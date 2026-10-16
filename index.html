@@ -1,121 +1,245 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Informasi 01 - Portal Kelas</title>
+    <title>Sistem Informasi 01 - Portal Kelas Elite</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                            950: '#1e1b4b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-15px) scale(1.03); }
+        }
+        .animate-float { animation: floatSlow 8s ease-in-out infinite; }
+        .glass-card {
+            background: rgba(30, 27, 75, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        .glass-card-light {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col" x-data="classApp()">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white relative overflow-x-hidden" x-data="classApp()">
+
+    <!-- Ambient Glowing Background Orbs -->
+    <div class="fixed top-0 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none animate-float"></div>
+    <div class="fixed bottom-1/4 right-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl pointer-events-none animate-float" style="animation-delay: 4s;"></div>
 
     <!-- INTRO SPLASH SCREEN -->
     <div x-show="showIntro" 
          x-transition:leave="transition ease-out duration-700"
          x-transition:leave-start="opacity-100 scale-100"
          x-transition:leave-end="opacity-0 scale-105"
-         class="fixed inset-0 z-[100] bg-gradient-to-br from-indigo-700 via-indigo-800 to-blue-900 flex flex-col items-center justify-center text-white px-4 text-center">
-        <div class="bg-indigo-600/80 backdrop-blur-md p-5 rounded-3xl border border-indigo-400/50 shadow-2xl mb-4 animate-bounce">
-            <i class="fa-solid fa-graduation-cap text-4xl sm:text-6xl text-white"></i>
+         class="fixed inset-0 z-[100] bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 flex flex-col items-center justify-center text-white px-4 text-center">
+        <div class="relative mb-6">
+            <div class="absolute inset-0 bg-indigo-500 rounded-3xl blur-xl opacity-50 animate-pulse"></div>
+            <div class="relative bg-gradient-to-tr from-indigo-600 to-violet-600 p-6 rounded-3xl border border-indigo-400/40 shadow-2xl">
+                <i class="fa-solid fa-graduation-cap text-5xl sm:text-7xl text-white"></i>
+            </div>
         </div>
-        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-wider animate-pulse">SISTEM INFORMASI 01</h1>
-        <p class="text-xs sm:text-sm text-indigo-200 mt-2 tracking-widest uppercase font-medium">Portal Akademik Kelas Real-Time</p>
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-indigo-200 to-indigo-400 bg-clip-text text-transparent">SISTEM INFORMASI 01</h1>
+        <p class="text-xs sm:text-sm text-indigo-300 mt-2 tracking-widest uppercase font-semibold">Portal Akademik Kelas Real-Time • Universitas Abulyatama</p>
         
-        <!-- Loading Dots -->
-        <div class="mt-8 flex space-x-2">
-            <div class="w-2.5 h-2.5 bg-indigo-300 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-            <div class="w-2.5 h-2.5 bg-indigo-300 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-            <div class="w-2.5 h-2.5 bg-indigo-300 rounded-full animate-bounce" style="animation-delay: 0.3s"></div>
+        <!-- Loading Progress -->
+        <div class="mt-10 w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden border border-indigo-500/30">
+            <div class="h-full bg-gradient-to-r from-indigo-500 to-violet-500 animate-pulse w-full"></div>
         </div>
     </div>
 
+    <!-- TOAST NOTIFICATION SYSTEM (Replaces alert) -->
+    <div class="fixed top-5 right-5 z-[120] space-y-3 max-w-sm w-full px-4 pointer-events-none">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="opacity-0 translate-y-[-20px] scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                 x-transition:leave="transition ease-in duration-200 transform"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95"
+                 class="pointer-events-auto flex items-start gap-3 p-4 rounded-2xl shadow-2xl border backdrop-blur-xl"
+                 :class="toast.type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-100' : (toast.type === 'error' ? 'bg-rose-950/90 border-rose-500/40 text-rose-100' : 'bg-indigo-950/90 border-indigo-500/40 text-indigo-150')">
+                <div class="shrink-0 pt-0.5">
+                    <i :class="{
+                        'fa-solid fa-circle-check text-emerald-400': toast.type === 'success',
+                        'fa-solid fa-circle-exclamation text-rose-400': toast.type === 'error',
+                        'fa-solid fa-circle-info text-indigo-400': toast.type === 'info'
+                    }" class="text-lg"></i>
+                </div>
+                <div class="flex-grow text-sm font-medium" x-text="toast.message"></div>
+                <button @click="removeToast(toast.id)" class="shrink-0 opacity-70 hover:opacity-150 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </template>
+    </div>
+
     <!-- Header / Navbar -->
-    <header class="bg-indigo-700 shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4 flex flex-col md:flex-row justify-between items-center gap-3">
-            <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-indigo-600 p-2.5 rounded-xl border border-indigo-400 shadow-inner shrink-0">
-                        <i class="fa-solid fa-graduation-cap text-white text-xl sm:text-2xl"></i>
+    <header class="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-indigo-500/20 shadow-xl shadow-indigo-950/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center justify-between w-full md:w-auto">
+                <div class="flex items-center space-x-3.5">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-indigo-500 rounded-xl blur-md opacity-40"></div>
+                        <div class="relative bg-gradient-to-br from-indigo-600 to-violet-700 p-2.5 rounded-xl border border-indigo-400/40 shadow-inner">
+                            <i class="fa-solid fa-graduation-cap text-white text-xl sm:text-2xl"></i>
+                        </div>
                     </div>
                     <div>
-                        <h1 class="text-base sm:text-xl font-bold text-white tracking-wide">SISTEM INFORMASI 01</h1>
-                        <p class="text-[11px] sm:text-xs text-indigo-200">Fakultas Teknik • Portal Real-Time</p>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-base sm:text-lg font-extrabold tracking-tight bg-gradient-to-r from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent">SI-01 ELITE</h1>
+                            <span class="bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 text-[10px] font-semibold px-2 py-0.5 rounded-full">LIVE</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span x-text="currentTime"></span>
+                        </p>
                     </div>
                 </div>
             </div>
-            <!-- Navigation Tabs (Mobile Horizontal Scroll) -->
-            <nav class="flex overflow-x-auto w-full md:w-auto justify-start md:justify-center gap-1.5 bg-indigo-800/60 p-1.5 rounded-xl border border-indigo-600 no-scrollbar">
-                <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'bg-white text-indigo-700 font-semibold shadow' : 'text-indigo-100 hover:bg-indigo-600'" class="px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap transition duration-200 shrink-0">
-                    <i class="fa-solid fa-house mr-1.5"></i> Beranda
+
+            <!-- Navigation Tabs -->
+            <nav class="flex overflow-x-auto w-full md:w-auto justify-start md:justify-center gap-1.5 bg-slate-950/60 p-1.5 rounded-2xl border border-indigo-500/20 no-scrollbar">
+                <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-4 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
+                    <i class="fa-solid fa-house"></i> Beranda
                 </button>
-                <button @click="activeTab = 'schedule'" :class="activeTab === 'schedule' ? 'bg-white text-indigo-700 font-semibold shadow' : 'text-indigo-100 hover:bg-indigo-600'" class="px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap transition duration-200 shrink-0">
-                    <i class="fa-solid fa-calendar-days mr-1.5"></i> Jadwal Kuliah
+                <button @click="activeTab = 'schedule'" :class="activeTab === 'schedule' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-4 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-days"></i> Jadwal Kuliah
                 </button>
-                <button @click="activeTab = 'lecturer'" :class="activeTab === 'lecturer' ? 'bg-white text-indigo-700 font-semibold shadow' : 'text-indigo-100 hover:bg-indigo-600'" class="px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap transition duration-200 shrink-0">
-                    <i class="fa-solid fa-user-check mr-1.5"></i> Konfirmasi Dosen
+                <button @click="activeTab = 'lecturer'" :class="activeTab === 'lecturer' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-4 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
+                    <i class="fa-solid fa-user-check"></i> Status Dosen
                 </button>
-                <button @click="activeTab = 'members'" :class="activeTab === 'members' ? 'bg-white text-indigo-700 font-semibold shadow' : 'text-indigo-100 hover:bg-indigo-600'" class="px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap transition duration-200 shrink-0">
-                    <i class="fa-solid fa-users mr-1.5"></i> Anggota Kelas
+                <button @click="activeTab = 'members'" :class="activeTab === 'members' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-4 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
+                    <i class="fa-solid fa-users"></i> Anggota Kelas
                 </button>
             </nav>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-grow w-full">
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full relative z-10">
 
         <!-- TAB 1: BERANDA -->
         <div x-show="activeTab === 'home'" 
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
              x-transition:enter-end="opacity-100 translate-y-0"
-             class="space-y-6">
-            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-6 sm:p-10 text-white shadow-lg relative overflow-hidden">
-                <div class="relative z-10 max-w-2xl">
-                    <span class="bg-indigo-500/80 text-[10px] sm:text-xs uppercase tracking-wider font-semibold px-3 py-1 rounded-full border border-indigo-400">Real-Time Connected</span>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 tracking-tight">Portal Kelas SI-01</h2>
-                    <p class="mt-2 text-indigo-100 text-xs sm:text-base leading-relaxed">
-                        Pusat informasi akademik terpadu kelas Sistem Informasi 01. Status kehadiran dosen terhubung langsung secara real-time dari database kelas.
+             class="space-y-8">
+            
+            <!-- Hero Banner -->
+            <div class="relative rounded-3xl p-6 sm:p-10 overflow-hidden border border-indigo-500/30 shadow-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-violet-950">
+                <div class="absolute -right-20 -top-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <div class="inline-flex items-center gap-2 bg-indigo-500/20 border border-indigo-400/30 px-3 py-1 rounded-full text-indigo-300 text-xs font-semibold">
+                        <i class="fa-solid fa-sparkles text-amber-400"></i>
+                        <span x-text="greeting"></span>, Civitas Akademika SI-01
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                        Portal Akademik <span class="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Sistem Informasi 01</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Pusat koordinasi perkuliahan real-time. Pantau jadwal, update kehadiran dosen langsung dari ruang kelas, dan akses direktori mahasiswa dengan mulus.
                     </p>
-                    <div class="mt-6 flex flex-wrap gap-3">
-                        <button @click="activeTab = 'lecturer'" class="bg-white text-indigo-700 font-medium px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow hover:bg-indigo-50 transition">
-                            Cek Status Dosen <i class="fa-solid fa-arrow-right ml-1"></i>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button @click="activeTab = 'lecturer'" class="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold px-6 py-3 rounded-2xl text-sm shadow-lg shadow-indigo-600/30 transition-all duration-300 flex items-center gap-2">
+                            <span>Cek Status Dosen</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                        <button @click="activeTab = 'schedule'" class="bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 font-semibold px-6 py-3 rounded-2xl text-sm transition-all duration-300 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-day text-indigo-400"></i> Jadwal Hari Ini
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
-                    <div class="bg-indigo-50 text-indigo-600 p-3.5 sm:p-4 rounded-xl text-xl sm:text-2xl shrink-0"><i class="fa-solid fa-book-open"></i></div>
+            <!-- Quick Stats Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-indigo-500/20 shadow-xl flex items-center space-x-5 hover:border-indigo-500/40 transition">
+                    <div class="bg-indigo-500/20 text-indigo-400 p-4 rounded-2xl text-2xl border border-indigo-500/30 shrink-0">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
                     <div>
-                        <p class="text-xs text-slate-500 font-medium uppercase">Mata Kuliah</p>
-                        <h3 class="text-xl sm:text-2xl font-bold text-slate-800">9 Matkul</h3>
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Mata Kuliah</p>
+                        <h3 class="text-2xl font-extrabold text-white mt-1">9 Matkul</h3>
                     </div>
                 </div>
-                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
-                    <div class="bg-emerald-50 text-emerald-600 p-3.5 sm:p-4 rounded-xl text-xl sm:text-2xl shrink-0"><i class="fa-solid fa-user-graduate"></i></div>
+                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-emerald-500/20 shadow-xl flex items-center space-x-5 hover:border-emerald-500/40 transition">
+                    <div class="bg-emerald-500/20 text-emerald-400 p-4 rounded-2xl text-2xl border border-emerald-500/30 shrink-0">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
                     <div>
-                        <p class="text-xs text-slate-500 font-medium uppercase">Total Mahasiswa</p>
-                        <h3 class="text-xl sm:text-2xl font-bold text-slate-800" x-text="members.length + ' Orang'"></h3>
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Total Mahasiswa</p>
+                        <h3 class="text-2xl font-extrabold text-white mt-1" x-text="members.length + ' Orang'"></h3>
                     </div>
                 </div>
-                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
-                    <div class="bg-amber-50 text-amber-600 p-3.5 sm:p-4 rounded-xl text-xl sm:text-2xl shrink-0"><i class="fa-solid fa-shield-halved"></i></div>
-                    <div>
-                        <p class="text-xs text-slate-500 font-medium uppercase">Akses Update</p>
-                        <h3 class="text-xs sm:text-sm font-semibold text-slate-800 mt-0.5">Admin & Ketua Kelas (PIN)</h3>
+                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-amber-500/20 shadow-xl flex items-center space-x-5 hover:border-amber-500/40 transition">
+                    <div class="bg-amber-500/20 text-amber-400 p-4 rounded-2xl text-2xl border border-amber-500/30 shrink-0">
+                        <i class="fa-solid fa-shield-halved"></i>
                     </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Keamanan Sistem</p>
+                        <h3 class="text-sm font-bold text-white mt-1">PIN Ketua & Admin</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Schedule Preview Today -->
+            <div class="bg-slate-900/60 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-indigo-500/20 shadow-xl space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-amber-400"></i> Ringkasan Jadwal (<span x-text="todayName"></span>)
+                    </h3>
+                    <button @click="selectedDay = todayName; activeTab = 'schedule'" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
+                        Lihat Semua <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <template x-for="item in todaySchedule">
+                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-indigo-500/10 hover:border-indigo-500/40 transition">
+                            <div class="flex justify-between items-start">
+                                <span class="bg-indigo-500/20 text-indigo-300 text-xs font-semibold px-2.5 py-1 rounded-lg border border-indigo-500/30" x-text="item.time"></span>
+                                <span class="text-slate-400 text-xs font-medium"><i class="fa-solid fa-location-dot text-rose-400 mr-1"></i> <span x-text="item.room"></span></span>
+                            </div>
+                            <h4 class="font-bold text-white mt-3 text-base" x-text="item.subject"></h4>
+                            <p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+                                <i class="fa-solid fa-chalkboard-user text-indigo-400"></i> <span x-text="item.lecturer"></span>
+                            </p>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -126,36 +250,42 @@
              x-transition:enter-start="opacity-0 translate-y-3"
              x-transition:enter-end="opacity-100 translate-y-0"
              class="space-y-6">
+            
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Jadwal Kuliah Kelas</h2>
-                    <p class="text-slate-500 text-xs sm:text-sm">Jadwal mingguan perkuliahan Sistem Informasi 01</p>
+                    <h2 class="text-2xl font-extrabold text-white">Jadwal Kuliah Mingguan</h2>
+                    <p class="text-slate-400 text-xs sm:text-sm">Jadwal lengkap perkuliahan kelas Sistem Informasi 01.</p>
                 </div>
-                <div class="flex overflow-x-auto w-full sm:w-auto gap-1.5 bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm no-scrollbar">
+                <!-- Day selector pill buttons -->
+                <div class="flex overflow-x-auto w-full sm:w-auto gap-1.5 bg-slate-900/80 p-1.5 rounded-2xl border border-indigo-500/20 no-scrollbar">
                     <template x-for="day in ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']">
-                        <button @click="selectedDay = day" :class="selectedDay === day ? 'bg-indigo-600 text-white font-medium shadow-sm' : 'text-slate-600 hover:bg-slate-100'" class="px-3.5 py-1.5 rounded-lg text-xs transition shrink-0">
+                        <button @click="selectedDay = day" :class="selectedDay === day ? 'bg-indigo-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800'" class="px-4 py-2 rounded-xl text-xs transition shrink-0">
                             <span x-text="day"></span>
                         </button>
                     </template>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Schedule Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <template x-for="item in filteredSchedule">
-                    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-indigo-500/20 shadow-xl hover:border-indigo-500/50 transition flex flex-col justify-between group">
                         <div>
                             <div class="flex justify-between items-start gap-2">
-                                <span class="bg-indigo-50 text-indigo-700 font-semibold text-xs px-2.5 py-1 rounded-md border border-indigo-100" x-text="item.time"></span>
-                                <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-md font-medium"><i class="fa-solid fa-door-open mr-1"></i> <span x-text="item.room"></span></span>
+                                <span class="bg-indigo-500/20 text-indigo-300 font-bold text-xs px-3 py-1 rounded-xl border border-indigo-500/30" x-text="item.time"></span>
+                                <span class="bg-slate-800 text-slate-300 text-xs px-3 py-1 rounded-xl font-semibold border border-slate-700 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-door-open text-indigo-400"></i> <span x-text="item.room"></span>
+                                </span>
                             </div>
-                            <h3 class="text-base sm:text-lg font-bold text-slate-800 mt-3" x-text="item.subject"></h3>
-                            <p class="text-xs text-slate-500 mt-0.5 flex items-center">
-                                <i class="fa-solid fa-chalkboard-user mr-1.5 text-indigo-500 shrink-0"></i> <span x-text="item.lecturer"></span>
+                            <h3 class="text-lg font-bold text-white mt-4 group-hover:text-indigo-300 transition" x-text="item.subject"></h3>
+                            <p class="text-xs text-slate-300 mt-1 flex items-center gap-2">
+                                <i class="fa-solid fa-chalkboard-user text-indigo-400 shrink-0"></i> 
+                                <span x-text="item.lecturer"></span>
                             </p>
                         </div>
-                        <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
-                            <span>SKS: <strong class="text-slate-700" x-text="item.sks"></strong></span>
-                            <span class="text-indigo-600 font-medium">Sistem Informasi 01</span>
+                        <div class="mt-6 pt-4 border-t border-slate-800 flex justify-between items-center text-xs text-slate-400">
+                            <span class="bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700">SKS: <strong class="text-white" x-text="item.sks"></strong></span>
+                            <span class="text-indigo-400 font-semibold">Sistem Informasi 01</span>
                         </div>
                     </div>
                 </template>
@@ -168,63 +298,65 @@
              x-transition:enter-start="opacity-0 translate-y-3"
              x-transition:enter-end="opacity-100 translate-y-0"
              class="space-y-6">
+            
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Konfirmasi Kehadiran Dosen</h2>
-                    <p class="text-slate-500 text-xs sm:text-sm">Data tersinkronisasi secara real-time dari database kelas.</p>
+                    <h2 class="text-2xl font-extrabold text-white">Konfirmasi Kehadiran Dosen</h2>
+                    <p class="text-slate-400 text-xs sm:text-sm">Data tersinkronisasi secara real-time dari database kelas.</p>
                 </div>
-                <div class="flex gap-2 w-full sm:w-auto">
-                    <button @click="fetchLecturerStatus()" class="flex-1 sm:flex-none bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-3.5 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-rotate" :class="loading ? 'animate-spin' : ''"></i> Refresh
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <button @click="fetchLecturerStatus()" class="flex-1 sm:flex-none bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold px-4 py-2.5 rounded-2xl text-xs sm:text-sm border border-indigo-500/20 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate" :class="loading ? 'animate-spin text-indigo-400' : ''"></i> Refresh
                     </button>
-                    <button @click="openAddConfirmationModal = true" class="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow transition flex items-center justify-center gap-2">
+                    <button @click="openAddConfirmationModal = true" class="flex-1 sm:flex-none bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold px-5 py-2.5 rounded-2xl text-xs sm:text-sm shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-plus"></i> Update Status
                     </button>
                 </div>
             </div>
 
             <!-- Loading State -->
-            <div x-show="loading" class="text-center py-12 text-slate-400">
-                <i class="fa-solid fa-spinner fa-spin text-2xl"></i>
-                <p class="text-xs mt-2">Memuat data terbaru...</p>
+            <div x-show="loading" class="text-center py-16 text-indigo-400">
+                <i class="fa-solid fa-spinner fa-spin text-3xl"></i>
+                <p class="text-xs text-slate-400 mt-3 font-medium">Memuat data real-time...</p>
             </div>
 
             <!-- Lecturer Status List -->
-            <div x-show="!loading" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="divide-y divide-slate-100" x-show="lecturerStatusList.length > 0">
+            <div x-show="!loading" class="bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-indigo-500/20 shadow-xl overflow-hidden">
+                <div class="divide-y divide-slate-800/80" x-show="lecturerStatusList.length > 0">
                     <template x-for="(item, index) in lecturerStatusList" :key="item.id">
-                        <div class="p-4 sm:p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-slate-50/50 transition">
-                            <div class="space-y-1 w-full sm:w-auto">
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <span class="text-xs font-semibold text-slate-400" x-text="item.day + ' • ' + item.time"></span>
+                        <div class="p-5 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-slate-800/40 transition">
+                            <div class="space-y-1.5 w-full sm:w-auto">
+                                <div class="flex flex-wrap items-center gap-2.5">
+                                    <span class="text-xs font-bold text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700" x-text="item.day + ' • ' + item.time"></span>
                                     <span :class="{
-                                        'bg-emerald-50 text-emerald-700 border-emerald-200': item.status === 'Masuk',
-                                        'bg-rose-50 text-rose-700 border-rose-200': item.status === 'Tidak Masuk',
-                                        'bg-amber-50 text-amber-700 border-amber-200': item.status === 'Online / Daring'
-                                    }" class="text-xs font-semibold px-2.5 py-0.5 rounded-full border">
-                                        <i :class="{
-                                            'fa-solid fa-circle-check text-emerald-500': item.status === 'Masuk',
-                                            'fa-solid fa-circle-xmark text-rose-500': item.status === 'Tidak Masuk',
-                                            'fa-solid fa-video text-amber-500': item.status === 'Online / Daring'
-                                        }" class="mr-1"></i>
+                                        'bg-emerald-500/20 text-emerald-300 border-emerald-500/40': item.status === 'Masuk',
+                                        'bg-rose-500/20 text-rose-300 border-rose-500/40': item.status === 'Tidak Masuk',
+                                        'bg-amber-500/20 text-amber-300 border-amber-500/40': item.status === 'Online / Daring'
+                                    }" class="text-xs font-bold px-3 py-1 rounded-full border flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full animate-ping" :class="{
+                                            'bg-emerald-400': item.status === 'Masuk',
+                                            'bg-rose-400': item.status === 'Tidak Masuk',
+                                            'bg-amber-400': item.status === 'Online / Daring'
+                                        }"></span>
                                         <span x-text="item.status"></span>
                                     </span>
                                 </div>
-                                <h3 class="text-base font-bold text-slate-800" x-text="item.subject"></h3>
-                                <p class="text-xs text-slate-600">Dosen: <span class="font-medium" x-text="item.lecturer"></span></p>
-                                <p class="text-xs text-slate-500 bg-slate-100/80 p-2 rounded-lg mt-1 block sm:inline-block" x-show="item.note">
-                                    <i class="fa-solid fa-note-sticky mr-1 text-indigo-500"></i> Keterangan: <span x-text="item.note"></span>
+                                <h3 class="text-base sm:text-lg font-bold text-white" x-text="item.subject"></h3>
+                                <p class="text-xs text-slate-300">Dosen: <span class="font-semibold text-indigo-300" x-text="item.lecturer"></span></p>
+                                <p class="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-indigo-500/10 mt-2 block sm:inline-block" x-show="item.note">
+                                    <i class="fa-solid fa-note-sticky text-indigo-400 mr-1.5"></i> <span x-text="item.note"></span>
                                 </p>
                             </div>
                             <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                                <button @click="deleteConfirmation(item.id)" class="w-full sm:w-auto text-slate-500 hover:text-rose-600 px-3 py-2 rounded-xl text-xs transition border border-slate-200 hover:border-rose-200 bg-white flex items-center justify-center gap-1.5" title="Hapus Status">
-                                    <i class="fa-solid fa-trash text-rose-500"></i> Hapus
+                                <button @click="deleteConfirmation(item.id)" class="text-slate-400 hover:text-rose-400 px-4 py-2 rounded-xl text-xs transition border border-slate-700 hover:border-rose-500/40 bg-slate-800/60 flex items-center gap-1.5" title="Hapus Status">
+                                    <i class="fa-solid fa-trash text-rose-400"></i> Hapus
                                 </button>
                             </div>
                         </div>
                     </template>
                 </div>
-                <div x-show="lecturerStatusList.length === 0" class="p-12 text-center text-slate-400 text-sm">
+                <div x-show="lecturerStatusList.length === 0" class="p-16 text-center text-slate-400 text-sm">
+                    <i class="fa-solid fa-folder-open text-4xl mb-3 text-slate-600 block"></i>
                     Belum ada data konfirmasi dosen yang diinput.
                 </div>
             </div>
@@ -236,25 +368,27 @@
              x-transition:enter-start="opacity-0 translate-y-3"
              x-transition:enter-end="opacity-100 translate-y-0"
              class="space-y-6">
+            
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Daftar Anggota Kelas SI-01</h2>
-                    <p class="text-slate-500 text-xs sm:text-sm">Daftar mahasiswa dan kepengurusan kelas.</p>
+                    <h2 class="text-2xl font-extrabold text-white">Direktori Anggota Kelas SI-01</h2>
+                    <p class="text-slate-400 text-xs sm:text-sm">Daftar mahasiswa lengkap dan struktur kepengurusan kelas.</p>
                 </div>
-                <div class="w-full sm:w-72 relative">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-search"></i></span>
-                    <input type="text" x-model="searchMember" placeholder="Cari nama atau NIM..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <div class="w-full sm:w-80 relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-search"></i></span>
+                    <input type="text" x-model="searchMember" placeholder="Cari nama atau NIM..." class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-indigo-500/20 rounded-2xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
                 </div>
             </div>
 
+            <!-- Members Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <template x-for="student in filteredMembers" :key="student.nim">
-                    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-full bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-lg border border-indigo-100 shrink-0" x-text="student.name.charAt(0)"></div>
+                    <div class="bg-slate-900/60 backdrop-blur-xl p-5 rounded-3xl border border-indigo-500/20 shadow-xl flex items-center space-x-4 hover:border-indigo-500/40 transition group">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 text-white flex items-center justify-center font-bold text-lg border border-indigo-400/40 shadow-inner shrink-0 group-hover:scale-105 transition" x-text="student.name.charAt(0)"></div>
                         <div class="min-w-0 flex-grow">
-                            <h4 class="text-sm font-bold text-slate-800 truncate" x-text="student.name"></h4>
-                            <p class="text-xs text-slate-500 font-mono mt-0.5" x-text="student.nim"></p>
-                            <span :class="student.role === 'Mahasiswa' ? 'bg-slate-100 text-slate-600' : 'bg-indigo-50 text-indigo-700 border border-indigo-100'" class="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full mt-1.5" x-text="student.role"></span>
+                            <h4 class="text-sm font-bold text-white truncate group-hover:text-indigo-300 transition" x-text="student.name"></h4>
+                            <p class="text-xs text-slate-400 font-mono mt-0.5" x-text="student.nim"></p>
+                            <span :class="student.role === 'Mahasiswa' ? 'bg-slate-800 text-slate-400 border-slate-700' : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'" class="inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full mt-2 border" x-text="student.role"></span>
                         </div>
                     </div>
                 </template>
@@ -268,16 +402,18 @@
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 scale-95"
          x-transition:enter-end="opacity-100 scale-100"
-         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto" x-cloak>
-        <div @click.away="openAddConfirmationModal = false" class="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl shadow-xl p-5 sm:p-6 space-y-4 my-auto">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="text-base sm:text-lg font-bold text-slate-800"><i class="fa-solid fa-shield-halved text-indigo-600 mr-2"></i> Update Kehadiran (PIN)</h3>
-                <button @click="openAddConfirmationModal = false" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-xl"></i></button>
+         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 overflow-y-auto" x-cloak>
+        <div @click.away="openAddConfirmationModal = false" class="bg-slate-900 border border-indigo-500/30 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl p-6 sm:p-8 space-y-5 my-auto">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-indigo-400"></i> Update Kehadiran Dosen (PIN)
+                </h3>
+                <button @click="openAddConfirmationModal = false" class="text-slate-400 hover:text-white p-1.5 rounded-xl bg-slate-800/80"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form @submit.prevent="addLecturerStatus" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Hari</label>
-                    <select x-model="formLecturer.day" class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Hari Perkuliahan</label>
+                    <select x-model="formLecturer.day" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
                         <option value="Senin">Senin</option>
                         <option value="Selasa">Selasa</option>
                         <option value="Rabu">Rabu</option>
@@ -287,44 +423,65 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Jam Perkuliahan</label>
-                    <input type="text" required x-model="formLecturer.time" placeholder="Contoh: 08:30 - 10:10" class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Jam Perkuliahan</label>
+                    <input type="text" required x-model="formLecturer.time" placeholder="Contoh: 08:30 - 10:10" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Mata Kuliah</label>
-                    <input type="text" required x-model="formLecturer.subject" placeholder="Contoh: Konsep Sistem Informasi" class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Mata Kuliah</label>
+                    <input type="text" required x-model="formLecturer.subject" placeholder="Contoh: Konsep Sistem Informasi" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nama Dosen</label>
-                    <input type="text" required x-model="formLecturer.lecturer" placeholder="Contoh: Dr. Murniati, S.Kom." class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Nama Dosen</label>
+                    <input type="text" required x-model="formLecturer.lecturer" placeholder="Contoh: Dr. Murniati, S.Kom." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Status Kehadiran</label>
-                    <select x-model="formLecturer.status" class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Status Kehadiran</label>
+                    <select x-model="formLecturer.status" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
                         <option value="Masuk">Masuk (Hadir)</option>
                         <option value="Tidak Masuk">Tidak Masuk (Absen/Diganti)</option>
                         <option value="Online / Daring">Online / Daring (Zoom/GMeet)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Keterangan / Catatan</label>
-                    <textarea x-model="formLecturer.note" rows="2" placeholder="Contoh: Kuliah diganti tugas mandiri" class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500"></textarea>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Keterangan / Catatan</label>
+                    <textarea x-model="formLecturer.note" rows="2" placeholder="Contoh: Kuliah diganti tugas mandiri" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500"></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-indigo-600 uppercase mb-1">PIN Khusus Admin / Ketua Kelas</label>
-                    <input type="password" required x-model="formLecturer.pin" placeholder="Masukkan PIN rahasia..." class="w-full p-3 sm:p-2.5 bg-indigo-50/50 border border-indigo-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-indigo-400 uppercase mb-1.5">PIN Khusus Admin / Ketua Kelas</label>
+                    <input type="password" required x-model="formLecturer.pin" placeholder="Masukkan PIN rahasia..." class="w-full p-3 bg-indigo-950/40 border border-indigo-500/40 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
                 </div>
-                <div class="flex flex-col sm:flex-row justify-end gap-2 pt-3 border-t border-slate-100">
-                    <button type="button" @click="openAddConfirmationModal = false" class="w-full sm:w-auto px-4 py-3 sm:py-2 bg-slate-100 text-slate-600 text-sm font-medium rounded-xl hover:bg-slate-200">Batal</button>
-                    <button type="submit" class="w-full sm:w-auto px-5 py-3 sm:py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 shadow">Simpan & Update</button>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                    <button type="button" @click="openAddConfirmationModal = false" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold rounded-2xl transition">Batal</button>
+                    <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-sm font-semibold rounded-2xl shadow-lg shadow-indigo-600/30 transition">Simpan & Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Delete PIN Input (Replaces prompt) -->
+    <div x-show="openDeleteModal" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4" x-cloak>
+        <div @click.away="openDeleteModal = false" class="bg-slate-900 border border-rose-500/30 w-full max-w-md rounded-3xl shadow-2xl p-6 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Konfirmasi Hapus Data
+            </h3>
+            <p class="text-xs text-slate-300">Masukkan PIN rahasia untuk menghapus status kehadiran ini:</p>
+            <form @submit.prevent="confirmDelete" class="space-y-4">
+                <input type="password" required x-model="deletePinInput" placeholder="Masukkan PIN..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-rose-500">
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" @click="openDeleteModal = false" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-2xl">Batal</button>
+                    <button type="submit" class="px-5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold rounded-2xl shadow-lg shadow-rose-600/30">Hapus Permanen</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 mt-auto py-6 text-center text-xs text-slate-500 px-4">
-        <p>&copy; 2026 Sistem Informasi 01 • Universitas Abulyatama</p>
+    <footer class="bg-slate-900/80 backdrop-blur-xl border-t border-indigo-500/20 mt-auto py-6 text-center text-xs text-slate-400 px-4">
+        <p>&copy; 2026 Sistem Informasi 01 • Universitas Abulyatama • Portal Elite Real-Time</p>
     </footer>
 
     <!-- Alpine.js Logic & API Connector -->
@@ -333,12 +490,19 @@
 
         function classApp() {
             return {
-                showIntro: true, // Status awal intro aktif
+                showIntro: true,
                 activeTab: 'home',
                 selectedDay: 'Senin',
+                todayName: 'Senin',
+                currentTime: '',
+                greeting: 'Halo',
                 searchMember: '',
                 openAddConfirmationModal: false,
+                openDeleteModal: false,
+                deleteTargetId: null,
+                deletePinInput: '',
                 loading: false,
+                toasts: [],
                 
                 formLecturer: {
                     day: 'Senin',
@@ -418,11 +582,43 @@
                 ],
 
                 init() {
+                    this.updateClockAndGreeting();
+                    setInterval(() => this.updateClockAndGreeting(), 1000);
                     this.fetchLecturerStatus();
-                    // Hilangkan splash screen intro setelah 1.5 detik
                     setTimeout(() => {
                         this.showIntro = false;
-                    }, 1500);
+                    }, 1400);
+                },
+
+                updateClockAndGreeting() {
+                    const now = new Date();
+                    const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                    this.currentTime = now.toLocaleDateString('id-ID', options);
+                    
+                    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                    this.todayName = days[now.getDay()];
+                    if (this.todayName === 'Minggu') this.todayName = 'Senin'; // Fallback if Sunday
+                    if (this.selectedDay === 'Senin' && this.todayName !== 'Minggu') {
+                        // Keep user selection or default
+                    }
+
+                    const hour = now.getHours();
+                    if (hour < 11) this.greeting = 'Selamat Pagi';
+                    else if (hour < 15) this.greeting = 'Selamat Siang';
+                    else if (hour < 18) this.greeting = 'Selamat Sore';
+                    else this.greeting = 'Selamat Malam';
+                },
+
+                showToast(message, type = 'success') {
+                    const id = Date.now();
+                    this.toasts.push({ id, message, type });
+                    setTimeout(() => {
+                        this.toasts = this.toasts.filter(t => t.id !== id);
+                    }, 4000);
+                },
+
+                removeToast(id) {
+                    this.toasts = this.toasts.filter(t => t.id !== id);
                 },
 
                 fetchLecturerStatus() {
@@ -444,6 +640,10 @@
                     return this.schedule.filter(item => item.day === this.selectedDay);
                 },
 
+                get todaySchedule() {
+                    return this.schedule.filter(item => item.day === this.todayName);
+                },
+
                 get filteredMembers() {
                     if (!this.searchMember) return this.members;
                     const search = this.searchMember.toLowerCase();
@@ -452,7 +652,7 @@
 
                 addLecturerStatus() {
                     if (API_URL.includes("GANTI_DENGAN_URL")) {
-                        alert("URL API Google Apps Script belum diatur di file index.html!");
+                        this.showToast("URL API Google Apps Script belum diatur!", "error");
                         return;
                     }
 
@@ -473,45 +673,50 @@
                         .then(res => {
                             this.loading = false;
                             if (res.status === 'success') {
-                                alert('Status dosen berhasil diupdate secara real-time!');
+                                this.showToast('Status dosen berhasil diupdate secara real-time!', 'success');
                                 this.openAddConfirmationModal = false;
                                 this.formLecturer = { day: 'Senin', time: '08:30 - 10:10', subject: '', lecturer: '', status: 'Masuk', note: '', pin: '' };
                                 this.fetchLecturerStatus();
                             } else {
-                                alert('Gagal: ' + res.message);
+                                this.showToast('Gagal: ' + res.message, 'error');
                             }
                         })
                         .catch(err => {
                             this.loading = false;
-                            alert('Terjadi kesalahan jaringan.');
+                            this.showToast('Terjadi kesalahan jaringan.', 'error');
                         });
                 },
 
                 deleteConfirmation(id) {
-                    const pinInput = prompt("Masukkan PIN rahasia untuk menghapus status ini:");
-                    if (!pinInput) return;
+                    this.deleteTargetId = id;
+                    this.deletePinInput = '';
+                    this.openDeleteModal = true;
+                },
 
+                confirmDelete() {
+                    if (!this.deletePinInput) return;
                     const params = new URLSearchParams({
                         action: 'delete',
-                        pin: pinInput,
-                        id: id
+                        pin: this.deletePinInput,
+                        id: this.deleteTargetId
                     });
 
+                    this.openDeleteModal = false;
                     this.loading = true;
                     fetch(`${API_URL}?${params.toString()}`)
                         .then(res => res.json())
                         .then(res => {
                             this.loading = false;
                             if (res.status === 'success') {
-                                alert('Status berhasil dihapus!');
+                                this.showToast('Status berhasil dihapus!', 'success');
                                 this.fetchLecturerStatus();
                             } else {
-                                alert('Gagal: ' + res.message);
+                                this.showToast('Gagal: ' + res.message, 'error');
                             }
                         })
                         .catch(err => {
                             this.loading = false;
-                            alert('Terjadi kesalahan jaringan.');
+                            this.showToast('Terjadi kesalahan jaringan.', 'error');
                         });
                 }
             }
