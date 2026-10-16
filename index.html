@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi 01 - Portal Kelas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col" x-data="classApp()">
+
+    <!-- INTRO SPLASH SCREEN -->
+    <div x-show="showIntro" 
+         x-transition:leave="transition ease-out duration-700"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-105"
+         class="fixed inset-0 z-[100] bg-gradient-to-br from-indigo-700 via-indigo-800 to-blue-900 flex flex-col items-center justify-center text-white px-4 text-center">
+        <div class="bg-indigo-600/80 backdrop-blur-md p-5 rounded-3xl border border-indigo-400/50 shadow-2xl mb-4 animate-bounce">
+            <i class="fa-solid fa-graduation-cap text-4xl sm:text-6xl text-white"></i>
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-wider animate-pulse">SISTEM INFORMASI 01</h1>
+        <p class="text-xs sm:text-sm text-indigo-200 mt-2 tracking-widest uppercase font-medium">Portal Akademik Kelas Real-Time</p>
+        
+        <!-- Loading Dots -->
+        <div class="mt-8 flex space-x-2">
+            <div class="w-2.5 h-2.5 bg-indigo-300 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+            <div class="w-2.5 h-2.5 bg-indigo-300 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+            <div class="w-2.5 h-2.5 bg-indigo-300 rounded-full animate-bounce" style="animation-delay: 0.3s"></div>
+        </div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="bg-indigo-700 shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4 flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-indigo-600 p-2.5 rounded-xl border border-indigo-400 shadow-inner shrink-0">
+                        <i class="fa-solid fa-graduation-cap text-white text-xl sm:text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-base sm:text-xl font-bold text-white tracking-wide">SISTEM INFORMASI 01</h1>
+                        <p class="text-[11px] sm:text-xs text-indigo-200">Fakultas Ilmu Komputer • Portal Real-Time</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Navigation Tabs (Mobile Horizontal Scroll) -->
+            <nav class="flex overflow-x-auto w-full md:w-auto justify-start md:justify-center gap-1.5 bg-indigo-800/60 p-1.5 rounded-xl border border-indigo-600 no-scrollbar">
+                <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'bg-white text-indigo-700 font-semibold shadow' : 'text-indigo-100 hover:bg-indigo-600'" class="px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap transition duration-200 shrink-0">
+                    <i class="fa-solid fa-house mr-1.5"></i> Beranda
+                </button>
+                <button @click="activeTab = 'schedule'" :class="activeTab === 'schedule' ? 'bg-white text-indigo-700 font-semibold shadow' : 'text-indigo-100 hover:bg-indigo-600'" class="px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap transition duration-200 shrink-0">
+                    <i class="fa-solid fa-calendar-days mr-1.5"></i> Jadwal Kuliah
+                </button>
+                <button @click="activeTab = 'lecturer'" :class="activeTab === 'lecturer' ? 'bg-white text-indigo-700 font-semibold shadow' : 'text-indigo-100 hover:bg-indigo-600'" class="px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap transition duration-200 shrink-0">
+                    <i class="fa-solid fa-user-check mr-1.5"></i> Konfirmasi Dosen
+                </button>
+                <button @click="activeTab = 'members'" :class="activeTab === 'members' ? 'bg-white text-indigo-700 font-semibold shadow' : 'text-indigo-100 hover:bg-indigo-600'" class="px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap transition duration-200 shrink-0">
+                    <i class="fa-solid fa-users mr-1.5"></i> Anggota Kelas
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-grow w-full">
+
+        <!-- TAB 1: BERANDA -->
+        <div x-show="activeTab === 'home'" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-3"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="space-y-6">
+            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-6 sm:p-10 text-white shadow-lg relative overflow-hidden">
+                <div class="relative z-10 max-w-2xl">
+                    <span class="bg-indigo-500/80 text-[10px] sm:text-xs uppercase tracking-wider font-semibold px-3 py-1 rounded-full border border-indigo-400">Real-Time Connected</span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 tracking-tight">Portal Kelas SI-01</h2>
+                    <p class="mt-2 text-indigo-100 text-xs sm:text-base leading-relaxed">
+                        Pusat informasi akademik terpadu kelas Sistem Informasi 01. Status kehadiran dosen terhubung langsung secara real-time dari database kelas.
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <button @click="activeTab = 'lecturer'" class="bg-white text-indigo-700 font-medium px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow hover:bg-indigo-50 transition">
+                            Cek Status Dosen <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
+                    <div class="bg-indigo-50 text-indigo-600 p-3.5 sm:p-4 rounded-xl text-xl sm:text-2xl shrink-0"><i class="fa-solid fa-book-open"></i></div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium uppercase">Mata Kuliah</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-slate-800">9 Matkul</h3>
+                    </div>
+                </div>
+                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
+                    <div class="bg-emerald-50 text-emerald-600 p-3.5 sm:p-4 rounded-xl text-xl sm:text-2xl shrink-0"><i class="fa-solid fa-user-graduate"></i></div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium uppercase">Total Mahasiswa</p>
+                        <h3 class="text-xl sm:text-2xl font-bold text-slate-800" x-text="members.length + ' Orang'"></h3>
+                    </div>
+                </div>
+                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
+                    <div class="bg-amber-50 text-amber-600 p-3.5 sm:p-4 rounded-xl text-xl sm:text-2xl shrink-0"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium uppercase">Akses Update</p>
+                        <h3 class="text-xs sm:text-sm font-semibold text-slate-800 mt-0.5">Admin & Ketua Kelas (PIN)</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: JADWAL KULIAH -->
+        <div x-show="activeTab === 'schedule'" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-3"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Jadwal Kuliah Kelas</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">Jadwal mingguan perkuliahan Sistem Informasi 01</p>
+                </div>
+                <div class="flex overflow-x-auto w-full sm:w-auto gap-1.5 bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm no-scrollbar">
+                    <template x-for="day in ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']">
+                        <button @click="selectedDay = day" :class="selectedDay === day ? 'bg-indigo-600 text-white font-medium shadow-sm' : 'text-slate-600 hover:bg-slate-100'" class="px-3.5 py-1.5 rounded-lg text-xs transition shrink-0">
+                            <span x-text="day"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <template x-for="item in filteredSchedule">
+                    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start gap-2">
+                                <span class="bg-indigo-50 text-indigo-700 font-semibold text-xs px-2.5 py-1 rounded-md border border-indigo-100" x-text="item.time"></span>
+                                <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-md font-medium"><i class="fa-solid fa-door-open mr-1"></i> <span x-text="item.room"></span></span>
+                            </div>
+                            <h3 class="text-base sm:text-lg font-bold text-slate-800 mt-3" x-text="item.subject"></h3>
+                            <p class="text-xs text-slate-500 mt-0.5 flex items-center">
+                                <i class="fa-solid fa-chalkboard-user mr-1.5 text-indigo-500 shrink-0"></i> <span x-text="item.lecturer"></span>
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                            <span>SKS: <strong class="text-slate-700" x-text="item.sks"></strong></span>
+                            <span class="text-indigo-600 font-medium">Sistem Informasi 01</span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- TAB 3: KONFIRMASI DOSEN (REAL-TIME) -->
+        <div x-show="activeTab === 'lecturer'" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-3"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Konfirmasi Kehadiran Dosen</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">Data tersinkronisasi secara real-time dari database kelas.</p>
+                </div>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <button @click="fetchLecturerStatus()" class="flex-1 sm:flex-none bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-3.5 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-rotate" :class="loading ? 'animate-spin' : ''"></i> Refresh
+                    </button>
+                    <button @click="openAddConfirmationModal = true" class="flex-1 sm:flex-none bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Update Status
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div x-show="loading" class="text-center py-12 text-slate-400">
+                <i class="fa-solid fa-spinner fa-spin text-2xl"></i>
+                <p class="text-xs mt-2">Memuat data terbaru...</p>
+            </div>
+
+            <!-- Lecturer Status List -->
+            <div x-show="!loading" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="divide-y divide-slate-100" x-show="lecturerStatusList.length > 0">
+                    <template x-for="(item, index) in lecturerStatusList" :key="item.id">
+                        <div class="p-4 sm:p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-slate-50/50 transition">
+                            <div class="space-y-1 w-full sm:w-auto">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="text-xs font-semibold text-slate-400" x-text="item.day + ' • ' + item.time"></span>
+                                    <span :class="{
+                                        'bg-emerald-50 text-emerald-700 border-emerald-200': item.status === 'Masuk',
+                                        'bg-rose-50 text-rose-700 border-rose-200': item.status === 'Tidak Masuk',
+                                        'bg-amber-50 text-amber-700 border-amber-200': item.status === 'Online / Daring'
+                                    }" class="text-xs font-semibold px-2.5 py-0.5 rounded-full border">
+                                        <i :class="{
+                                            'fa-solid fa-circle-check text-emerald-500': item.status === 'Masuk',
+                                            'fa-solid fa-circle-xmark text-rose-500': item.status === 'Tidak Masuk',
+                                            'fa-solid fa-video text-amber-500': item.status === 'Online / Daring'
+                                        }" class="mr-1"></i>
+                                        <span x-text="item.status"></span>
+                                    </span>
+                                </div>
+                                <h3 class="text-base font-bold text-slate-800" x-text="item.subject"></h3>
+                                <p class="text-xs text-slate-600">Dosen: <span class="font-medium" x-text="item.lecturer"></span></p>
+                                <p class="text-xs text-slate-500 bg-slate-100/80 p-2 rounded-lg mt-1 block sm:inline-block" x-show="item.note">
+                                    <i class="fa-solid fa-note-sticky mr-1 text-indigo-500"></i> Keterangan: <span x-text="item.note"></span>
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                                <button @click="deleteConfirmation(item.id)" class="w-full sm:w-auto text-slate-500 hover:text-rose-600 px-3 py-2 rounded-xl text-xs transition border border-slate-200 hover:border-rose-200 bg-white flex items-center justify-center gap-1.5" title="Hapus Status">
+                                    <i class="fa-solid fa-trash text-rose-500"></i> Hapus
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <div x-show="lecturerStatusList.length === 0" class="p-12 text-center text-slate-400 text-sm">
+                    Belum ada data konfirmasi dosen yang diinput.
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: ANGGOTA KELAS -->
+        <div x-show="activeTab === 'members'" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-3"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Daftar Anggota Kelas SI-01</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">Daftar mahasiswa dan kepengurusan kelas.</p>
+                </div>
+                <div class="w-full sm:w-72 relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-search"></i></span>
+                    <input type="text" x-model="searchMember" placeholder="Cari nama atau NIM..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <template x-for="student in filteredMembers" :key="student.nim">
+                    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-full bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-lg border border-indigo-100 shrink-0" x-text="student.name.charAt(0)"></div>
+                        <div class="min-w-0 flex-grow">
+                            <h4 class="text-sm font-bold text-slate-800 truncate" x-text="student.name"></h4>
+                            <p class="text-xs text-slate-500 font-mono mt-0.5" x-text="student.nim"></p>
+                            <span :class="student.role === 'Mahasiswa' ? 'bg-slate-100 text-slate-600' : 'bg-indigo-50 text-indigo-700 border border-indigo-100'" class="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full mt-1.5" x-text="student.role"></span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Update Status Dosen -->
+    <div x-show="openAddConfirmationModal" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto" x-cloak>
+        <div @click.away="openAddConfirmationModal = false" class="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl shadow-xl p-5 sm:p-6 space-y-4 my-auto">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-base sm:text-lg font-bold text-slate-800"><i class="fa-solid fa-shield-halved text-indigo-600 mr-2"></i> Update Kehadiran (PIN)</h3>
+                <button @click="openAddConfirmationModal = false" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <form @submit.prevent="addLecturerStatus" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Hari</label>
+                    <select x-model="formLecturer.day" class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                        <option value="Senin">Senin</option>
+                        <option value="Selasa">Selasa</option>
+                        <option value="Rabu">Rabu</option>
+                        <option value="Kamis">Kamis</option>
+                        <option value="Jumat">Jumat</option>
+                        <option value="Sabtu">Sabtu</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Jam Perkuliahan</label>
+                    <input type="text" required x-model="formLecturer.time" placeholder="Contoh: 08:30 - 10:10" class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Mata Kuliah</label>
+                    <input type="text" required x-model="formLecturer.subject" placeholder="Contoh: Konsep Sistem Informasi" class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nama Dosen</label>
+                    <input type="text" required x-model="formLecturer.lecturer" placeholder="Contoh: Dr. Murniati, S.Kom." class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Status Kehadiran</label>
+                    <select x-model="formLecturer.status" class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                        <option value="Masuk">Masuk (Hadir)</option>
+                        <option value="Tidak Masuk">Tidak Masuk (Absen/Diganti)</option>
+                        <option value="Online / Daring">Online / Daring (Zoom/GMeet)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Keterangan / Catatan</label>
+                    <textarea x-model="formLecturer.note" rows="2" placeholder="Contoh: Kuliah diganti tugas mandiri" class="w-full p-3 sm:p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-indigo-600 uppercase mb-1">PIN Khusus Admin / Ketua Kelas</label>
+                    <input type="password" required x-model="formLecturer.pin" placeholder="Masukkan PIN rahasia..." class="w-full p-3 sm:p-2.5 bg-indigo-50/50 border border-indigo-200 rounded-xl text-base sm:text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="flex flex-col sm:flex-row justify-end gap-2 pt-3 border-t border-slate-100">
+                    <button type="button" @click="openAddConfirmationModal = false" class="w-full sm:w-auto px-4 py-3 sm:py-2 bg-slate-100 text-slate-600 text-sm font-medium rounded-xl hover:bg-slate-200">Batal</button>
+                    <button type="submit" class="w-full sm:w-auto px-5 py-3 sm:py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 shadow">Simpan & Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto py-6 text-center text-xs text-slate-500 px-4">
+        <p>&copy; 2026 Sistem Informasi 01 • Connected via Google Sheets Real-Time API</p>
+    </footer>
+
+    <!-- Alpine.js Logic & API Connector -->
+    <script>    
+        const API_URL = "https://script.google.com/macros/s/AKfycbw4W9xXs89-H8ljfkZT94Tvrtuq00L0r_BgrHHleTCzy5j2Ev3A6JpbWIupIH90jtSQZw/exec";
+
+        function classApp() {
+            return {
+                showIntro: true, // Status awal intro aktif
+                activeTab: 'home',
+                selectedDay: 'Senin',
+                searchMember: '',
+                openAddConfirmationModal: false,
+                loading: false,
+                
+                formLecturer: {
+                    day: 'Senin',
+                    time: '08:30 - 10:10',
+                    subject: '',
+                    lecturer: '',
+                    status: 'Masuk',
+                    note: '',
+                    pin: ''
+                },
+
+                schedule: [
+                    { day: 'Senin', time: '13:00 - 15:10', subject: 'Konsep Sistem Informasi', lecturer: 'Dr. Murniati, S.Kom., M.T', room: 'D1-304B', sks: 2 },
+                    { day: 'Selasa', time: '08:30 - 10:10', subject: 'Algoritma dan Pemograman', lecturer: 'Anisah. ST., M.T', room: 'D1-306B', sks: 3 },
+                    { day: 'Selasa', time: '10:00 - 11:50', subject: 'Bahasa Indonesia', lecturer: 'Meri Yulizar, S.Pd., M.Pd.', room: 'D1-101 Aula Teater', sks: 2 },
+                    { day: 'Selasa', time: '14:30 - 16:10', subject: 'Pendidikan Pancasila', lecturer: 'Drs. Tamarli, M.Si', room: 'D1-303 MKU', sks: 2 },
+                    { day: 'Rabu', time: '08:30 - 10:10', subject: 'Pendidikan Agama', lecturer: 'Hasanah, MA', room: 'F 227 MKU', sks: 2 },
+                    { day: 'Kamis', time: '08:30 - 10:10', subject: 'Bahasa Inggris', lecturer: 'Putri Dini Mutia, M.Pd', room: 'D-101 Aula Teater', sks: 2 },
+                    { day: 'Jumat', time: '10:10 - 12:40', subject: 'Matematika 1', lecturer: 'Murni, Ph.D', room: 'D1-301B', sks: 3 },
+                    { day: 'Sabtu', time: '08:30 - 10:10', subject: 'Arsitektur komputer', lecturer: 'Qurrata Ayuni, S.T., M.T', room: 'D1-304B', sks: 2 },
+                    { day: 'Sabtu', time: '11:00 - 12:40', subject: 'Aplikasi Komputer', lecturer: 'Rahmat Sufri, S.T., M.T', room: 'D1-301B', sks: 3 }
+                ],
+
+                lecturerStatusList: [],
+
+                members: [
+                    { nim: '26146039', name: 'Rian Sayadi', role: 'Ketua Kelas' },
+                    { nim: '26146065', name: 'Abdul Khalid', role: 'Wakil Ketua' },
+                    { nim: '26146087', name: 'Fuad Akram', role: 'Divisi Pertahanan 1' },
+                    { nim: '26146001', name: 'Nurma Yunita', role: 'Mahasiswa' },
+                    { nim: '26146003', name: 'Muhammad furqan salahuddin S.', role: 'Mahasiswa' },                  
+                    { nim: '26146005', name: 'Nurhatifah', role: 'Mahasiswa' },
+                    { nim: '26146007', name: 'M. Raffa Azarta', role: 'Mahasiswa' },
+                    { nim: '26146009', name: 'Shabila anjani', role: 'Mahasiswa' },
+                    { nim: '26146013', name: 'Maulidi', role: 'Mahasiswa' },
+                    { nim: '26146015', name: 'Khairatun Nafais', role: 'Mahasiswa' },                  
+                    { nim: '26146017', name: 'Sauma Al Khalis', role: 'Mahasiswa' },
+                    { nim: '26146019', name: 'Ahya Agus Sidqi', role: 'Mahasiswa' },
+                    { nim: '26146021', name: 'Arif', role: 'Mahasiswa' },
+                    { nim: '26146023', name: 'Maulidia', role: 'Mahasiswa' },
+                    { nim: '26146025', name: 'Anna Taqia Putri', role: 'Mahasiswa' },
+                    { nim: '26146027', name: 'Rahma Akmalia', role: 'Mahasiswa' },
+                    { nim: '26146029', name: 'M. Syibral Aula', role: 'Mahasiswa' },
+                    { nim: '26146031', name: 'Naziratul Hasanah', role: 'Mahasiswa' },
+                    { nim: '26146035', name: 'Fariel Hidayah', role: 'Mahasiswa' },
+                    { nim: '26146037', name: 'Rahman Sale', role: 'Mahasiswa' },
+                    { nim: '26146041', name: 'Hajra Wandi', role: 'Mahasiswa' },
+                    { nim: '26146043', name: 'Rifno Mirilwan', role: 'Mahasiswa' },
+                    { nim: '26146045', name: 'Afdal Kan', role: 'Mahasiswa' },
+                    { nim: '26146047', name: 'Tasya Mutmainah', role: 'Mahasiswa' },
+                    { nim: '26146049', name: 'Adek Haliaton', role: 'Mahasiswa' },
+                    { nim: '26146051', name: 'Irwan Wahyudi', role: 'Mahasiswa' },
+                    { nim: '26146053', name: 'Ayu Windira', role: 'Mahasiswa' },
+                    { nim: '26146055', name: 'Zulkarnen', role: 'Mahasiswa' },
+                    { nim: '26146057', name: 'M. Vicky Julianda', role: 'Mahasiswa' },
+                    { nim: '26146059', name: 'Susi Aurelliya', role: 'Mahasiswa' },
+                    { nim: '26146061', name: 'M. Fahreza', role: 'Mahasiswa' },
+                    { nim: '26146063', name: 'Wulan Maulanda', role: 'Mahasiswa' },
+                    { nim: '26146067', name: 'M.Hafidz Saragih', role: 'Mahasiswa' },
+                    { nim: '26146069', name: 'Safrullah Kamil', role: 'Mahasiswa' },
+                    { nim: '26146071', name: 'Alif Ilsha Putra', role: 'Mahasiswa' },
+                    { nim: '26146073', name: 'Hanif Haikal', role: 'Mahasiswa' },
+                    { nim: '26146075', name: 'Qori Arvita Manda', role: 'Mahasiswa' },
+                    { nim: '26146077', name: 'Azzami Syauqi', role: 'Mahasiswa' },
+                    { nim: '26146079', name: 'Muhibbud Thibri', role: 'Mahasiswa' },
+                    { nim: '26146083', name: 'Muzammil', role: 'Mahasiswa' },
+                    { nim: '26146085', name: 'Husairi Akbar', role: 'Mahasiswa' },
+                    { nim: '26146089', name: 'Muhammand Naufal', role: 'Mahasiswa' },
+                    { nim: '26146091', name: 'T.M Hidayat Alde', role: 'Mahasiswa' },
+                    { nim: '26146093', name: 'Muharis', role: 'Mahasiswa' },
+                    { nim: '26146095', name: 'Dhiyaa Fawwaz', role: 'Mahasiswa' },
+                    { nim: '26146097', name: 'Ahmad Rizqan Kausar', role: 'Mahasiswa' },
+                    { nim: '26146099', name: 'Willi Vanonta', role: 'Mahasiswa' },
+                    { nim: '26146101', name: 'Rajul Aulia', role: 'Mahasiswa' },
+                    { nim: '26146103', name: 'Miranda Sari', role: 'Mahasiswa' },
+                    { nim: '26146105', name: 'Moulida', role: 'Mahasiswa' }
+                ],
+
+                init() {
+                    this.fetchLecturerStatus();
+                    // Hilangkan splash screen intro setelah 1.5 detik
+                    setTimeout(() => {
+                        this.showIntro = false;
+                    }, 1500);
+                },
+
+                fetchLecturerStatus() {
+                    if (API_URL.includes("GANTI_DENGAN_URL")) return;
+                    this.loading = true;
+                    fetch(API_URL)
+                        .then(res => res.json())
+                        .then(data => {
+                            this.lecturerStatusList = data.reverse();
+                            this.loading = false;
+                        })
+                        .catch(err => {
+                            console.error("Gagal mengambil data:", err);
+                            this.loading = false;
+                        });
+                },
+
+                get filteredSchedule() {
+                    return this.schedule.filter(item => item.day === this.selectedDay);
+                },
+
+                get filteredMembers() {
+                    if (!this.searchMember) return this.members;
+                    const search = this.searchMember.toLowerCase();
+                    return this.members.filter(m => m.name.toLowerCase().includes(search) || m.nim.toLowerCase().includes(search));
+                },
+
+                addLecturerStatus() {
+                    if (API_URL.includes("GANTI_DENGAN_URL")) {
+                        alert("URL API Google Apps Script belum diatur di file index.html!");
+                        return;
+                    }
+
+                    const params = new URLSearchParams({
+                        action: 'update',
+                        pin: this.formLecturer.pin,
+                        day: this.formLecturer.day,
+                        time: this.formLecturer.time,
+                        subject: this.formLecturer.subject,
+                        lecturer: this.formLecturer.lecturer,
+                        status: this.formLecturer.status,
+                        note: this.formLecturer.note
+                    });
+
+                    this.loading = true;
+                    fetch(`${API_URL}?${params.toString()}`)
+                        .then(res => res.json())
+                        .then(res => {
+                            this.loading = false;
+                            if (res.status === 'success') {
+                                alert('Status dosen berhasil diupdate secara real-time!');
+                                this.openAddConfirmationModal = false;
+                                this.formLecturer = { day: 'Senin', time: '08:30 - 10:10', subject: '', lecturer: '', status: 'Masuk', note: '', pin: '' };
+                                this.fetchLecturerStatus();
+                            } else {
+                                alert('Gagal: ' + res.message);
+                            }
+                        })
+                        .catch(err => {
+                            this.loading = false;
+                            alert('Terjadi kesalahan jaringan.');
+                        });
+                },
+
+                deleteConfirmation(id) {
+                    const pinInput = prompt("Masukkan PIN rahasia untuk menghapus status ini:");
+                    if (!pinInput) return;
+
+                    const params = new URLSearchParams({
+                        action: 'delete',
+                        pin: pinInput,
+                        id: id
+                    });
+
+                    this.loading = true;
+                    fetch(`${API_URL}?${params.toString()}`)
+                        .then(res => res.json())
+                        .then(res => {
+                            this.loading = false;
+                            if (res.status === 'success') {
+                                alert('Status berhasil dihapus!');
+                                this.fetchLecturerStatus();
+                            } else {
+                                alert('Gagal: ' + res.message);
+                            }
+                        })
+                        .catch(err => {
+                            this.loading = false;
+                            alert('Terjadi kesalahan jaringan.');
+                        });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
