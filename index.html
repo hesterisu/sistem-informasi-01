@@ -41,18 +41,6 @@
             50% { transform: translateY(-15px) scale(1.03); }
         }
         .animate-float { animation: floatSlow 8s ease-in-out infinite; }
-        .glass-card {
-            background: rgba(30, 27, 75, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-        }
-        .glass-card-light {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white relative overflow-x-hidden" x-data="classApp()">
@@ -76,13 +64,12 @@
         <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-indigo-200 to-indigo-400 bg-clip-text text-transparent">SISTEM INFORMASI 01</h1>
         <p class="text-xs sm:text-sm text-indigo-300 mt-2 tracking-widest uppercase font-semibold">Portal Akademik Kelas Real-Time • Universitas Abulyatama</p>
         
-        <!-- Loading Progress -->
         <div class="mt-10 w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden border border-indigo-500/30">
             <div class="h-full bg-gradient-to-r from-indigo-500 to-violet-500 animate-pulse w-full"></div>
         </div>
     </div>
 
-    <!-- TOAST NOTIFICATION SYSTEM (Replaces alert) -->
+    <!-- TOAST NOTIFICATION SYSTEM -->
     <div class="fixed top-5 right-5 z-[120] space-y-3 max-w-sm w-full px-4 pointer-events-none">
         <template x-for="toast in toasts" :key="toast.id">
             <div x-transition:enter="transition ease-out duration-300 transform"
@@ -101,7 +88,7 @@
                     }" class="text-lg"></i>
                 </div>
                 <div class="flex-grow text-sm font-medium" x-text="toast.message"></div>
-                <button @click="removeToast(toast.id)" class="shrink-0 opacity-70 hover:opacity-150 transition">
+                <button @click="removeToast(toast.id)" class="shrink-0 opacity-70 hover:opacity-100 transition">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -172,7 +159,7 @@
                         Portal Akademik <span class="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Sistem Informasi 01</span>
                     </h2>
                     <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        Pusat koordinasi perkuliahan real-time. Pantau jadwal, update kehadiran dosen langsung dari ruang kelas, dan akses direktori mahasiswa dengan mulus.
+                        Pusat koordinasi perkuliahan real-time. Pantau jadwal, kirim konfirmasi WhatsApp ke dosen dalam 1 klik, dan pantau status perkuliahan dengan cepat.
                     </p>
                     <div class="pt-2 flex flex-wrap gap-3">
                         <button @click="activeTab = 'lecturer'" class="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold px-6 py-3 rounded-2xl text-sm shadow-lg shadow-indigo-600/30 transition-all duration-300 flex items-center gap-2">
@@ -208,11 +195,11 @@
                 </div>
                 <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-amber-500/20 shadow-xl flex items-center space-x-5 hover:border-amber-500/40 transition">
                     <div class="bg-amber-500/20 text-amber-400 p-4 rounded-2xl text-2xl border border-amber-500/30 shrink-0">
-                        <i class="fa-solid fa-shield-halved"></i>
+                        <i class="fa-solid fa-comment-dots"></i>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Keamanan Sistem</p>
-                        <h3 class="text-sm font-bold text-white mt-1">PIN Ketua & Admin</h3>
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Fitur WA 1-Klik</p>
+                        <h3 class="text-sm font-bold text-white mt-1">Konfirmasi Dosen H-1</h3>
                     </div>
                 </div>
             </div>
@@ -229,15 +216,22 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <template x-for="item in todaySchedule">
-                        <div class="bg-slate-950/60 p-4 rounded-2xl border border-indigo-500/10 hover:border-indigo-500/40 transition">
-                            <div class="flex justify-between items-start">
-                                <span class="bg-indigo-500/20 text-indigo-300 text-xs font-semibold px-2.5 py-1 rounded-lg border border-indigo-500/30" x-text="item.time"></span>
-                                <span class="text-slate-400 text-xs font-medium"><i class="fa-solid fa-location-dot text-rose-400 mr-1"></i> <span x-text="item.room"></span></span>
+                        <div class="bg-slate-950/60 p-5 rounded-2xl border border-indigo-500/10 hover:border-indigo-500/40 transition flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start">
+                                    <span class="bg-indigo-500/20 text-indigo-300 text-xs font-semibold px-2.5 py-1 rounded-lg border border-indigo-500/30" x-text="item.time"></span>
+                                    <span class="text-slate-400 text-xs font-medium"><i class="fa-solid fa-location-dot text-rose-400 mr-1"></i> <span x-text="item.room"></span></span>
+                                </div>
+                                <h4 class="font-bold text-white mt-3 text-base" x-text="item.subject"></h4>
+                                <p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-chalkboard-user text-indigo-400"></i> <span x-text="item.lecturer"></span>
+                                </p>
                             </div>
-                            <h4 class="font-bold text-white mt-3 text-base" x-text="item.subject"></h4>
-                            <p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
-                                <i class="fa-solid fa-chalkboard-user text-indigo-400"></i> <span x-text="item.lecturer"></span>
-                            </p>
+                            <div class="mt-4 pt-3 border-t border-slate-800/80">
+                                <a :href="getWhatsAppLink(item)" target="_blank" class="w-full bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition">
+                                    <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i> Kirim WA Konfirmasi
+                                </a>
+                            </div>
                         </div>
                     </template>
                 </div>
@@ -254,7 +248,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-2xl font-extrabold text-white">Jadwal Kuliah Mingguan</h2>
-                    <p class="text-slate-400 text-xs sm:text-sm">Jadwal lengkap perkuliahan kelas Sistem Informasi 01.</p>
+                    <p class="text-slate-400 text-xs sm:text-sm">Jadwal lengkap perkuliahan & fitur cepat kirim pesan konfirmasi ke dosen.</p>
                 </div>
                 <!-- Day selector pill buttons -->
                 <div class="flex overflow-x-auto w-full sm:w-auto gap-1.5 bg-slate-900/80 p-1.5 rounded-2xl border border-indigo-500/20 no-scrollbar">
@@ -283,9 +277,13 @@
                                 <span x-text="item.lecturer"></span>
                             </p>
                         </div>
-                        <div class="mt-6 pt-4 border-t border-slate-800 flex justify-between items-center text-xs text-slate-400">
-                            <span class="bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700">SKS: <strong class="text-white" x-text="item.sks"></strong></span>
-                            <span class="text-indigo-400 font-semibold">Sistem Informasi 01</span>
+                        <div class="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row gap-3 sm:items-center justify-between text-xs">
+                            <span class="bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700 text-slate-400 w-fit">SKS: <strong class="text-white" x-text="item.sks"></strong></span>
+                            
+                            <!-- WhatsApp Confirmation Button -->
+                            <a :href="getWhatsAppLink(item)" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> Kirim Konfirmasi H-1
+                            </a>
                         </div>
                     </div>
                 </template>
@@ -458,7 +456,7 @@
         </div>
     </div>
 
-    <!-- Modal Delete PIN Input (Replaces prompt) -->
+    <!-- Modal Delete PIN Input -->
     <div x-show="openDeleteModal" 
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 scale-95"
@@ -515,15 +513,15 @@
                 },
 
                 schedule: [
-                   { day: 'Selasa', time: '08:30 - 10:10', subject: 'Algoritma dan Pemograman', lecturer: 'Anisah. ST., M.T', room: 'D1-306B', sks: 3 },
-                    { day: 'Selasa', time: '10:00 - 11:50', subject: 'Bahasa Indonesia', lecturer: 'Meri Yulizar, S.Pd., M.Pd.', room: 'D1-101 Aula Teater', sks: 2 },
-                    { day: 'Selasa', time: '14:30 - 16:10', subject: 'Pendidikan Pancasila', lecturer: 'Drs. Tamarli, M.Si', room: 'D1-303 MKU', sks: 2 },
-                    { day: 'Rabu', time: '08:30 - 10:10', subject: 'Pendidikan Agama', lecturer: 'Hasanah, MA', room: 'F 227 MKU', sks: 2 },
-                    { day: 'Kamis', time: '08:30 - 10:10', subject: 'Bahasa Inggris', lecturer: 'Putri Dini Mutia, M.Pd', room: 'D-101 Aula Teater', sks: 2 },
-                    { day: 'Kamis', time: '11:00 - 12:40', subject: 'Konsep Sistem Informasi', lecturer: 'Dr. Murniati, S.Kom., M.T', room: 'D1-304B', sks: 2 },
-                    { day: 'Jumat', time: '08:30 - 10:10', subject: 'Arsitektur komputer', lecturer: 'Qurrata Ayuni, S.T., M.T', room: 'D1-304B', sks: 2 },
-                    { day: 'Jumat', time: '10:10 - 12:40', subject: 'Matematika 1', lecturer: 'Murni, Ph.D', room: 'D1-301B', sks: 3 },
-                    { day: 'Rabu', time: '14:30 - 16:10', subject: 'Aplikasi Komputer', lecturer: 'Rahmat Sufri, S.T., M.T', room: 'D1-301B', sks: 3 }
+                    { day: 'Selasa', time: '08:30 - 10:10', subject: 'Algoritma dan Pemograman', lecturer: 'Anisah. ST., M.T', room: 'D1-306B', sks: 3, phone: '6285359398283' },
+                    { day: 'Selasa', time: '10:00 - 11:50', subject: 'Bahasa Indonesia', lecturer: 'Meri Yulizar, S.Pd., M.Pd.', room: 'D1-101 Aula Teater', sks: 2, phone: '6285213274710' },
+                    { day: 'Selasa', time: '14:30 - 16:10', subject: 'Pendidikan Pancasila', lecturer: 'Drs. Tamarli, M.Si', room: 'D1-303 MKU', sks: 2, phone: '6281234567890' },
+                    { day: 'Rabu', time: '08:30 - 10:10', subject: 'Pendidikan Agama', lecturer: 'Hasanah, MA', room: 'F 227 MKU', sks: 2, phone: '6282124773946' },
+                    { day: 'Kamis', time: '08:30 - 10:10', subject: 'Bahasa Inggris', lecturer: 'Putri Dini Mutia, M.Pd', room: 'D-101 Aula Teater', sks: 2, phone: '6282363782257' },
+                    { day: 'Kamis', time: '11:00 - 12:40', subject: 'Konsep Sistem Informasi', lecturer: 'Dr. Murniati, S.Kom., M.T', room: 'D1-304B', sks: 2, phone: '6282290448680' },
+                    { day: 'Jumat', time: '08:30 - 10:10', subject: 'Arsitektur komputer', lecturer: 'Qurrata Ayuni, S.T., M.T', room: 'D1-304B', sks: 2, phone: '6285358749986' },
+                    { day: 'Jumat', time: '10:10 - 12:40', subject: 'Matematika 1', lecturer: 'Murni, Ph.D', room: 'D1-301B', sks: 3, phone: '6281234567890' },
+                    { day: 'Rabu', time: '14:30 - 16:10', subject: 'Aplikasi Komputer', lecturer: 'Rahmat Sufri, S.T., M.T', room: 'D1-301B', sks: 3, phone: '6285260546475' }
                 ],
 
                 lecturerStatusList: [],
@@ -597,16 +595,35 @@
                     
                     const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
                     this.todayName = days[now.getDay()];
-                    if (this.todayName === 'Minggu') this.todayName = 'Senin'; // Fallback if Sunday
-                    if (this.selectedDay === 'Senin' && this.todayName !== 'Minggu') {
-                        // Keep user selection or default
-                    }
+                    if (this.todayName === 'Minggu') this.todayName = 'Senin';
 
                     const hour = now.getHours();
                     if (hour < 11) this.greeting = 'Selamat Pagi';
                     else if (hour < 15) this.greeting = 'Selamat Siang';
                     else if (hour < 18) this.greeting = 'Selamat Sore';
                     else this.greeting = 'Selamat Malam';
+                },
+
+                getWhatsAppLink(item) {
+                    const phone = item.phone || '';
+                    const text = `Assalamu'alaikum Wr. Wb.
+
+Yth. Bapak/Ibu ${item.lecturer},
+
+Kami dari perwakilan mahasiswa Kelas Sistem Informasi 01 Universitas Abulyatama ingin mengkonfirmasi ketersediaan perkuliahan untuk mata kuliah *${item.subject}* pada:
+
+🗓 Hari: ${item.day}
+⏰ Pukul: ${item.time} WIB
+🏫 Ruangan: ${item.room}
+
+Mohon konfirmasi ketersediaan kehadiran Bapak/Ibu. Terima kasih banyak.
+
+Hormat kami,
+Rian Sayadi
+NIM: 26146039
+Komting Sistem Informasi 01`;
+
+                    return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
                 },
 
                 showToast(message, type = 'success') {
