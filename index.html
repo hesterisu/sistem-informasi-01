@@ -164,7 +164,7 @@
                         Portal Akademik <span class="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Sistem Informasi 01</span>
                     </h2>
                     <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        Pusat koordinasi perkuliahan real-time. Pantau jadwal, cek deadline tugas, kirim konfirmasi WhatsApp ke dosen dalam 1 klik, dan pantau status perkuliahan dengan cepat.
+                        Pusat koordinasi perkuliahan real-time. Pantau jadwal, cek deadline & file PDF tugas, kirim konfirmasi WhatsApp ke dosen dalam 1 klik, dan pantau status perkuliahan dengan cepat.
                     </p>
                     <div class="pt-2 flex flex-wrap gap-3">
                         <button @click="activeTab = 'tasks'" class="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold px-6 py-3 rounded-2xl text-sm shadow-lg shadow-indigo-600/30 transition-all duration-300 flex items-center gap-2">
@@ -210,11 +210,11 @@
                 </div>
                 <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-amber-500/20 shadow-xl flex items-center space-x-5 hover:border-amber-500/40 transition">
                     <div class="bg-amber-500/20 text-amber-400 p-4 rounded-2xl text-2xl border border-amber-500/30 shrink-0">
-                        <i class="fa-solid fa-comment-dots"></i>
+                        <i class="fa-solid fa-file-pdf"></i>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Fitur WA 1-Klik</p>
-                        <h3 class="text-sm font-bold text-white mt-1">Konfirmasi & Share</h3>
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Lampiran Tugas</p>
+                        <h3 class="text-sm font-bold text-white mt-1">Support PDF & Link</h3>
                     </div>
                 </div>
             </div>
@@ -355,7 +355,7 @@
             </div>
         </div>
 
-        <!-- TAB BARU: PAPAN TUGAS & DEADLINE TRACKER -->
+        <!-- TAB 3: PAPAN TUGAS & DEADLINE TRACKER (DENGAN LAMPIRAN PDF & LINK) -->
         <div x-show="activeTab === 'tasks'" 
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
@@ -368,7 +368,7 @@
                     <h2 class="text-2xl font-extrabold text-white flex items-center gap-2.5">
                         <span>Papan Tugas & Deadline Tracker</span>
                     </h2>
-                    <p class="text-slate-400 text-xs sm:text-sm">Pantau tenggat waktu pengumpulan tugas kuliah dan tandai progres pribadimu.</p>
+                    <p class="text-slate-400 text-xs sm:text-sm">Pantau tenggat waktu tugas, unduh lampiran PDF soal/materi, atau akses link pengumpulan.</p>
                 </div>
                 <div class="flex gap-3 w-full sm:w-auto">
                     <button @click="fetchAllData()" class="flex-1 sm:flex-none bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold px-4 py-2.5 rounded-2xl text-xs sm:text-sm border border-indigo-500/20 transition flex items-center justify-center gap-2">
@@ -418,7 +418,7 @@
             <div x-show="!loading && filteredTasks.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <template x-for="task in filteredTasks" :key="task.id">
                     <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border shadow-xl transition flex flex-col justify-between relative overflow-hidden"
-                         :class="isTaskDone(task.id) ? 'border-emerald-500/30 opacity-80' : 'border-indigo-500/20 hover:border-indigo-500/50'">
+                         :class="isTaskDone(task.id) ? 'border-emerald-500/30 opacity-85' : 'border-indigo-500/20 hover:border-indigo-500/50'">
                         
                         <div>
                             <!-- Top Badges: Tipe Tugas & Countdown -->
@@ -441,6 +441,46 @@
                                x-show="task.description" 
                                x-text="task.description"></p>
 
+                            <!-- KOTAK LAMPIRAN FILE PDF (Jika Ada PDF) -->
+                            <div x-show="task.pdfUrl" class="mt-3 bg-rose-950/25 border border-rose-500/30 rounded-2xl p-3.5 flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <div class="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 flex items-center justify-center text-lg shrink-0">
+                                        <i class="fa-solid fa-file-pdf"></i>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-bold text-white truncate" x-text="task.pdfName || 'Dokumen_Tugas.pdf'"></p>
+                                        <p class="text-[11px] text-rose-300/80 flex items-center gap-1.5 mt-0.5">
+                                            <span>Dokumen PDF</span>
+                                            <span x-show="task.pdfSize" x-text="'• ' + task.pdfSize"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button @click="openPdfPreview(task)" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-lg shadow-rose-600/20" title="Pratinjau PDF di sini">
+                                        <i class="fa-solid fa-eye"></i> <span class="hidden sm:inline">Lihat PDF</span>
+                                    </button>
+                                    <button @click="downloadOrOpenPdf(task)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 p-2 rounded-xl text-xs transition" title="Unduh / Buka Tab Baru">
+                                        <i class="fa-solid fa-download"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- KOTAK LAMPIRAN LINK (Jika Ada Link) -->
+                            <div x-show="task.link" class="mt-3 bg-indigo-950/25 border border-indigo-500/30 rounded-2xl p-3 flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <div class="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-400 flex items-center justify-center text-sm shrink-0">
+                                        <i class="fa-solid fa-link"></i>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-bold text-white truncate" x-text="task.linkLabel || 'Tautan Tugas / Pengumpulan'"></p>
+                                        <p class="text-[11px] text-indigo-300/80 truncate" x-text="task.link"></p>
+                                    </div>
+                                </div>
+                                <a :href="task.link" target="_blank" rel="noopener noreferrer" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0 shadow-lg shadow-indigo-600/20">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Link
+                                </a>
+                            </div>
+
                             <!-- Info Waktu Tenggat -->
                             <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-400">
                                 <span class="flex items-center gap-1.5">
@@ -461,14 +501,9 @@
                             </button>
 
                             <div class="flex items-center gap-2">
-                                <!-- Link Pengumpulan jika ada -->
-                                <a x-show="task.link" :href="task.link" target="_blank" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-lg shadow-indigo-600/20" title="Buka Link Pengumpulan">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Link Tugas
-                                </a>
-
                                 <!-- Share ke Grup WA -->
-                                <a :href="getTaskWhatsAppShare(task)" target="_blank" class="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 p-2 rounded-xl text-xs transition flex items-center justify-center" title="Bagikan Pengingat ke WA">
-                                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                                <a :href="getTaskWhatsAppShare(task)" target="_blank" class="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5" title="Bagikan Pengingat ke WA">
+                                    <i class="fa-brands fa-whatsapp text-sm"></i> Share WA
                                 </a>
 
                                 <!-- Hapus Tugas (Admin PIN) -->
@@ -493,7 +528,7 @@
             </div>
         </div>
 
-        <!-- TAB 3: KONFIRMASI DOSEN (REAL-TIME) -->
+        <!-- TAB 4: KONFIRMASI DOSEN (REAL-TIME) -->
         <div x-show="activeTab === 'lecturer'" 
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
@@ -563,7 +598,7 @@
             </div>
         </div>
 
-        <!-- TAB 4: ANGGOTA KELAS -->
+        <!-- TAB 5: ANGGOTA KELAS -->
         <div x-show="activeTab === 'members'" 
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
@@ -598,19 +633,20 @@
 
     </main>
 
-    <!-- Modal Tambah Tugas Baru (PIN Admin) -->
+    <!-- MODAL TAMBAH TUGAS BARU (DENGAN FITUR SISIPAN FILE PDF ATAU LINK) -->
     <div x-show="openAddTaskModal" 
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 scale-95"
          x-transition:enter-end="opacity-100 scale-100"
          class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 overflow-y-auto" x-cloak>
-        <div @click.away="openAddTaskModal = false" class="bg-slate-900 border border-indigo-500/30 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl p-6 sm:p-8 space-y-5 my-auto">
+        <div @click.away="openAddTaskModal = false" class="bg-slate-900 border border-indigo-500/30 w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-3xl shadow-2xl p-6 sm:p-8 space-y-5 my-auto">
             <div class="flex justify-between items-center border-b border-slate-800 pb-4">
                 <h3 class="text-lg font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-list-check text-indigo-400"></i> Tambah Tugas Kuliah Baru
                 </h3>
                 <button @click="openAddTaskModal = false" class="text-slate-400 hover:text-white p-1.5 rounded-xl bg-slate-800/80"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
+
             <form @submit.prevent="addTaskItem" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Pilih Mata Kuliah</label>
@@ -640,12 +676,88 @@
 
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Instruksi / Detail Tugas</label>
-                    <textarea x-model="formTask.description" rows="3" placeholder="Contoh: Format PDF, dikumpulkan lewat Google Drive kelas..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500"></textarea>
+                    <textarea x-model="formTask.description" rows="3" placeholder="Contoh: Kerjakan soal pada file PDF terlampir, dikumpulkan dalam bentuk laporan..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500"></textarea>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Link Pengumpulan (Opsional)</label>
-                    <input type="url" x-model="formTask.link" placeholder="https://drive.google.com/..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
+                <!-- BAGIAN SISIPAN LAMPIRAN (FILE PDF ATAU LINK) -->
+                <div class="bg-slate-950/90 border border-indigo-500/25 rounded-2xl p-4 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <label class="text-xs font-bold text-indigo-300 uppercase flex items-center gap-1.5">
+                            <i class="fa-solid fa-paperclip"></i> Sisipkan Lampiran Tugas
+                        </label>
+                        <!-- Pilihan Mode Lampiran -->
+                        <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+                            <button type="button" @click="formTask.attachmentMode = 'none'" :class="formTask.attachmentMode === 'none' ? 'bg-slate-700 text-white font-semibold' : 'text-slate-400 hover:text-white'" class="px-2.5 py-1 rounded-lg transition">
+                                Tanpa
+                            </button>
+                            <button type="button" @click="formTask.attachmentMode = 'pdf'" :class="formTask.attachmentMode === 'pdf' ? 'bg-rose-600 text-white font-semibold' : 'text-slate-400 hover:text-white'" class="px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+                                <i class="fa-solid fa-file-pdf"></i> File PDF
+                            </button>
+                            <button type="button" @click="formTask.attachmentMode = 'link'" :class="formTask.attachmentMode === 'link' ? 'bg-indigo-600 text-white font-semibold' : 'text-slate-400 hover:text-white'" class="px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+                                <i class="fa-solid fa-link"></i> Link
+                            </button>
+                            <button type="button" @click="formTask.attachmentMode = 'both'" :class="formTask.attachmentMode === 'both' ? 'bg-violet-600 text-white font-semibold' : 'text-slate-400 hover:text-white'" class="px-2.5 py-1 rounded-lg transition">
+                                PDF + Link
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- INPUT LAMPIRAN FILE PDF -->
+                    <div x-show="formTask.attachmentMode === 'pdf' || formTask.attachmentMode === 'both'" class="space-y-3 pt-2 border-t border-slate-800/80">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-rose-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-pdf"></i> Dokumen PDF Soal / Materi
+                            </span>
+                            <div class="flex gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-[11px]">
+                                <button type="button" @click="formTask.pdfSourceType = 'upload'" :class="formTask.pdfSourceType === 'upload' ? 'bg-rose-600/30 text-rose-200 border border-rose-500/40 font-semibold' : 'text-slate-400'" class="px-2.5 py-0.5 rounded-md transition">
+                                    Upload File
+                                </button>
+                                <button type="button" @click="formTask.pdfSourceType = 'url'" :class="formTask.pdfSourceType === 'url' ? 'bg-rose-600/30 text-rose-200 border border-rose-500/40 font-semibold' : 'text-slate-400'" class="px-2.5 py-0.5 rounded-md transition">
+                                    Link PDF / Drive
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Opsi A: Upload File PDF dari Perangkat -->
+                        <div x-show="formTask.pdfSourceType === 'upload'" class="space-y-2">
+                            <label class="flex flex-col items-center justify-center w-full p-4 border-2 border-dashed rounded-2xl cursor-pointer transition"
+                                   :class="formTask.pdfDataBase64 ? 'border-emerald-500/50 bg-emerald-950/20' : 'border-slate-700 hover:border-rose-500/50 bg-slate-900/50 hover:bg-slate-900'">
+                                <div class="flex flex-col items-center justify-center text-center" x-show="!formTask.pdfDataBase64">
+                                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-rose-400 mb-1.5"></i>
+                                    <p class="text-xs font-semibold text-slate-200">Klik untuk pilih file PDF dari perangkat</p>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Format .PDF (Maks. disarankan 3 MB)</p>
+                                </div>
+                                <div class="flex items-center justify-between w-full gap-3" x-show="formTask.pdfDataBase64">
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        <i class="fa-solid fa-file-pdf text-2xl text-rose-400 shrink-0"></i>
+                                        <div class="text-left min-w-0">
+                                            <p class="text-xs font-bold text-white truncate" x-text="formTask.pdfFileName"></p>
+                                            <p class="text-[11px] text-emerald-400" x-text="formTask.pdfFileSize + ' • Siap dilampirkan'"></p>
+                                        </div>
+                                    </div>
+                                    <button type="button" @click.prevent="clearUploadedPdf()" class="text-xs bg-rose-600/20 hover:bg-rose-600/40 text-rose-300 px-2.5 py-1 rounded-lg border border-rose-500/30 shrink-0">
+                                        Ganti
+                                    </button>
+                                </div>
+                                <input type="file" accept=".pdf,application/pdf" @change="handlePdfUpload($event)" class="hidden">
+                            </label>
+                        </div>
+
+                        <!-- Opsi B: Tempel URL File PDF / Google Drive -->
+                        <div x-show="formTask.pdfSourceType === 'url'" class="space-y-2">
+                            <input type="url" x-model="formTask.pdfFileUrl" placeholder="https://drive.google.com/file/d/... atau link .pdf" class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-rose-500">
+                            <input type="text" x-model="formTask.pdfFileName" placeholder="Nama tampilan file (Contoh: Modul_Praktikum_1.pdf)" class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-rose-500">
+                        </div>
+                    </div>
+
+                    <!-- INPUT LAMPIRAN LINK / URL -->
+                    <div x-show="formTask.attachmentMode === 'link' || formTask.attachmentMode === 'both'" class="space-y-2 pt-2 border-t border-slate-800/80">
+                        <span class="text-xs font-semibold text-indigo-300 flex items-center gap-1.5">
+                            <i class="fa-solid fa-link"></i> Tautan / Link Pengumpulan Tugas
+                        </span>
+                        <input type="url" x-model="formTask.link" placeholder="https://drive.google.com/... atau https://forms.gle/..." class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500">
+                        <input type="text" x-model="formTask.linkLabel" placeholder="Judul tombol link (Opsional, contoh: Link Pengumpulan Drive)" class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500">
+                    </div>
                 </div>
 
                 <div>
@@ -658,6 +770,45 @@
                     <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-sm font-semibold rounded-2xl shadow-lg shadow-indigo-600/30 transition">Simpan Tugas</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL PRATINJAU (PREVIEW) FILE PDF -->
+    <div x-show="openPdfModal" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         class="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/90 backdrop-blur-md p-3 sm:p-6" x-cloak>
+        <div @click.away="closePdfPreview()" class="bg-slate-900 border border-rose-500/30 w-full max-w-4xl h-[88vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center px-5 py-4 border-b border-slate-800 bg-slate-950/60">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-9 h-9 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="text-sm sm:text-base font-bold text-white truncate" x-text="activePdfTask?.pdfName || 'Pratinjau Dokumen PDF'"></h3>
+                        <p class="text-[11px] text-slate-400 truncate" x-text="activePdfTask?.subject || ''"></p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button @click="downloadOrOpenPdf(activePdfTask)" class="bg-rose-600 hover:bg-rose-500 text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> <span class="hidden sm:inline">Unduh / Buka Tab Baru</span>
+                    </button>
+                    <button @click="closePdfPreview()" class="text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-grow bg-slate-950 relative">
+                <template x-if="pdfPreviewSrc">
+                    <iframe :src="pdfPreviewSrc" class="w-full h-full border-0" allow="autoplay"></iframe>
+                </template>
+                <div x-show="!pdfPreviewSrc" class="flex flex-col items-center justify-center h-full text-center p-6 space-y-3">
+                    <i class="fa-solid fa-file-circle-exclamation text-4xl text-rose-400"></i>
+                    <p class="text-sm font-bold text-white">Pratinjau PDF Tidak Tersedia di Perangkat Ini</p>
+                    <p class="text-xs text-slate-400 max-w-md">File PDF ini diunggah secara lokal dari perangkat lain. Untuk berbagi lintas perangkat, gunakan opsi Link Google Drive PDF.</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -781,6 +932,9 @@
                 openAddConfirmationModal: false,
                 openAddTaskModal: false,
                 openDeleteModal: false,
+                openPdfModal: false,
+                activePdfTask: null,
+                pdfPreviewSrc: '',
                 deleteTargetId: null,
                 deletePinInput: '',
                 loading: false,
@@ -788,6 +942,7 @@
                 selectedCourseIndex: '',
                 taskFilter: 'all',
                 completedTaskIds: [],
+                localPdfStore: {},
                 
                 formLecturer: {
                     day: 'Senin',
@@ -805,7 +960,14 @@
                     deadlineDate: '',
                     deadlineTime: '23:59',
                     description: '',
+                    attachmentMode: 'pdf', // 'none' | 'pdf' | 'link' | 'both'
+                    pdfSourceType: 'upload', // 'upload' | 'url'
+                    pdfFileUrl: '',
+                    pdfFileName: '',
+                    pdfFileSize: '',
+                    pdfDataBase64: '',
                     link: '',
+                    linkLabel: '',
                     pin: ''
                 },
 
@@ -878,10 +1040,14 @@
                 ],
 
                 init() {
-                    // Muat daftar tugas yang sudah dicentang selesai dari localStorage
                     const savedCompleted = localStorage.getItem('si01_completed_tasks');
                     if (savedCompleted) {
                         try { this.completedTaskIds = JSON.parse(savedCompleted); } catch (e) { this.completedTaskIds = []; }
+                    }
+
+                    const savedPdfs = localStorage.getItem('si01_local_pdfs');
+                    if (savedPdfs) {
+                        try { this.localPdfStore = JSON.parse(savedPdfs); } catch (e) { this.localPdfStore = {}; }
                     }
 
                     this.updateClockAndGreeting();
@@ -964,10 +1130,97 @@
                         deadlineDate: defaultDate,
                         deadlineTime: '23:59',
                         description: '',
+                        attachmentMode: 'pdf',
+                        pdfSourceType: 'upload',
+                        pdfFileUrl: '',
+                        pdfFileName: '',
+                        pdfFileSize: '',
+                        pdfDataBase64: '',
                         link: '',
+                        linkLabel: '',
                         pin: ''
                     };
                     this.openAddTaskModal = true;
+                },
+
+                handlePdfUpload(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                        this.showToast('Harap pilih file dengan format .PDF!', 'error');
+                        event.target.value = '';
+                        return;
+                    }
+
+                    const sizeKB = file.size / 1024;
+                    const formattedSize = sizeKB >= 1024 
+                        ? (sizeKB / 1024).toFixed(2) + ' MB' 
+                        : Math.round(sizeKB) + ' KB';
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.formTask.pdfDataBase64 = e.target.result;
+                        this.formTask.pdfFileName = file.name;
+                        this.formTask.pdfFileSize = formattedSize;
+                        this.showToast(`File "${file.name}" berhasil dipilih.`, 'info');
+                    };
+                    reader.readAsDataURL(file);
+                },
+
+                clearUploadedPdf() {
+                    this.formTask.pdfDataBase64 = '';
+                    this.formTask.pdfFileName = '';
+                    this.formTask.pdfFileSize = '';
+                },
+
+                convertDriveToPreviewUrl(url) {
+                    if (!url) return '';
+                    const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                    if (driveMatch && driveMatch[1]) {
+                        return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+                    }
+                    return url;
+                },
+
+                openPdfPreview(task) {
+                    this.activePdfTask = task;
+                    this.pdfPreviewSrc = '';
+
+                    if (task.pdfUrl && task.pdfUrl.startsWith('local_pdf_')) {
+                        const base64Data = this.localPdfStore[task.pdfUrl];
+                        if (base64Data) {
+                            this.pdfPreviewSrc = base64Data;
+                        }
+                    } else if (task.pdfUrl) {
+                        this.pdfPreviewSrc = this.convertDriveToPreviewUrl(task.pdfUrl);
+                    }
+                    this.openPdfModal = true;
+                },
+
+                closePdfPreview() {
+                    this.openPdfModal = false;
+                    this.pdfPreviewSrc = '';
+                    this.activePdfTask = null;
+                },
+
+                downloadOrOpenPdf(task) {
+                    if (!task || !task.pdfUrl) return;
+                    if (task.pdfUrl.startsWith('local_pdf_')) {
+                        const base64Data = this.localPdfStore[task.pdfUrl];
+                        if (!base64Data) {
+                            this.showToast('File PDF lokal hanya tersimpan di perangkat pengunggah.', 'error');
+                            return;
+                        }
+                        const link = document.createElement('a');
+                        link.href = base64Data;
+                        link.download = task.pdfName || 'Tugas_SI01.pdf';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    } else {
+                        window.open(task.pdfUrl, '_blank', 'noopener');
+                    }
                 },
 
                 // Memisahkan data Status Dosen dan data Papan Tugas dari Google Sheets
@@ -982,14 +1235,23 @@
                             // Filter Status Kehadiran Dosen
                             this.lecturerStatusList = raw.filter(item => item.status !== 'TUGAS').reverse();
                             
-                            // Filter & Parse Papan Tugas
+                            // Filter & Parse Papan Tugas (Mendukung format lama & baru: desc|||link|||pdfUrl|||pdfName|||pdfSize|||linkLabel)
                             this.taskList = raw.filter(item => item.status === 'TUGAS').map(item => {
                                 let desc = item.note || '';
                                 let link = '';
+                                let pdfUrl = '';
+                                let pdfName = '';
+                                let pdfSize = '';
+                                let linkLabel = '';
+
                                 if (desc.includes('|||')) {
                                     const parts = desc.split('|||');
-                                    desc = parts[0];
+                                    desc = parts[0] || '';
                                     link = parts[1] || '';
+                                    pdfUrl = parts[2] || '';
+                                    pdfName = parts[3] || '';
+                                    pdfSize = parts[4] || '';
+                                    linkLabel = parts[5] || '';
                                 }
                                 return {
                                     id: item.id,
@@ -998,7 +1260,11 @@
                                     subject: item.subject,
                                     title: item.lecturer,
                                     description: desc,
-                                    link: link
+                                    link: link,
+                                    pdfUrl: pdfUrl,
+                                    pdfName: pdfName,
+                                    pdfSize: pdfSize,
+                                    linkLabel: linkLabel
                                 };
                             }).sort((a, b) => {
                                 const dateA = new Date(`${a.deadlineDate}T${a.deadlineTime}`);
@@ -1015,9 +1281,49 @@
                 },
 
                 addTaskItem() {
-                    const packedNote = this.formTask.link 
-                        ? `${this.formTask.description}|||${this.formTask.link}` 
-                        : this.formTask.description;
+                    let finalLink = '';
+                    let finalLinkLabel = '';
+                    let finalPdfRef = '';
+                    let finalPdfName = '';
+                    let finalPdfSize = '';
+
+                    const mode = this.formTask.attachmentMode;
+
+                    if (mode === 'link' || mode === 'both') {
+                        finalLink = (this.formTask.link || '').trim();
+                        finalLinkLabel = (this.formTask.linkLabel || '').trim();
+                    }
+
+                    if (mode === 'pdf' || mode === 'both') {
+                        if (this.formTask.pdfSourceType === 'upload' && this.formTask.pdfDataBase64) {
+                            const pdfKey = 'local_pdf_' + Date.now();
+                            this.localPdfStore[pdfKey] = this.formTask.pdfDataBase64;
+                            try {
+                                localStorage.setItem('si01_local_pdfs', JSON.stringify(this.localPdfStore));
+                            } catch (e) {
+                                console.warn('Penyimpanan lokal penuh, menyimpan PDF di sesi aktif.');
+                            }
+                            finalPdfRef = pdfKey;
+                            finalPdfName = this.formTask.pdfFileName || 'Dokumen_Tugas.pdf';
+                            finalPdfSize = this.formTask.pdfFileSize || '';
+                        } else if (this.formTask.pdfSourceType === 'url' && this.formTask.pdfFileUrl) {
+                            finalPdfRef = this.formTask.pdfFileUrl.trim();
+                            finalPdfName = (this.formTask.pdfFileName || '').trim() || 'Dokumen_Tugas.pdf';
+                            finalPdfSize = 'Cloud PDF';
+                        }
+                    }
+
+                    const hasAttachment = finalLink || finalPdfRef;
+                    const packedNote = hasAttachment
+                        ? [
+                            this.formTask.description || '',
+                            finalLink,
+                            finalPdfRef,
+                            finalPdfName,
+                            finalPdfSize,
+                            finalLinkLabel
+                          ].join('|||')
+                        : (this.formTask.description || '');
 
                     const params = new URLSearchParams({
                         action: 'update',
@@ -1117,12 +1423,20 @@
                 },
 
                 getTaskWhatsAppShare(task) {
+                    const pdfLine = task.pdfUrl
+                        ? (task.pdfUrl.startsWith('local_pdf_')
+                            ? `\n📄 *Lampiran PDF:* ${task.pdfName || 'Dokumen Tugas.pdf'} (Tersedia di Portal Kelas)`
+                            : `\n📄 *File PDF (${task.pdfName || 'Dokumen'}):* ${task.pdfUrl}`)
+                        : '';
+                    const linkLine = task.link ? `\n🔗 *${task.linkLabel || 'Link Tugas'}:* ${task.link}` : '';
+
                     const text = `📢 *PENGINGAT TUGAS KULIAH SI-01*
 
 📚 *Mata Kuliah:* ${task.subject}
 📝 *Judul Tugas:* ${task.title}
 ⏰ *Deadline:* ${this.formatDateIndo(task.deadlineDate)} (${task.deadlineTime} WIB)
-${task.description ? `\n📌 *Detail:* \n${task.description}\n` : ''}${task.link ? `\n🔗 *Link Pengumpulan:* ${task.link}\n` : ''}
+${task.description ? `\n📌 *Detail:* \n${task.description}\n` : ''}${pdfLine}${linkLine}
+
 Jangan lupa dikerjakan tepat waktu ya teman-teman!`;
                     return `https://wa.me/?text=${encodeURIComponent(text)}`;
                 },
