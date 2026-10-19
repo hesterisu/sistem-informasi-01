@@ -80,7 +80,7 @@
                  x-transition:leave-start="opacity-100 scale-100"
                  x-transition:leave-end="opacity-0 scale-95"
                  class="pointer-events-auto flex items-start gap-3 p-4 rounded-2xl shadow-2xl border backdrop-blur-xl"
-                 :class="toast.type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-100' : (toast.type === 'error' ? 'bg-rose-950/90 border-rose-500/40 text-rose-100' : 'bg-indigo-950/90 border-indigo-500/40 text-indigo-150')">
+                 :class="toast.type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-100' : (toast.type === 'error' ? 'bg-rose-950/90 border-rose-500/40 text-rose-100' : 'bg-indigo-950/90 border-indigo-500/40 text-indigo-100')">
                 <div class="shrink-0 pt-0.5">
                     <i :class="{
                         'fa-solid fa-circle-check text-emerald-400': toast.type === 'success',
@@ -130,7 +130,7 @@
                 </button>
                 <button @click="activeTab = 'tasks'" :class="activeTab === 'tasks' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
                     <i class="fa-solid fa-list-check"></i> Papan Tugas
-                    <span x-show="pendingTasksCount > 0" x-text="pendingTasksCount" class="bg-amber-500 text-slate-950 text-[10px] font-extrabold px-1.5 py-0.2 rounded-full"></span>
+                    <span x-show="pendingTasksCount > 0" x-text="pendingTasksCount" class="bg-amber-500 text-slate-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full"></span>
                 </button>
                 <button @click="activeTab = 'lecturer'" :class="activeTab === 'lecturer' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
                     <i class="fa-solid fa-user-check"></i> Status Dosen
@@ -157,7 +157,7 @@
                 <div class="absolute -right-20 -top-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="relative z-10 max-w-3xl space-y-4">
                     <div class="inline-flex items-center gap-2 bg-indigo-500/20 border border-indigo-400/30 px-3 py-1 rounded-full text-indigo-300 text-xs font-semibold">
-                        <i class="fa-solid fa-sparkles text-amber-400"></i>
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
                         <span x-text="greeting"></span>, Civitas Akademika SI-01
                     </div>
                     <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
@@ -181,7 +181,7 @@
 
             <!-- Quick Stats Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-indigo-500/20 shadow-xl flex items-center space-x-5 hover:border-indigo-500/40 transition">
+                <div @click="activeTab = 'schedule'" class="cursor-pointer bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-indigo-500/20 shadow-xl flex items-center space-x-5 hover:border-indigo-500/40 transition">
                     <div class="bg-indigo-500/20 text-indigo-400 p-4 rounded-2xl text-2xl border border-indigo-500/30 shrink-0">
                         <i class="fa-solid fa-book-open"></i>
                     </div>
@@ -199,7 +199,7 @@
                         <h3 class="text-2xl font-extrabold text-white mt-1" x-text="pendingTasksCount + ' Belum Selesai'"></h3>
                     </div>
                 </div>
-                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-emerald-500/20 shadow-xl flex items-center space-x-5 hover:border-emerald-500/40 transition">
+                <div @click="activeTab = 'members'" class="cursor-pointer bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-emerald-500/20 shadow-xl flex items-center space-x-5 hover:border-emerald-500/40 transition">
                     <div class="bg-emerald-500/20 text-emerald-400 p-4 rounded-2xl text-2xl border border-emerald-500/30 shrink-0">
                         <i class="fa-solid fa-user-graduate"></i>
                     </div>
@@ -208,7 +208,7 @@
                         <h3 class="text-2xl font-extrabold text-white mt-1" x-text="members.length + ' Orang'"></h3>
                     </div>
                 </div>
-                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-amber-500/20 shadow-xl flex items-center space-x-5 hover:border-amber-500/40 transition">
+                <div @click="activeTab = 'tasks'" class="cursor-pointer bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-amber-500/20 shadow-xl flex items-center space-x-5 hover:border-amber-500/40 transition">
                     <div class="bg-amber-500/20 text-amber-400 p-4 rounded-2xl text-2xl border border-amber-500/30 shrink-0">
                         <i class="fa-solid fa-file-pdf"></i>
                     </div>
@@ -223,9 +223,9 @@
             <div class="bg-slate-900/60 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-indigo-500/20 shadow-xl space-y-4">
                 <div class="flex justify-between items-center">
                     <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-bolt text-amber-400"></i> Ringkasan Jadwal (<span x-text="todayName"></span>)
+                        <i class="fa-solid fa-bolt text-amber-400"></i> Ringkasan Jadwal Hari Ini (<span x-text="todayName"></span>)
                     </h3>
-                    <button @click="selectedDay = todayName; activeTab = 'schedule'" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
+                    <button @click="selectedDay = (todayName === 'Minggu' ? 'Senin' : todayName); activeTab = 'schedule'" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
                         Lihat Semua <i class="fa-solid fa-chevron-right text-[10px]"></i>
                     </button>
                 </div>
@@ -248,7 +248,7 @@
                                 <button @click="openQuickUpdate(item)" class="flex-1 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
                                     <i class="fa-solid fa-pen-to-square"></i> Status
                                 </button>
-                                <a :href="getWhatsAppLink(item)" target="_blank" class="flex-1 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                                <a :href="getWhatsAppLink(item)" target="_blank" rel="noopener noreferrer" class="flex-1 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
                                     <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i> WA Dosen
                                 </a>
                             </div>
@@ -262,193 +262,16 @@
                         <i class="fa-solid fa-mug-hot"></i>
                     </div>
                     <div class="space-y-1">
-                        indigo-400': toast.type === 'info'
-                    }" class="text-lg"></i>
-                </div>
-                <div class="flex-grow text-sm font-medium" x-text="toast.message"></div>
-                <button @click="removeToast(toast.id)" class="shrink-0 opacity-70 hover:opacity-100 transition">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-        </template>
-    </div>
-
-    <!-- Header / Navbar -->
-    <header class="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-indigo-500/20 shadow-xl shadow-indigo-950/20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row justify-between items-center gap-3">
-            <div class="flex items-center justify-between w-full md:w-auto">
-                <div class="flex items-center space-x-3.5">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-indigo-500 rounded-xl blur-md opacity-40"></div>
-                        <div class="relative bg-gradient-to-br from-indigo-600 to-violet-700 p-2.5 rounded-xl border border-indigo-400/40 shadow-inner">
-                            <i class="fa-solid fa-graduation-cap text-white text-xl sm:text-2xl"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <h1 class="text-base sm:text-lg font-extrabold tracking-tight bg-gradient-to-r from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent">SI-01 ELITE</h1>
-                            <span class="bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 text-[10px] font-semibold px-2 py-0.5 rounded-full">LIVE</span>
-                        </div>
-                        <p class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                            <span x-text="currentTime"></span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Navigation Tabs -->
-            <nav class="flex overflow-x-auto w-full md:w-auto justify-start md:justify-center gap-1.5 bg-slate-950/60 p-1.5 rounded-2xl border border-indigo-500/20 no-scrollbar">
-                <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-house"></i> Beranda
-                </button>
-                <button @click="activeTab = 'schedule'" :class="activeTab === 'schedule' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-calendar-days"></i> Jadwal Kuliah
-                </button>
-                <button @click="activeTab = 'tasks'" :class="activeTab === 'tasks' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-list-check"></i> Papan Tugas
-                    <span x-show="pendingTasksCount > 0" x-text="pendingTasksCount" class="bg-amber-500 text-slate-950 text-[10px] font-extrabold px-1.5 py-0.2 rounded-full"></span>
-                </button>
-                <button @click="activeTab = 'lecturer'" :class="activeTab === 'lecturer' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-user-check"></i> Status Dosen
-                </button>
-                <button @click="activeTab = 'members'" :class="activeTab === 'members' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-users"></i> Anggota Kelas
-                </button>
-
-                <!-- TAB ADMIN: HANYA MUNCUL UNTUK KETUA KELAS / ADMIN (NIM 26146073) -->
-                <button x-show="currentUser && currentUser.nim === '26146073'" @click="activeTab = 'admin_logs'" :class="activeTab === 'admin_logs' ? 'bg-gradient-to-r from-rose-600 to-pink-600 text-white font-semibold shadow-lg shadow-rose-600/30' : 'text-rose-400 hover:text-white hover:bg-rose-950/40'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2 border border-rose-500/30">
-                    <i class="fa-solid fa-user-shield text-rose-300"></i> Log Akses & Lokasi
-                </button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full relative z-10">
-
-        <!-- TAB 1: BERANDA -->
-        <div x-show="activeTab === 'home'" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 translate-y-3"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             class="space-y-8">
-            
-            <!-- Hero Banner -->
-            <div class="relative rounded-3xl p-6 sm:p-10 overflow-hidden border border-indigo-500/30 shadow-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-violet-950">
-                <div class="absolute -right-20 -top-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="relative z-10 max-w-3xl space-y-4">
-                    <div class="flex flex-wrap items-center justify-between gap-3">
-                        <div class="inline-flex items-center gap-2 bg-indigo-500/20 border border-indigo-400/30 px-3 py-1 rounded-full text-indigo-300 text-xs font-semibold">
-                            <i class="fa-solid fa-sparkles text-amber-400"></i>
-                            <span x-text="greeting"></span>, <span x-text="currentUser?.name"></span> (<span x-text="currentUser?.nim"></span>)
-                        </div>
-                        <button @click="logout" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 px-3 py-1 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-right-from-bracket"></i> Keluar
-                        </button>
-                    </div>
-                    <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                        Portal Akademik <span class="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Sistem Informasi 01</span>
-                    </h2>
-                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        Pusat koordinasi perkuliahan real-time. Pantau jadwal, cek deadline & file PDF tugas, kirim konfirmasi WhatsApp ke dosen dalam 1 klik, dan pantau status perkuliahan dengan cepat.
-                    </p>
-                    <div class="pt-2 flex flex-wrap gap-3">
-                        <button @click="activeTab = 'tasks'" class="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold px-6 py-3 rounded-2xl text-sm shadow-lg shadow-indigo-600/30 transition-all duration-300 flex items-center gap-2">
-                            <i class="fa-solid fa-list-check"></i>
-                            <span>Cek Papan Tugas</span>
-                            <span x-show="pendingTasksCount > 0" class="bg-amber-400 text-slate-950 text-xs font-extrabold px-2 py-0.5 rounded-full" x-text="pendingTasksCount"></span>
-                        </button>
-                        <button @click="activeTab = 'lecturer'" class="bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 font-semibold px-6 py-3 rounded-2xl text-sm transition-all duration-300 flex items-center gap-2">
-                            <i class="fa-solid fa-user-check text-indigo-400"></i> Status Dosen
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Stats Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-indigo-500/20 shadow-xl flex items-center space-x-5 hover:border-indigo-500/40 transition">
-                    <div class="bg-indigo-500/20 text-indigo-400 p-4 rounded-2xl text-2xl border border-indigo-500/30 shrink-0">
-                        <i class="fa-solid fa-book-open"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Mata Kuliah</p>
-                        <h3 class="text-2xl font-extrabold text-white mt-1" x-text="schedule.length + ' Matkul'"></h3>
-                    </div>
-                </div>
-                <div @click="activeTab = 'tasks'" class="cursor-pointer bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-rose-500/20 shadow-xl flex items-center space-x-5 hover:border-rose-500/40 transition">
-                    <div class="bg-rose-500/20 text-rose-400 p-4 rounded-2xl text-2xl border border-rose-500/30 shrink-0">
-                        <i class="fa-solid fa-fire-flame-curved"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Tugas Aktif</p>
-                        <h3 class="text-2xl font-extrabold text-white mt-1" x-text="pendingTasksCount + ' Belum Selesai'"></h3>
-                    </div>
-                </div>
-                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-emerald-500/20 shadow-xl flex items-center space-x-5 hover:border-emerald-500/40 transition">
-                    <div class="bg-emerald-500/20 text-emerald-400 p-4 rounded-2xl text-2xl border border-emerald-500/30 shrink-0">
-                        <i class="fa-solid fa-user-graduate"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Total Mahasiswa</p>
-                        <h3 class="text-2xl font-extrabold text-white mt-1" x-text="members.length + ' Orang'"></h3>
-                    </div>
-                </div>
-                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-amber-500/20 shadow-xl flex items-center space-x-5 hover:border-amber-500/40 transition">
-                    <div class="bg-amber-500/20 text-amber-400 p-4 rounded-2xl text-2xl border border-amber-500/30 shrink-0">
-                        <i class="fa-solid fa-file-pdf"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Lampiran Tugas</p>
-                        <h3 class="text-sm font-bold text-white mt-1">Support PDF & Link</h3>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Schedule Preview Today -->
-            <div class="bg-slate-900/60 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-indigo-500/20 shadow-xl space-y-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-bolt text-amber-400"></i> Ringkasan Jadwal (<span x-text="todayName"></span>)
-                    </h3>
-                    <button @click="selectedDay = todayName; activeTab = 'schedule'" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
-                        Lihat Semua <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    </button>
-                </div>
-
-                <div x-show="todaySchedule.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <template x-for="item in todaySchedule" :key="item.subject">
-                        <div class="bg-slate-950/60 p-5 rounded-2xl border border-indigo-500/10 hover:border-indigo-500/40 transition flex flex-col justify-between">
-                            <div>
-                                <div class="flex justify-between items-start">
-                                    <span class="bg-indigo-500/20 text-indigo-300 text-xs font-semibold px-2.5 py-1 rounded-lg border border-indigo-500/30" x-text="item.time"></span>
-                                    <span class="text-slate-400 text-xs font-medium"><i class="fa-solid fa-location-dot text-rose-400 mr-1"></i> <span x-text="item.room"></span></span>
-                                </div>
-                                <h4 class="font-bold text-white mt-3 text-base" x-text="item.subject"></h4>
-                                <p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-chalkboard-user text-indigo-400"></i> <span x-text="item.lecturer"></span>
-                                </p>
-                            </div>
-                            <div class="mt-4 pt-3 border-t border-slate-800/80 flex gap-2">
-                                <button @click="openQuickUpdate(item)" class="flex-1 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
-                                    <i class="fa-solid fa-pen-to-square"></i> Status
-                                </button>
-                                <a :href="getWhatsAppLink(item)" target="_blank" class="flex-1 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
-                                    <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i> WA Dosen
-                                </a>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-
-                <div x-show="todaySchedule.length === 0" class="bg-slate-950/60 p-8 sm:p-10 rounded-2xl border border-indigo-500/10 text-center space-y-3">
-                    <div class="w-14 h-14 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center mx-auto text-indigo-400 text-2xl">
-                        <i class="fa-solid fa-mug-hot"></i>
-                    </div>
-                    <div class="space-y-1">
                         <h4 class="font-bold text-white text-base">Tidak Ada Jadwal Kuliah di Hari <span x-text="todayName" class="text-indigo-400"></span></h4>
-                        <p class="text-xs text-slate-400 max-w-md mx-auto">Hari ini bebas dari jadwal perkuliahan tatap muka. Manfaatkan waktu untuk istirahat atau mencicil tugas!</p>
+                        <p class="text-xs text-slate-400 max-w-md mx-auto">Hari ini kelas bebas dari jadwal perkuliahan tatap muka. Manfaatkan waktu untuk istirahat, belajar mandiri, atau mencicil tugas!</p>
+                    </div>
+                    <div class="pt-2 flex flex-wrap justify-center gap-2">
+                        <button @click="selectedDay = 'Selasa'; activeTab = 'schedule'" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 px-4 py-2 rounded-xl font-semibold transition inline-flex items-center gap-1.5">
+                            <i class="fa-solid fa-calendar-week"></i> Lihat Jadwal Minggu Ini
+                        </button>
+                        <button @click="activeTab = 'tasks'" class="text-xs bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 px-4 py-2 rounded-xl font-semibold transition inline-flex items-center gap-1.5">
+                            <i class="fa-solid fa-list-check"></i> Cek Tugas Kuliah
+                        </button>
                     </div>
                 </div>
             </div>
@@ -466,11 +289,12 @@
                     <h2 class="text-2xl font-extrabold text-white">Jadwal Kuliah Mingguan</h2>
                     <p class="text-slate-400 text-xs sm:text-sm">Jadwal lengkap perkuliahan & fitur cepat kirim pesan konfirmasi ke dosen.</p>
                 </div>
+                <!-- Day selector pill buttons -->
                 <div class="flex overflow-x-auto w-full sm:w-auto gap-1.5 bg-slate-900/80 p-1.5 rounded-2xl border border-indigo-500/20 no-scrollbar">
-                    <template x-for="day in ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']">
+                    <template x-for="day in ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']" :key="day">
                         <button @click="selectedDay = day" :class="selectedDay === day ? 'bg-indigo-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800'" class="px-4 py-2 rounded-xl text-xs transition shrink-0 flex items-center gap-1.5">
                             <span x-text="day"></span>
-                            <span class="text-[10px] px-1.5 py-0.2 rounded-full" 
+                            <span class="text-[10px] px-1.5 py-0.5 rounded-full" 
                                   :class="selectedDay === day ? 'bg-indigo-800 text-indigo-200' : 'bg-slate-800 text-slate-400'"
                                   x-text="schedule.filter(s => s.day === day).length"></span>
                         </button>
@@ -478,6 +302,7 @@
                 </div>
             </div>
 
+            <!-- Schedule Cards Grid -->
             <div x-show="filteredSchedule.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <template x-for="item in filteredSchedule" :key="item.subject">
                     <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-indigo-500/20 shadow-xl hover:border-indigo-500/50 transition flex flex-col justify-between group">
@@ -501,7 +326,7 @@
                                 <button @click="openQuickUpdate(item)" class="bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-300 border border-indigo-500/30 font-semibold px-3.5 py-2 rounded-xl transition flex items-center justify-center gap-1.5">
                                     <i class="fa-solid fa-pen-to-square"></i> Update Status
                                 </button>
-                                <a :href="getWhatsAppLink(item)" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center justify-center gap-2">
+                                <a :href="getWhatsAppLink(item)" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-xl shadow-lg shadow-emerald-600/20 transition flex items-center justify-center gap-2">
                                     <i class="fa-brands fa-whatsapp text-sm"></i> Konfirmasi H-1
                                 </a>
                             </div>
@@ -509,21 +334,44 @@
                     </div>
                 </template>
             </div>
+
+            <!-- Empty State Jadwal Mingguan -->
+            <div x-show="filteredSchedule.length === 0" class="bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-indigo-500/20 shadow-xl p-12 sm:p-16 text-center space-y-4">
+                <div class="w-16 h-16 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center mx-auto text-indigo-400 text-3xl">
+                    <i class="fa-solid fa-calendar-xmark"></i>
+                </div>
+                <div class="space-y-1.5">
+                    <h3 class="text-lg sm:text-xl font-bold text-white">Tidak Ada Jadwal Kuliah di Hari <span x-text="selectedDay" class="text-indigo-400"></span></h3>
+                    <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">Tidak ada mata kuliah reguler yang terjadwal pada hari ini. Silakan pilih hari lain atau cek tab Status Dosen untuk melihat apabila ada jadwal kuliah pengganti.</p>
+                </div>
+                <div class="pt-2 flex justify-center gap-3">
+                    <button @click="selectedDay = 'Selasa'" class="px-4 py-2 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 rounded-xl text-xs font-semibold transition">
+                        Lihat Jadwal Selasa
+                    </button>
+                    <button @click="activeTab = 'lecturer'" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-xl text-xs font-semibold transition">
+                        Cek Status Dosen
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <!-- TAB 3: PAPAN TUGAS & DEADLINE TRACKER -->
+        <!-- ========================================================================= -->
+        <!-- TAB 3: PAPAN TUGAS & DEADLINE TRACKER (SUDAH DIPERBAIKI & DISEMPURNAKAN) -->
+        <!-- ========================================================================= -->
         <div x-show="activeTab === 'tasks'" 
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
              x-transition:enter-end="opacity-100 translate-y-0"
              class="space-y-6">
             
+            <!-- Header & Action Buttons -->
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-2xl font-extrabold text-white flex items-center gap-2.5">
+                        <i class="fa-solid fa-list-check text-indigo-400"></i>
                         <span>Papan Tugas & Deadline Tracker</span>
                     </h2>
-                    <p class="text-slate-400 text-xs sm:text-sm">Pantau tenggat waktu tugas, unduh lampiran PDF soal, atau akses link pengumpulan.</p>
+                    <p class="text-slate-400 text-xs sm:text-sm mt-0.5">Pantau tenggat waktu tugas, unduh lampiran PDF soal/materi, atau akses link pengumpulan.</p>
                 </div>
                 <div class="flex gap-3 w-full sm:w-auto">
                     <button @click="fetchAllData()" class="flex-1 sm:flex-none bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold px-4 py-2.5 rounded-2xl text-xs sm:text-sm border border-indigo-500/20 transition flex items-center justify-center gap-2">
@@ -535,62 +383,95 @@
                 </div>
             </div>
 
-            <!-- Bar Progres & Filter -->
-            <div class="bg-slate-900/60 backdrop-blur-xl p-5 rounded-3xl border border-indigo-500/20 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="w-full md:w-1/2 space-y-2">
-                    <div class="flex justify-between text-xs font-semibold">
-                        <span class="text-slate-300 flex items-center gap-1.5">
-                            <i class="fa-solid fa-chart-pie text-indigo-400"></i> Progres Tugas Pribadimu
-                        </span>
-                        <span class="text-indigo-300" x-text="`${taskList.length - pendingTasksCount} / ${taskList.length} Selesai (${taskProgressPercent}%)`"></span>
+            <!-- Bar Progres Pribadi & Statistik Ringkas -->
+            <div class="bg-slate-900/60 backdrop-blur-xl p-5 sm:p-6 rounded-3xl border border-indigo-500/20 shadow-xl space-y-5">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="w-full md:w-1/2 space-y-2">
+                        <div class="flex justify-between text-xs font-semibold">
+                            <span class="text-slate-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-chart-pie text-indigo-400"></i> Progres Penyelesaian Tugasmu
+                            </span>
+                            <span class="text-indigo-300 font-bold" x-text="`${completedTasksCount} dari ${taskList.length} Selesai (${taskProgressPercent}%)`"></span>
+                        </div>
+                        <div class="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                            <div class="h-full bg-gradient-to-r from-indigo-500 via-violet-500 to-emerald-400 transition-all duration-500" :style="`width: ${taskProgressPercent}%`"></div>
+                        </div>
                     </div>
-                    <div class="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
-                        <div class="h-full bg-gradient-to-r from-indigo-500 to-emerald-400 transition-all duration-500" :style="`width: ${taskProgressPercent}%`"></div>
+
+                    <!-- Filter Status Pill Buttons -->
+                    <div class="flex flex-wrap gap-1.5 bg-slate-950/80 p-1.5 rounded-2xl border border-slate-800 w-full md:w-auto justify-center">
+                        <button @click="taskFilter = 'all'" :class="taskFilter === 'all' ? 'bg-indigo-600 text-white font-semibold shadow' : 'text-slate-400 hover:text-white'" class="px-3.5 py-1.5 rounded-xl text-xs transition">
+                            Semua (<span x-text="taskList.length"></span>)
+                        </button>
+                        <button @click="taskFilter = 'pending'" :class="taskFilter === 'pending' ? 'bg-amber-600 text-white font-semibold shadow' : 'text-slate-400 hover:text-white'" class="px-3.5 py-1.5 rounded-xl text-xs transition">
+                            Belum Selesai (<span x-text="pendingTasksCount"></span>)
+                        </button>
+                        <button @click="taskFilter = 'completed'" :class="taskFilter === 'completed' ? 'bg-emerald-600 text-white font-semibold shadow' : 'text-slate-400 hover:text-white'" class="px-3.5 py-1.5 rounded-xl text-xs transition">
+                            Selesai (<span x-text="completedTasksCount"></span>)
+                        </button>
                     </div>
                 </div>
 
-                <div class="flex gap-1.5 bg-slate-950/80 p-1.5 rounded-2xl border border-slate-800 w-full md:w-auto justify-center">
-                    <button @click="taskFilter = 'all'" :class="taskFilter === 'all' ? 'bg-indigo-600 text-white font-semibold' : 'text-slate-400 hover:text-white'" class="px-3.5 py-1.5 rounded-xl text-xs transition">
-                        Semua (<span x-text="taskList.length"></span>)
-                    </button>
-                    <button @click="taskFilter = 'pending'" :class="taskFilter === 'pending' ? 'bg-amber-600 text-white font-semibold' : 'text-slate-400 hover:text-white'" class="px-3.5 py-1.5 rounded-xl text-xs transition">
-                        Belum Selesai (<span x-text="pendingTasksCount"></span>)
-                    </button>
-                    <button @click="taskFilter = 'completed'" :class="taskFilter === 'completed' ? 'bg-emerald-600 text-white font-semibold' : 'text-slate-400 hover:text-white'" class="px-3.5 py-1.5 rounded-xl text-xs transition">
-                        Selesai (<span x-text="taskList.length - pendingTasksCount"></span>)
-                    </button>
+                <!-- Pencarian & Filter Mata Kuliah -->
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-3 border-t border-slate-800/80">
+                    <div class="sm:col-span-7 relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                        </span>
+                        <input type="text" x-model="searchTask" placeholder="Cari judul tugas, mata kuliah, atau deskripsi..." class="w-full pl-9 pr-9 py-2.5 bg-slate-950/90 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                        <button x-show="searchTask" @click="searchTask = ''" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="sm:col-span-5">
+                        <select x-model="taskSubjectFilter" class="w-full py-2.5 px-3.5 bg-slate-950/90 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                            <option value="">📚 Semua Mata Kuliah</option>
+                            <template x-for="course in schedule" :key="course.subject">
+                                <option :value="course.subject" x-text="course.subject"></option>
+                            </template>
+                        </select>
+                    </div>
                 </div>
             </div>
 
+            <!-- Loading State -->
             <div x-show="loading" class="text-center py-16 text-indigo-400">
                 <i class="fa-solid fa-spinner fa-spin text-3xl"></i>
                 <p class="text-xs text-slate-400 mt-3 font-medium">Memuat daftar tugas kelas...</p>
             </div>
 
+            <!-- Tasks Grid -->
             <div x-show="!loading && filteredTasks.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <template x-for="task in filteredTasks" :key="task.id">
-                    <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border shadow-xl transition flex flex-col justify-between relative overflow-hidden"
-                         :class="isTaskDone(task.id) ? 'border-emerald-500/30 opacity-85' : 'border-indigo-500/20 hover:border-indigo-500/50'">
+                <template x-for="task in filteredTasks" :key="task.uid">
+                    <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border shadow-xl transition flex flex-col justify-between relative overflow-hidden group"
+                         :class="isTaskDone(task.uid) ? 'border-emerald-500/30 bg-slate-900/40' : 'border-indigo-500/20 hover:border-indigo-500/50'">
                         
                         <div>
+                            <!-- Top Badges: Mata Kuliah & Countdown -->
                             <div class="flex flex-wrap justify-between items-start gap-2">
-                                <span class="text-[11px] font-bold px-3 py-1 rounded-xl border bg-indigo-500/20 text-indigo-300 border-indigo-500/30" x-text="task.subject"></span>
+                                <span class="text-[11px] font-bold px-3 py-1 rounded-xl border bg-indigo-500/20 text-indigo-300 border-indigo-500/30 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-book-bookmark text-[10px]"></i>
+                                    <span x-text="task.subject || 'Mata Kuliah Umum'"></span>
+                                </span>
+                                
                                 <span class="text-xs font-bold px-3 py-1 rounded-full border flex items-center gap-1.5"
-                                      :class="getDeadlineInfo(task.deadlineDate, task.deadlineTime, task.id).badgeClass">
-                                    <i :class="getDeadlineInfo(task.deadlineDate, task.deadlineTime, task.id).icon"></i>
-                                    <span x-text="getDeadlineInfo(task.deadlineDate, task.deadlineTime, task.id).label"></span>
+                                      :class="getDeadlineInfo(task.deadlineDate, task.deadlineTime, task.uid).badgeClass">
+                                    <i :class="getDeadlineInfo(task.deadlineDate, task.deadlineTime, task.uid).icon"></i>
+                                    <span x-text="getDeadlineInfo(task.deadlineDate, task.deadlineTime, task.uid).label"></span>
                                 </span>
                             </div>
 
-                            <h3 class="text-lg font-extrabold text-white mt-4" 
-                                :class="isTaskDone(task.id) ? 'line-through text-slate-400' : ''"
+                            <!-- Judul Tugas -->
+                            <h3 class="text-lg font-extrabold text-white mt-4 transition" 
+                                :class="isTaskDone(task.uid) ? 'line-through text-slate-400' : 'group-hover:text-indigo-200'"
                                 x-text="task.title"></h3>
                             
-                            <p class="text-xs text-slate-300 mt-2 whitespace-pre-line leading-relaxed bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800/80" 
-                               x-show="task.description" 
-                               x-text="task.description"></p>
+                            <!-- Deskripsi / Instruksi Tugas -->
+                            <div x-show="task.description" class="mt-2.5 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800/80">
+                                <p class="text-xs text-slate-300 whitespace-pre-line leading-relaxed break-words" x-text="task.description"></p>
+                            </div>
 
-                            <!-- Kotak Lampiran PDF -->
+                            <!-- KOTAK LAMPIRAN FILE PDF (Jika Ada PDF) -->
                             <div x-show="task.pdfUrl" class="mt-3 bg-rose-950/25 border border-rose-500/30 rounded-2xl p-3.5 flex items-center justify-between gap-3">
                                 <div class="flex items-center gap-3 min-w-0">
                                     <div class="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 flex items-center justify-center text-lg shrink-0">
@@ -599,52 +480,98 @@
                                     <div class="min-w-0">
                                         <p class="text-xs font-bold text-white truncate" x-text="task.pdfName || 'Dokumen_Tugas.pdf'"></p>
                                         <p class="text-[11px] text-rose-300/80 flex items-center gap-1.5 mt-0.5">
-                                            <span>Dokumen PDF</span>
+                                            <span x-text="task.pdfUrl.startsWith('local_pdf_') ? 'PDF Lokal' : 'Dokumen PDF'"></span>
+                                            <span x-show="task.pdfSize" x-text="'• ' + task.pdfSize"></span>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-1.5 shrink-0">
-                                    <button @click="openPdfPreview(task)" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
-                                        <i class="fa-solid fa-eye"></i> <span class="hidden sm:inline">Lihat</span>
+                                    <button @click="openPdfPreview(task)" class="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-lg shadow-rose-600/20" title="Pratinjau PDF di sini">
+                                        <i class="fa-solid fa-eye"></i> <span class="hidden sm:inline">Lihat PDF</span>
+                                    </button>
+                                    <button @click="downloadOrOpenPdf(task)" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 p-2 rounded-xl text-xs transition" title="Unduh / Buka Tab Baru">
+                                        <i class="fa-solid fa-download"></i>
                                     </button>
                                 </div>
                             </div>
 
-                            <!-- Kotak Lampiran Link -->
+                            <!-- KOTAK LAMPIRAN LINK (Jika Ada Link) -->
                             <div x-show="task.link" class="mt-3 bg-indigo-950/25 border border-indigo-500/30 rounded-2xl p-3 flex items-center justify-between gap-3">
                                 <div class="flex items-center gap-3 min-w-0">
                                     <div class="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-400 flex items-center justify-center text-sm shrink-0">
                                         <i class="fa-solid fa-link"></i>
                                     </div>
                                     <div class="min-w-0">
-                                        <p class="text-xs font-bold text-white truncate" x-text="task.linkLabel || 'Tautan Tugas'"></p>
+                                        <p class="text-xs font-bold text-white truncate" x-text="task.linkLabel || 'Tautan Tugas / Pengumpulan'"></p>
                                         <p class="text-[11px] text-indigo-300/80 truncate" x-text="task.link"></p>
                                     </div>
                                 </div>
-                                <a :href="task.link" target="_blank" rel="noopener noreferrer" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0">
-                                    Buka
+                                <a :href="normalizeUrl(task.link)" target="_blank" rel="noopener noreferrer" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0 shadow-lg shadow-indigo-600/20">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Link
                                 </a>
+                            </div>
+
+                            <!-- Info Waktu Tenggat -->
+                            <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-400">
+                                <span class="flex items-center gap-1.5 bg-slate-950/50 px-3 py-1.5 rounded-xl border border-slate-800/80">
+                                    <i class="fa-regular fa-calendar-check text-indigo-400"></i>
+                                    <span>Deadline: <strong class="text-slate-200" x-text="formatDateIndo(task.deadlineDate) + ' • ' + task.deadlineTime + ' WIB'"></strong></span>
+                                </span>
                             </div>
                         </div>
 
+                        <!-- Bottom Actions -->
                         <div class="mt-5 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
-                            <button @click="toggleTaskDone(task.id)" 
-                                    :class="isTaskDone(task.id) ? 'bg-emerald-600 text-white' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'"
+                            <!-- Tombol Checklist Selesai (Tersimpan di perangkat masing-masing) -->
+                            <button @click="toggleTaskDone(task.uid)" 
+                                    :class="isTaskDone(task.uid) ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20' : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'"
                                     class="px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-2">
-                                <i class="fa-solid" :class="isTaskDone(task.id) ? 'fa-circle-check' : 'fa-regular fa-circle'"></i>
-                                <span x-text="isTaskDone(task.id) ? 'Sudah Selesai' : 'Tandai Selesai'"></span>
+                                <i class="fa-solid" :class="isTaskDone(task.uid) ? 'fa-circle-check' : 'fa-regular fa-circle'"></i>
+                                <span x-text="isTaskDone(task.uid) ? 'Sudah Selesai' : 'Tandai Selesai'"></span>
                             </button>
 
-                            <button @click="deleteConfirmation(task.id)" class="bg-slate-800/80 hover:bg-rose-950/60 text-slate-400 hover:text-rose-400 border border-slate-700 p-2 rounded-xl text-xs transition" title="Hapus Tugas">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
+                            <div class="flex items-center gap-1.5">
+                                <!-- Salin Info Tugas -->
+                                <button @click="copyTaskInfo(task)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 p-2 rounded-xl text-xs transition" title="Salin Teks Tugas">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+
+                                <!-- Share ke Grup WA -->
+                                <a :href="getTaskWhatsAppShare(task)" target="_blank" rel="noopener noreferrer" class="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5" title="Bagikan Pengingat ke WA">
+                                    <i class="fa-brands fa-whatsapp text-sm"></i> Share WA
+                                </a>
+
+                                <!-- Hapus Tugas (Admin PIN) -->
+                                <button @click="deleteConfirmation(task.id)" class="bg-slate-800/80 hover:bg-rose-950/60 text-slate-400 hover:text-rose-400 border border-slate-700 hover:border-rose-500/40 p-2 rounded-xl text-xs transition" title="Hapus Tugas (Admin)">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </template>
             </div>
+
+            <!-- Empty State Papan Tugas -->
+            <div x-show="!loading && filteredTasks.length === 0" class="bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-indigo-500/20 shadow-xl p-12 sm:p-16 text-center space-y-4">
+                <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mx-auto text-emerald-400 text-3xl">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+                <div class="space-y-1">
+                    <h3 class="text-lg font-bold text-white">Tidak Ada Tugas yang Ditemukan</h3>
+                    <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">Belum ada tugas kuliah pada filter ini atau semua tugas sudah kamu selesaikan. Klik tombol di bawah jika ingin menambahkan tugas baru.</p>
+                </div>
+                <div class="pt-2 flex justify-center gap-2">
+                    <button x-show="taskFilter !== 'all' || searchTask !== '' || taskSubjectFilter !== ''" @click="taskFilter = 'all'; searchTask = ''; taskSubjectFilter = ''" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold border border-slate-700 transition">
+                        Reset Filter
+                    </button>
+                    <button @click="openNewTaskModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-indigo-600/20 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i> Tambah Tugas Baru
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <!-- TAB 4: STATUS DOSEN -->
+        <!-- TAB 4: KONFIRMASI DOSEN (REAL-TIME) -->
         <div x-show="activeTab === 'lecturer'" 
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
@@ -666,9 +593,16 @@
                 </div>
             </div>
 
+            <!-- Loading State -->
+            <div x-show="loading" class="text-center py-16 text-indigo-400">
+                <i class="fa-solid fa-spinner fa-spin text-3xl"></i>
+                <p class="text-xs text-slate-400 mt-3 font-medium">Memuat data real-time...</p>
+            </div>
+
+            <!-- Lecturer Status List -->
             <div x-show="!loading" class="bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-indigo-500/20 shadow-xl overflow-hidden">
                 <div class="divide-y divide-slate-800/80" x-show="lecturerStatusList.length > 0">
-                    <template x-for="item in lecturerStatusList" :key="item.id">
+                    <template x-for="(item, index) in lecturerStatusList" :key="item.id || index">
                         <div class="p-5 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:bg-slate-800/40 transition">
                             <div class="space-y-1.5 w-full sm:w-auto">
                                 <div class="flex flex-wrap items-center gap-2.5">
@@ -678,14 +612,31 @@
                                         'bg-rose-500/20 text-rose-300 border-rose-500/40': item.status === 'Tidak Masuk',
                                         'bg-amber-500/20 text-amber-300 border-amber-500/40': item.status === 'Online / Daring'
                                     }" class="text-xs font-bold px-3 py-1 rounded-full border flex items-center gap-1.5">
+                                        <span class="w-2 h-2 rounded-full animate-ping" :class="{
+                                            'bg-emerald-400': item.status === 'Masuk',
+                                            'bg-rose-400': item.status === 'Tidak Masuk',
+                                            'bg-amber-400': item.status === 'Online / Daring'
+                                        }"></span>
                                         <span x-text="item.status"></span>
                                     </span>
                                 </div>
                                 <h3 class="text-base sm:text-lg font-bold text-white" x-text="item.subject"></h3>
                                 <p class="text-xs text-slate-300">Dosen: <span class="font-semibold text-indigo-300" x-text="item.lecturer"></span></p>
+                                <p class="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-indigo-500/10 mt-2 block sm:inline-block" x-show="item.note">
+                                    <i class="fa-solid fa-note-sticky text-indigo-400 mr-1.5"></i> <span x-text="item.note"></span>
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                                <button @click="deleteConfirmation(item.id)" class="text-slate-400 hover:text-rose-400 px-4 py-2 rounded-xl text-xs transition border border-slate-700 hover:border-rose-500/40 bg-slate-800/60 flex items-center gap-1.5" title="Hapus Status">
+                                    <i class="fa-solid fa-trash text-rose-400"></i> Hapus
+                                </button>
                             </div>
                         </div>
                     </template>
+                </div>
+                <div x-show="lecturerStatusList.length === 0" class="p-16 text-center text-slate-400 text-sm">
+                    <i class="fa-solid fa-folder-open text-4xl mb-3 text-slate-600 block"></i>
+                    Belum ada data konfirmasi dosen yang diinput.
                 </div>
             </div>
         </div>
@@ -700,133 +651,337 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-2xl font-extrabold text-white">Direktori Anggota Kelas SI-01</h2>
-                    <p class="text-slate-400 text-xs sm:text-sm">Daftar mahasiswa lengkap kelas.</p>
+                    <p class="text-slate-400 text-xs sm:text-sm">Daftar mahasiswa lengkap dan struktur kepengurusan kelas.</p>
                 </div>
                 <div class="w-full sm:w-80 relative">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-search"></i></span>
-                    <input type="text" x-model="searchMember" placeholder="Cari nama atau NIM..." class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-indigo-500/20 rounded-2xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                    <input type="text" x-model="searchMember" placeholder="Cari nama atau NIM..." class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-indigo-500/20 rounded-2xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
                 </div>
             </div>
 
+            <!-- Members Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <template x-for="student in filteredMembers" :key="student.nim">
                     <div class="bg-slate-900/60 backdrop-blur-xl p-5 rounded-3xl border border-indigo-500/20 shadow-xl flex items-center space-x-4 hover:border-indigo-500/40 transition group">
-                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 text-white flex items-center justify-center font-bold text-lg border border-indigo-400/40 shrink-0" x-text="student.name.charAt(0)"></div>
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 text-white flex items-center justify-center font-bold text-lg border border-indigo-400/40 shadow-inner shrink-0 group-hover:scale-105 transition" x-text="student.name.charAt(0).toUpperCase()"></div>
                         <div class="min-w-0 flex-grow">
-                            <h4 class="text-sm font-bold text-white truncate" x-text="student.name"></h4>
+                            <h4 class="text-sm font-bold text-white truncate group-hover:text-indigo-300 transition" x-text="student.name"></h4>
                             <p class="text-xs text-slate-400 font-mono mt-0.5" x-text="student.nim"></p>
-                            <span class="inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full mt-2 border bg-slate-800 text-slate-400 border-slate-700" x-text="student.role"></span>
+                            <span :class="student.role === 'Mahasiswa' ? 'bg-slate-800 text-slate-400 border-slate-700' : 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40'" class="inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full mt-2 border" x-text="student.role"></span>
                         </div>
                     </div>
                 </template>
             </div>
         </div>
 
-        <!-- ================= TAB KHUSUS ADMIN: LOG AKSES & LOKASI (HANYA MUNCUL DI ANDA) ================= -->
-        <div x-show="activeTab === 'admin_logs'" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 translate-y-3"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             class="space-y-6" x-cloak>
-            
-            <div class="bg-gradient-to-r from-rose-950/80 via-slate-900 to-slate-900 p-6 rounded-3xl border border-rose-500/40 shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <h2 class="text-2xl font-extrabold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-user-secret text-rose-400"></i> Panel Keamanan: Log Akses & Lokasi
-                    </h2>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-1">Hanya Anda (Ketua Kelas / Admin) yang dapat melihat daftar siapa saja yang membuka website ini beserta titik lokasinya.</p>
-                </div>
-                <button @click="clearAccessLogs" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 px-4 py-2.5 rounded-2xl text-xs font-semibold transition flex items-center gap-2">
-                    <i class="fa-solid fa-trash-can"></i> Bersihkan Log
-                </button>
-            </div>
-
-            <div class="bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-rose-500/20 shadow-xl overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="bg-slate-950/80 text-slate-400 uppercase border-b border-slate-800">
-                            <tr>
-                                <th class="px-5 py-3.5">Waktu Akses</th>
-                                <th class="px-5 py-3.5">NIM & Nama Pengguna</th>
-                                <th class="px-5 py-3.5">Perangkat</th>
-                                <th class="px-5 py-3.5">Lokasi GPS Saat Akses</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/80">
-                            <template x-for="log in accessLogs" :key="log.time + log.nim">
-                                <tr class="hover:bg-slate-800/40 transition">
-                                    <td class="px-5 py-4 font-mono text-slate-400" x-text="formatLogTime(log.time)"></td>
-                                    <td class="px-5 py-4">
-                                        <p class="font-bold text-white" x-text="log.name"></p>
-                                        <p class="text-indigo-400 font-mono text-[11px]" x-text="log.nim"></p>
-                                    </td>
-                                    <td class="px-5 py-4 text-slate-400 max-w-xs truncate" x-text="log.device"></td>
-                                    <td class="px-5 py-4">
-                                        <template x-if="log.lat && log.lng">
-                                            <a :href="`https://www.google.com/maps?q=${log.lat},${log.lng}`" target="_blank" class="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-3 py-1.5 rounded-xl font-semibold hover:bg-emerald-500/30 transition">
-                                                <i class="fa-solid fa-map-location-dot text-emerald-400"></i> Buka Peta (${log.lat.toFixed(4)},${log.lng.toFixed(4)})
-                                            </a>
-                                        </template>
-                                        <template x-if="!log.lat || !log.lng">
-                                            <span class="text-amber-400/80 italic"><i class="fa-solid fa-triangle-exclamation"></i> Izin Lokasi Ditolak</span>
-                                        </template>
-                                    </td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
-                </div>
-                <div x-show="accessLogs.length === 0" class="p-16 text-center text-slate-400 text-sm">
-                    <i class="fa-solid fa-shield-halved text-4xl mb-3 text-slate-600 block"></i>
-                    Belum ada riwayat akses tercatat.
-                </div>
-            </div>
-        </div>
-
     </main>
 
-    <!-- Modal Tambah Tugas & Modal Lainnya -->
-    <div x-show="openAddTaskModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 overflow-y-auto" x-cloak>
-        <div @click.away="openAddTaskModal = false" class="bg-slate-900 border border-indigo-500/30 w-full max-w-xl rounded-3xl shadow-2xl p-6 sm:p-8 space-y-5 my-auto">
+    <!-- ========================================================================= -->
+    <!-- MODAL TAMBAH TUGAS BARU (SUDAH DIPERBAIKI VALIDASI & MODE LAMPIRANNYA)   -->
+    <!-- ========================================================================= -->
+    <div x-show="openAddTaskModal" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 overflow-y-auto" x-cloak>
+        <div @click.away="openAddTaskModal = false" class="bg-slate-900 border border-indigo-500/30 w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-3xl shadow-2xl p-6 sm:p-8 space-y-5 my-auto">
             <div class="flex justify-between items-center border-b border-slate-800 pb-4">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-list-check text-indigo-400"></i> Tambah Tugas Baru</h3>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-indigo-400"></i> Tambah Tugas Kuliah Baru
+                </h3>
                 <button @click="openAddTaskModal = false" class="text-slate-400 hover:text-white p-1.5 rounded-xl bg-slate-800/80"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
+
             <form @submit.prevent="addTaskItem" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Mata Kuliah</label>
-                    <select required x-model="formTask.subject" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white">
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Pilih Mata Kuliah</label>
+                    <select required x-model="formTask.subject" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
                         <option value="">-- Pilih Mata Kuliah --</option>
                         <template x-for="course in schedule" :key="course.subject">
-                            <option :value="course.subject" x-text="course.subject"></option>
+                            <option :value="course.subject" x-text="`${course.subject} (${course.lecturer})`"></option>
                         </template>
                     </select>
                 </div>
+
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Judul Tugas</label>
-                    <input type="text" required x-model="formTask.title" placeholder="Contoh: Makalah Bab 3" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white">
+                    <input type="text" required x-model="formTask.title" placeholder="Contoh: Makalah Kelompok Bab 3 / Tugas Praktikum 2" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
                 </div>
-                <div class="grid grid-cols-2 gap-3">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Deadline</label>
-                        <input type="date" required x-model="formTask.deadlineDate" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Tanggal Deadline</label>
+                        <input type="date" required x-model="formTask.deadlineDate" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
+                        <!-- Pintasan Pilih Cepat Tanggal Deadline -->
+                        <div class="flex flex-wrap gap-1.5 mt-2">
+                            <button type="button" @click="setQuickDeadline(1)" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-indigo-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">Besok</button>
+                            <button type="button" @click="setQuickDeadline(3)" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-indigo-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">+3 Hari</button>
+                            <button type="button" @click="setQuickDeadline(7)" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-indigo-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">+1 Minggu</button>
+                        </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Jam</label>
-                        <input type="time" required x-model="formTask.deadlineTime" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Jam Batas Kumpul</label>
+                        <input type="time" required x-model="formTask.deadlineTime" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
+                        <div class="flex flex-wrap gap-1.5 mt-2">
+                            <button type="button" @click="formTask.deadlineTime = '12:00'" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">12:00</button>
+                            <button type="button" @click="formTask.deadlineTime = '18:00'" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">18:00</button>
+                            <button type="button" @click="formTask.deadlineTime = '23:59'" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700 transition">23:59</button>
+                        </div>
                     </div>
                 </div>
+
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Deskripsi / Link</label>
-                    <textarea x-model="formTask.description" rows="2" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white"></textarea>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Instruksi / Detail Tugas</label>
+                    <textarea x-model="formTask.description" rows="3" placeholder="Contoh: Kerjakan soal pada file PDF terlampir, dikumpulkan dalam bentuk laporan..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500"></textarea>
+                </div>
+
+                <!-- BAGIAN SISIPAN LAMPIRAN (FILE PDF ATAU LINK) -->
+                <div class="bg-slate-950/90 border border-indigo-500/25 rounded-2xl p-4 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <label class="text-xs font-bold text-indigo-300 uppercase flex items-center gap-1.5">
+                            <i class="fa-solid fa-paperclip"></i> Sisipkan Lampiran (Opsional)
+                        </label>
+                        <!-- Pilihan Mode Lampiran -->
+                        <div class="flex flex-wrap bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs gap-1">
+                            <button type="button" @click="formTask.attachmentMode = 'none'" :class="formTask.attachmentMode === 'none' ? 'bg-slate-700 text-white font-semibold' : 'text-slate-400 hover:text-white'" class="px-2.5 py-1 rounded-lg transition">
+                                Tanpa
+                            </button>
+                            <button type="button" @click="formTask.attachmentMode = 'pdf'" :class="formTask.attachmentMode === 'pdf' ? 'bg-rose-600 text-white font-semibold' : 'text-slate-400 hover:text-white'" class="px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+                                <i class="fa-solid fa-file-pdf"></i> File PDF
+                            </button>
+                            <button type="button" @click="formTask.attachmentMode = 'link'" :class="formTask.attachmentMode === 'link' ? 'bg-indigo-600 text-white font-semibold' : 'text-slate-400 hover:text-white'" class="px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+                                <i class="fa-solid fa-link"></i> Link
+                            </button>
+                            <button type="button" @click="formTask.attachmentMode = 'both'" :class="formTask.attachmentMode === 'both' ? 'bg-violet-600 text-white font-semibold' : 'text-slate-400 hover:text-white'" class="px-2.5 py-1 rounded-lg transition">
+                                PDF + Link
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- INPUT LAMPIRAN FILE PDF -->
+                    <div x-show="formTask.attachmentMode === 'pdf' || formTask.attachmentMode === 'both'" class="space-y-3 pt-2 border-t border-slate-800/80">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-rose-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-pdf"></i> Dokumen PDF Soal / Materi
+                            </span>
+                            <div class="flex gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-[11px]">
+                                <button type="button" @click="formTask.pdfSourceType = 'url'" :class="formTask.pdfSourceType === 'url' ? 'bg-rose-600/30 text-rose-200 border border-rose-500/40 font-semibold' : 'text-slate-400'" class="px-2.5 py-0.5 rounded-md transition">
+                                    Link PDF / Drive
+                                </button>
+                                <button type="button" @click="formTask.pdfSourceType = 'upload'" :class="formTask.pdfSourceType === 'upload' ? 'bg-rose-600/30 text-rose-200 border border-rose-500/40 font-semibold' : 'text-slate-400'" class="px-2.5 py-0.5 rounded-md transition">
+                                    Upload File
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Opsi A: Tempel URL File PDF / Google Drive (Direkomendasikan agar semua HP bisa buka) -->
+                        <div x-show="formTask.pdfSourceType === 'url'" class="space-y-2">
+                            <input type="text" x-model="formTask.pdfFileUrl" placeholder="Tempel link Google Drive PDF atau link .pdf..." class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-rose-500">
+                            <input type="text" x-model="formTask.pdfFileName" placeholder="Nama tampilan file (Contoh: Modul_Praktikum_1.pdf)" class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-rose-500">
+                            <p class="text-[11px] text-slate-400">
+                                <i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>
+                                Link Google Drive PDF dapat dilihat dan diunduh oleh seluruh mahasiswa di semua perangkat.
+                            </p>
+                        </div>
+
+                        <!-- Opsi B: Upload File PDF dari Perangkat -->
+                        <div x-show="formTask.pdfSourceType === 'upload'" class="space-y-2">
+                            <label class="flex flex-col items-center justify-center w-full p-4 border-2 border-dashed rounded-2xl cursor-pointer transition"
+                                   :class="formTask.pdfDataBase64 ? 'border-emerald-500/50 bg-emerald-950/20' : 'border-slate-700 hover:border-rose-500/50 bg-slate-900/50 hover:bg-slate-900'">
+                                <div class="flex flex-col items-center justify-center text-center" x-show="!formTask.pdfDataBase64">
+                                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-rose-400 mb-1.5"></i>
+                                    <p class="text-xs font-semibold text-slate-200">Klik untuk pilih file PDF dari perangkat</p>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Format .PDF (Maks. 3 MB)</p>
+                                </div>
+                                <div class="flex items-center justify-between w-full gap-3" x-show="formTask.pdfDataBase64">
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        <i class="fa-solid fa-file-pdf text-2xl text-rose-400 shrink-0"></i>
+                                        <div class="text-left min-w-0">
+                                            <p class="text-xs font-bold text-white truncate" x-text="formTask.pdfFileName"></p>
+                                            <p class="text-[11px] text-emerald-400" x-text="formTask.pdfFileSize + ' • Siap dilampirkan'"></p>
+                                        </div>
+                                    </div>
+                                    <button type="button" @click.prevent="clearUploadedPdf()" class="text-xs bg-rose-600/20 hover:bg-rose-600/40 text-rose-300 px-2.5 py-1 rounded-lg border border-rose-500/30 shrink-0">
+                                        Hapus
+                                    </button>
+                                </div>
+                                <input type="file" accept=".pdf,application/pdf" @change="handlePdfUpload($event)" class="hidden">
+                            </label>
+                            <p class="text-[11px] text-amber-300/90 leading-relaxed">
+                                <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+                                Catatan: Upload langsung disimpan di memori browser perangkat ini. Gunakan tab <strong>Link PDF / Drive</strong> jika ingin file bisa dibuka di HP teman sekelas lainnya.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- INPUT LAMPIRAN LINK / URL -->
+                    <div x-show="formTask.attachmentMode === 'link' || formTask.attachmentMode === 'both'" class="space-y-2 pt-2 border-t border-slate-800/80">
+                        <span class="text-xs font-semibold text-indigo-300 flex items-center gap-1.5">
+                            <i class="fa-solid fa-link"></i> Tautan / Link Pengumpulan Tugas
+                        </span>
+                        <input type="text" x-model="formTask.link" placeholder="https://drive.google.com/... atau forms.gle/..." class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500">
+                        <input type="text" x-model="formTask.linkLabel" placeholder="Judul tombol link (Opsional, contoh: Folder Pengumpulan Tugas)" class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-indigo-400 uppercase mb-1.5">PIN Khusus Admin / Pengurus Kelas</label>
+                    <input type="password" required x-model="formTask.pin" placeholder="Masukkan PIN rahasia..." class="w-full p-3 bg-indigo-950/40 border border-indigo-500/40 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                    <button type="button" @click="openAddTaskModal = false" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold rounded-2xl transition">Batal</button>
+                    <button type="submit" :disabled="submitting" class="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:opacity-50 text-white text-sm font-semibold rounded-2xl shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
+                        <i x-show="submitting" class="fa-solid fa-spinner fa-spin"></i>
+                        <span x-text="submitting ? 'Menyimpan...' : 'Simpan Tugas'"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL PRATINJAU (PREVIEW) FILE PDF                                        -->
+    <!-- ========================================================================= -->
+    <div x-show="openPdfModal" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         class="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/90 backdrop-blur-md p-3 sm:p-6" x-cloak>
+        <div @click.away="closePdfPreview()" class="bg-slate-900 border border-rose-500/30 w-full max-w-4xl h-[88vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center px-5 py-4 border-b border-slate-800 bg-slate-950/60">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-9 h-9 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="text-sm sm:text-base font-bold text-white truncate" x-text="activePdfTask?.pdfName || 'Pratinjau Dokumen PDF'"></h3>
+                        <p class="text-[11px] text-slate-400 truncate" x-text="activePdfTask?.subject || ''"></p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button @click="downloadOrOpenPdf(activePdfTask)" class="bg-rose-600 hover:bg-rose-500 text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-up-right-from-square"></i> <span class="hidden sm:inline">Unduh / Buka Tab Baru</span>
+                    </button>
+                    <button @click="closePdfPreview()" class="text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-grow bg-slate-950 relative">
+                <template x-if="pdfPreviewSrc">
+                    <iframe :src="pdfPreviewSrc" class="w-full h-full border-0" allow="autoplay"></iframe>
+                </template>
+                <div x-show="!pdfPreviewSrc" class="flex flex-col items-center justify-center h-full text-center p-6 space-y-4">
+                    <div class="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 text-3xl">
+                        <i class="fa-solid fa-file-circle-exclamation"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-base font-bold text-white">File PDF Lokal Tidak Ditemukan di Perangkat Ini</p>
+                        <p class="text-xs text-slate-400 max-w-md">File PDF ini diunggah dari penyimpanan lokal perangkat lain. Mintalah pengurus kelas menyisipkan PDF menggunakan opsi <strong>Link PDF / Google Drive</strong> agar dapat diakses dari semua perangkat.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Update Status Dosen (Dengan Fitur Auto-Fill) -->
+    <div x-show="openAddConfirmationModal" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 overflow-y-auto" x-cloak>
+        <div @click.away="openAddConfirmationModal = false" class="bg-slate-900 border border-indigo-500/30 w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl p-6 sm:p-8 space-y-5 my-auto">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-indigo-400"></i> Update Kehadiran Dosen (PIN)
+                </h3>
+                <button @click="openAddConfirmationModal = false" class="text-slate-400 hover:text-white p-1.5 rounded-xl bg-slate-800/80"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form @submit.prevent="addLecturerStatus" class="space-y-4">
+                
+                <!-- Dropdown Auto-Fill dari Jadwal -->
+                <div class="bg-indigo-950/30 border border-indigo-500/30 p-3.5 rounded-2xl space-y-1.5">
+                    <label class="block text-xs font-bold text-indigo-300 uppercase flex items-center gap-1.5">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Pilih Cepat Mata Kuliah (Auto-Fill)
+                    </label>
+                    <select x-model="selectedCourseIndex" @change="autoFillLecturerForm()" class="w-full p-2.5 bg-slate-950 border border-indigo-500/40 rounded-xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
+                        <option value="">-- Pilih Mata Kuliah untuk Isi Otomatis --</option>
+                        <template x-for="(course, idx) in schedule" :key="idx">
+                            <option :value="idx" x-text="`${course.day} (${course.time}) - ${course.subject}`"></option>
+                        </template>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Hari Perkuliahan</label>
+                        <select x-model="formLecturer.day" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
+                            <option value="Senin">Senin</option>
+                            <option value="Selasa">Selasa</option>
+                            <option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option>
+                            <option value="Jumat">Jumat</option>
+                            <option value="Sabtu">Sabtu</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Jam Perkuliahan</label>
+                        <input type="text" required x-model="formLecturer.time" placeholder="Contoh: 08:30 - 10:10" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Mata Kuliah</label>
+                    <input type="text" required x-model="formLecturer.subject" placeholder="Contoh: Konsep Sistem Informasi" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-indigo-400 uppercase mb-1.5">PIN Admin</label>
-                    <input type="password" required x-model="formTask.pin" placeholder="PIN rahasia..." class="w-full p-3 bg-indigo-950/40 border border-indigo-500/40 rounded-2xl text-sm text-white">
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Nama Dosen</label>
+                    <input type="text" required x-model="formLecturer.lecturer" placeholder="Contoh: Dr. Murniati, S.Kom." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Status Kehadiran</label>
+                    <select x-model="formLecturer.status" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
+                        <option value="Masuk">Masuk (Hadir)</option>
+                        <option value="Tidak Masuk">Tidak Masuk (Absen/Diganti)</option>
+                        <option value="Online / Daring">Online / Daring (Zoom/GMeet)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Keterangan / Catatan</label>
+                    <textarea x-model="formLecturer.note" rows="2" placeholder="Contoh: Kuliah diganti tugas mandiri" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-indigo-400 uppercase mb-1.5">PIN Khusus Admin / Ketua Kelas</label>
+                    <input type="password" required x-model="formLecturer.pin" placeholder="Masukkan PIN rahasia..." class="w-full p-3 bg-indigo-950/40 border border-indigo-500/40 rounded-2xl text-sm text-white focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
-                    <button type="button" @click="openAddTaskModal = false" class="px-5 py-2.5 bg-slate-800 text-slate-300 rounded-2xl text-sm font-semibold">Batal</button>
-                    <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white rounded-2xl text-sm font-semibold">Simpan</button>
+                    <button type="button" @click="openAddConfirmationModal = false" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold rounded-2xl transition">Batal</button>
+                    <button type="submit" :disabled="submitting" class="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:opacity-50 text-white text-sm font-semibold rounded-2xl shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
+                        <i x-show="submitting" class="fa-solid fa-spinner fa-spin"></i>
+                        <span x-text="submitting ? 'Menyimpan...' : 'Simpan & Update'"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Delete PIN Input -->
+    <div x-show="openDeleteModal" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4" x-cloak>
+        <div @click.away="openDeleteModal = false" class="bg-slate-900 border border-rose-500/30 w-full max-w-md rounded-3xl shadow-2xl p-6 space-y-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Konfirmasi Hapus Data
+            </h3>
+            <p class="text-xs text-slate-300">Masukkan PIN rahasia untuk menghapus data ini secara permanen:</p>
+            <form @submit.prevent="confirmDelete" class="space-y-4">
+                <input type="password" required x-model="deletePinInput" placeholder="Masukkan PIN..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white focus:ring-2 focus:ring-rose-500">
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" @click="openDeleteModal = false" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-2xl">Batal</button>
+                    <button type="submit" :disabled="submitting" class="px-5 py-2.5 bg-rose-600 hover:bg-rose-500 disabled:opacity-50 text-white text-xs font-semibold rounded-2xl shadow-lg shadow-rose-600/30">Hapus Permanen</button>
                 </div>
             </form>
         </div>
@@ -837,43 +992,75 @@
         <p>&copy; 2026 Sistem Informasi 01 • Universitas Abulyatama • Portal Elite Real-Time</p>
     </footer>
 
-    <!-- Script Utama -->
-    <script>
+    <!-- Alpine.js Logic & API Connector -->
+    <script>    
         const API_URL = "https://script.google.com/macros/s/AKfycbw4W9xXs89-H8ljfkZT94Tvrtuq00L0r_BgrHHleTCzy5j2Ev3A6JpbWIupIH90jtSQZw/exec";
 
         function classApp() {
             return {
                 showIntro: true,
-                isLoggedIn: false,
-                authStep: 'login', // 'login' | 'change_password'
-                currentUser: null,
-                loginForm: { nim: '', password: '' },
-                changePassForm: { newPass: '', confirmPass: '' },
-                accessLogs: [],
-
                 activeTab: 'home',
                 selectedDay: 'Senin',
                 todayName: 'Senin',
                 currentTime: '',
                 greeting: 'Halo',
                 searchMember: '',
+                searchTask: '',
+                taskSubjectFilter: '',
+                openAddConfirmationModal: false,
                 openAddTaskModal: false,
+                openDeleteModal: false,
+                openPdfModal: false,
+                activePdfTask: null,
+                pdfPreviewSrc: '',
+                activeBlobUrl: null,
+                deleteTargetId: null,
+                deletePinInput: '',
                 loading: false,
+                submitting: false,
                 toasts: [],
+                selectedCourseIndex: '',
+                taskFilter: 'all',
                 completedTaskIds: [],
+                localPdfStore: {},
                 
-                formTask: { subject: '', title: '', deadlineDate: '', deadlineTime: '23:59', description: '', pin: '' },
+                formLecturer: {
+                    day: 'Senin',
+                    time: '08:30 - 10:10',
+                    subject: '',
+                    lecturer: '',
+                    status: 'Masuk',
+                    note: '',
+                    pin: ''
+                },
+
+                formTask: {
+                    subject: '',
+                    title: '',
+                    deadlineDate: '',
+                    deadlineTime: '23:59',
+                    description: '',
+                    attachmentMode: 'none', // 'none' | 'pdf' | 'link' | 'both'
+                    pdfSourceType: 'url', // 'url' | 'upload'
+                    pdfFileUrl: '',
+                    pdfFileName: '',
+                    pdfFileSize: '',
+                    pdfDataBase64: '',
+                    link: '',
+                    linkLabel: '',
+                    pin: ''
+                },
 
                 schedule: [
-                    { day: 'Selasa', time: '08:30 - 10:10', subject: 'Algoritma dan Pemograman', lecturer: 'Anisah. ST., M.T', room: 'D1-306B', sks: 3, phone: '6285359398283' },
+                    { day: 'Selasa', time: '08:30 - 10:10', subject: 'Algoritma dan Pemrograman', lecturer: 'Anisah, S.T., M.T.', room: 'D1-306B', sks: 3, phone: '6285359398283' },
                     { day: 'Selasa', time: '10:00 - 11:50', subject: 'Bahasa Indonesia', lecturer: 'Meri Yulizar, S.Pd., M.Pd.', room: 'D1-101 Aula Teater', sks: 2, phone: '6285213274710' },
-                    { day: 'Selasa', time: '14:30 - 16:10', subject: 'Pendidikan Pancasila', lecturer: 'Drs. Tamarli, M.Si', room: 'D1-303 MKU', sks: 2, phone: '6281234567890' },
-                    { day: 'Rabu', time: '08:30 - 10:10', subject: 'Pendidikan Agama', lecturer: 'Hasanah, MA', room: 'F 227 MKU', sks: 2, phone: '6282124773946' },
-                    { day: 'Rabu', time: '14:30 - 16:10', subject: 'Aplikasi Komputer', lecturer: 'Rahmat Sufri, S.T., M.T', room: 'D1-301B', sks: 3, phone: '6285260546475' },
-                    { day: 'Kamis', time: '08:30 - 10:10', subject: 'Bahasa Inggris', lecturer: 'Putri Dini Mutia, M.Pd', room: 'D-101 Aula Teater', sks: 2, phone: '6282363782257' },
-                    { day: 'Kamis', time: '11:00 - 12:40', subject: 'Konsep Sistem Informasi', lecturer: 'Dr. Murniati, S.Kom., M.T', room: 'D1-304B', sks: 2, phone: '6282290448680' },
-                    { day: 'Jumat', time: '08:30 - 10:10', subject: 'Arsitektur komputer', lecturer: 'Qurrata Ayuni, S.T., M.T', room: 'D1-304B', sks: 2, phone: '6285358749986' },
-                    { day: 'Jumat', time: '10:10 - 12:40', subject: 'Matematika 1', lecturer: 'Murni, Ph.D', room: 'D1-301B', sks: 3, phone: '6281234567890' }
+                    { day: 'Selasa', time: '14:30 - 16:10', subject: 'Pendidikan Pancasila', lecturer: 'Drs. Tamarli, M.Si.', room: 'D1-303 MKU', sks: 2, phone: '6281234567890' },
+                    { day: 'Rabu', time: '08:30 - 10:10', subject: 'Pendidikan Agama', lecturer: 'Hasanah, M.A.', room: 'F 227 MKU', sks: 2, phone: '6282124773946' },
+                    { day: 'Rabu', time: '14:30 - 16:10', subject: 'Aplikasi Komputer', lecturer: 'Rahmat Sufri, S.T., M.T.', room: 'D1-301B', sks: 3, phone: '6285260546475' },
+                    { day: 'Kamis', time: '08:30 - 10:10', subject: 'Bahasa Inggris', lecturer: 'Putri Dini Mutia, M.Pd.', room: 'D-101 Aula Teater', sks: 2, phone: '6282363782257' },
+                    { day: 'Kamis', time: '11:00 - 12:40', subject: 'Konsep Sistem Informasi', lecturer: 'Dr. Murniati, S.Kom., M.T.', room: 'D1-304B', sks: 2, phone: '6282290448680' },
+                    { day: 'Jumat', time: '08:30 - 10:10', subject: 'Arsitektur Komputer', lecturer: 'Qurrata Ayuni, S.T., M.T.', room: 'D1-304B', sks: 2, phone: '6285358749986' },
+                    { day: 'Jumat', time: '10:10 - 12:40', subject: 'Matematika 1', lecturer: 'Murni, Ph.D.', room: 'D1-301B', sks: 3, phone: '6281234567890' }
                 ],
 
                 lecturerStatusList: [],
@@ -884,10 +1071,10 @@
                     { nim: '26146065', name: 'Abdul Khalid', role: 'Wakil Ketua' },
                     { nim: '26146087', name: 'Fuad Akram', role: 'Divisi Pertahanan 1' },
                     { nim: '26146001', name: 'Nurma Yunita', role: 'Mahasiswa' },
-                    { nim: '26146003', name: 'Muhammad furqan salahuddin S.', role: 'Mahasiswa' },                  
+                    { nim: '26146003', name: 'Muhammad Furqan Salahuddin S.', role: 'Mahasiswa' },                  
                     { nim: '26146005', name: 'Nurhatifah', role: 'Mahasiswa' },
                     { nim: '26146007', name: 'M. Raffa Azarta', role: 'Mahasiswa' },
-                    { nim: '26146009', name: 'Shabila anjani', role: 'Mahasiswa' },
+                    { nim: '26146009', name: 'Shabila Anjani', role: 'Mahasiswa' },
                     { nim: '26146013', name: 'Maulidi', role: 'Mahasiswa' },
                     { nim: '26146015', name: 'Khairatun Nafais', role: 'Mahasiswa' },                  
                     { nim: '26146017', name: 'Sauma Al Khalis', role: 'Mahasiswa' },
@@ -912,7 +1099,7 @@
                     { nim: '26146059', name: 'Susi Aurelliya', role: 'Mahasiswa' },
                     { nim: '26146061', name: 'M. Fahreza', role: 'Mahasiswa' },
                     { nim: '26146063', name: 'Wulan Maulanda', role: 'Mahasiswa' },
-                    { nim: '26146067', name: 'M.Hafidz Saragih', role: 'Mahasiswa' },
+                    { nim: '26146067', name: 'M. Hafidz Saragih', role: 'Mahasiswa' },
                     { nim: '26146069', name: 'Safrullah Kamil', role: 'Mahasiswa' },
                     { nim: '26146071', name: 'Alif Ilsha Putra', role: 'Mahasiswa' },
                     { nim: '26146073', name: 'Hanif Haikal', role: 'Mahasiswa' },
@@ -921,8 +1108,8 @@
                     { nim: '26146079', name: 'Muhibbud Thibri', role: 'Mahasiswa' },
                     { nim: '26146083', name: 'Muzammil', role: 'Mahasiswa' },
                     { nim: '26146085', name: 'Husairi Akbar', role: 'Mahasiswa' },
-                    { nim: '26146089', name: 'Muhammand Naufal', role: 'Mahasiswa' },
-                    { nim: '26146091', name: 'T.M Hidayat Alde', role: 'Mahasiswa' },
+                    { nim: '26146089', name: 'Muhammad Naufal', role: 'Mahasiswa' },
+                    { nim: '26146091', name: 'T. M. Hidayat Alde', role: 'Mahasiswa' },
                     { nim: '26146093', name: 'Muharis', role: 'Mahasiswa' },
                     { nim: '26146095', name: 'Dhiyaa Fawwaz', role: 'Mahasiswa' },
                     { nim: '26146097', name: 'Ahmad Rizqan Kausar', role: 'Mahasiswa' },
@@ -933,133 +1120,26 @@
                 ],
 
                 init() {
-                    const savedUser = localStorage.getItem('si01_current_user');
-                    if (savedUser) {
-                        try {
-                            this.currentUser = JSON.parse(savedUser);
-                            this.isLoggedIn = true;
-                        } catch (e) { this.isLoggedIn = false; }
+                    const savedCompleted = localStorage.getItem('si01_completed_tasks');
+                    if (savedCompleted) {
+                        try { this.completedTaskIds = JSON.parse(savedCompleted); } catch (e) { this.completedTaskIds = []; }
                     }
 
-                    const savedLogs = localStorage.getItem('si01_access_logs');
-                    if (savedLogs) {
-                        try { this.accessLogs = JSON.parse(savedLogs); } catch (e) { this.accessLogs = []; }
+                    const savedPdfs = localStorage.getItem('si01_local_pdfs');
+                    if (savedPdfs) {
+                        try { this.localPdfStore = JSON.parse(savedPdfs); } catch (e) { this.localPdfStore = {}; }
                     }
 
                     this.updateClockAndGreeting();
+                    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                    let currentDay = days[new Date().getDay()];
+                    this.selectedDay = currentDay === 'Minggu' ? 'Senin' : currentDay;
+
                     setInterval(() => this.updateClockAndGreeting(), 1000);
                     this.fetchAllData();
-                    setTimeout(() => { this.showIntro = false; }, 1400);
-                },
-
-                handleLogin() {
-                    const nimInput = this.loginForm.nim.trim();
-                    const passInput = this.loginForm.password;
-
-                    const student = this.members.find(m => m.nim === nimInput);
-                    if (!student) {
-                        this.showToast('NIM tidak terdaftar dalam kelas SI-01!', 'error');
-                        return;
-                    }
-
-                    const customPass = localStorage.getItem(`si01_pass_${nimInput}`);
-                    const activePass = customPass || 'si012026';
-
-                    if (passInput !== activePass) {
-                        this.showToast('Password salah!', 'error');
-                        return;
-                    }
-
-                    this.currentUser = student;
-                    
-                    if (!customPass) {
-                        this.authStep = 'change_password';
-                        return;
-                    }
-
-                    // Wajibkan Lokasi
-                    this.requestLocationAndLogin();
-                },
-
-                handleChangePassword() {
-                    const newP = this.changePassForm.newPass;
-                    const confP = this.changePassForm.confirmPass;
-
-                    if (newP.length < 6) {
-                        this.showToast('Password baru minimal 6 karakter!', 'error');
-                        return;
-                    }
-                    if (newP !== confP) {
-                        this.showToast('Konfirmasi password tidak cocok!', 'error');
-                        return;
-                    }
-
-                    localStorage.setItem(`si01_pass_${this.currentUser.nim}`, newP);
-                    this.showToast('Password berhasil diubah!', 'success');
-                    
-                    // Wajibkan Lokasi Setelah Ganti Password
-                    this.requestLocationAndLogin();
-                },
-
-                requestLocationAndLogin() {
-                    if (!navigator.geolocation) {
-                        this.showToast('Browser Anda tidak mendukung fitur Geolocation.', 'error');
-                        return;
-                    }
-
-                    this.showToast('Meminta izin akses lokasi (Wajib aktif)...', 'info');
-
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                            const record = {
-                                nim: this.currentUser.nim,
-                                name: this.currentUser.name,
-                                time: new Date().toISOString(),
-                                device: navigator.userAgent,
-                                lat: pos.coords.latitude,
-                                lng: pos.coords.longitude
-                            };
-                            this.saveAccessLog(record);
-                            this.isLoggedIn = true;
-                            localStorage.setItem('si01_current_user', JSON.stringify(this.currentUser));
-                            this.showToast(`Selamat datang, ${this.currentUser.name}!`, 'success');
-                        },
-                        (err) => {
-                            this.showToast('Akses Ditolak! Anda wajib menyalakan & mengizinkan lokasi (GPS) untuk masuk ke website ini.', 'error');
-                            this.isLoggedIn = false;
-                        },
-                        { timeout: 15000, enableHighAccuracy: true }
-                    );
-                },
-
-                saveAccessLog(record) {
-                    let logs = [];
-                    try { logs = JSON.parse(localStorage.getItem('si01_access_logs')) || []; } catch(e) { logs = []; }
-                    logs.unshift(record);
-                    localStorage.setItem('si01_access_logs', JSON.stringify(logs));
-                    this.accessLogs = logs;
-                },
-
-                clearAccessLogs() {
-                    if (confirm('Yakin ingin membersihkan riwayat log akses?')) {
-                        this.accessLogs = [];
-                        localStorage.removeItem('si01_access_logs');
-                        this.showToast('Log akses dibersihkan.', 'info');
-                    }
-                },
-
-                logout() {
-                    localStorage.removeItem('si01_current_user');
-                    this.isLoggedIn = false;
-                    this.currentUser = null;
-                    this.authStep = 'login';
-                    this.loginForm = { nim: '', password: '' };
-                    this.showToast('Berhasil keluar.', 'info');
-                },
-
-                formatLogTime(isoStr) {
-                    const d = new Date(isoStr);
-                    return isNaN(d) ? isoStr : d.toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'medium' });
+                    setTimeout(() => {
+                        this.showIntro = false;
+                    }, 1400);
                 },
 
                 updateClockAndGreeting() {
@@ -1069,13 +1149,244 @@
                     
                     const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
                     this.todayName = days[now.getDay()];
-                    if (this.todayName === 'Minggu') this.todayName = 'Senin';
 
                     const hour = now.getHours();
                     if (hour < 11) this.greeting = 'Selamat Pagi';
                     else if (hour < 15) this.greeting = 'Selamat Siang';
                     else if (hour < 18) this.greeting = 'Selamat Sore';
                     else this.greeting = 'Selamat Malam';
+                },
+
+                // Normalisasi URL agar otomatis memiliki https://
+                normalizeUrl(url) {
+                    if (!url) return '';
+                    const trimmed = String(url).trim();
+                    if (!trimmed) return '';
+                    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+                    return 'https://' + trimmed;
+                },
+
+                // Normalisasi format tanggal dari Google Sheets
+                normalizeDateStr(val) {
+                    if (!val) return '';
+                    const str = String(val).trim();
+                    if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+                    const d = new Date(str);
+                    if (!isNaN(d.getTime())) {
+                        const year = d.getFullYear();
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
+                        const day = String(d.getDate()).padStart(2, '0');
+                        return `${year}-${month}-${day}`;
+                    }
+                    return str;
+                },
+
+                // Normalisasi format jam dari Google Sheets
+                normalizeTimeStr(val) {
+                    if (!val) return '23:59';
+                    const str = String(val).trim();
+                    if (/^\d{2}:\d{2}$/.test(str)) return str;
+                    if (str.includes('T')) {
+                        const d = new Date(str);
+                        if (!isNaN(d.getTime())) {
+                            const hours = String(d.getHours()).padStart(2, '0');
+                            const mins = String(d.getMinutes()).padStart(2, '0');
+                            return `${hours}:${mins}`;
+                        }
+                    }
+                    const match = str.match(/(\d{1,2}):(\d{2})/);
+                    if (match) {
+                        return `${match[1].padStart(2, '0')}:${match[2]}`;
+                    }
+                    return '23:59';
+                },
+
+                setQuickDeadline(daysToAdd) {
+                    const target = new Date();
+                    target.setDate(target.getDate() + daysToAdd);
+                    const year = target.getFullYear();
+                    const month = String(target.getMonth() + 1).padStart(2, '0');
+                    const day = String(target.getDate()).padStart(2, '0');
+                    this.formTask.deadlineDate = `${year}-${month}-${day}`;
+                },
+
+                autoFillLecturerForm() {
+                    if (this.selectedCourseIndex === '') return;
+                    const chosen = this.schedule[this.selectedCourseIndex];
+                    if (chosen) {
+                        this.formLecturer.day = chosen.day;
+                        this.formLecturer.time = chosen.time;
+                        this.formLecturer.subject = chosen.subject;
+                        this.formLecturer.lecturer = chosen.lecturer;
+                    }
+                },
+
+                openNewUpdateModal() {
+                    this.selectedCourseIndex = '';
+                    this.formLecturer = {
+                        day: this.todayName === 'Minggu' ? 'Senin' : this.todayName,
+                        time: '08:30 - 10:10',
+                        subject: '',
+                        lecturer: '',
+                        status: 'Masuk',
+                        note: '',
+                        pin: ''
+                    };
+                    this.openAddConfirmationModal = true;
+                },
+
+                openQuickUpdate(item) {
+                    const idx = this.schedule.findIndex(s => s.subject === item.subject && s.day === item.day);
+                    this.selectedCourseIndex = idx !== -1 ? idx : '';
+                    this.formLecturer = {
+                        day: item.day,
+                        time: item.time,
+                        subject: item.subject,
+                        lecturer: item.lecturer,
+                        status: 'Masuk',
+                        note: '',
+                        pin: ''
+                    };
+                    this.openAddConfirmationModal = true;
+                },
+
+                openNewTaskModal() {
+                    const nextWeek = new Date();
+                    nextWeek.setDate(nextWeek.getDate() + 7);
+                    const year = nextWeek.getFullYear();
+                    const month = String(nextWeek.getMonth() + 1).padStart(2, '0');
+                    const day = String(nextWeek.getDate()).padStart(2, '0');
+
+                    this.formTask = {
+                        subject: '',
+                        title: '',
+                        deadlineDate: `${year}-${month}-${day}`,
+                        deadlineTime: '23:59',
+                        description: '',
+                        attachmentMode: 'none', // Default ke Tanpa Lampiran agar tugas biasa langsung bisa disimpan
+                        pdfSourceType: 'url',
+                        pdfFileUrl: '',
+                        pdfFileName: '',
+                        pdfFileSize: '',
+                        pdfDataBase64: '',
+                        link: '',
+                        linkLabel: '',
+                        pin: ''
+                    };
+                    this.openAddTaskModal = true;
+                },
+
+                handlePdfUpload(event) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                        this.showToast('Harap pilih file dengan format .PDF!', 'error');
+                        event.target.value = '';
+                        return;
+                    }
+
+                    const sizeKB = file.size / 1024;
+                    if (sizeKB > 3500) {
+                        this.showToast('Ukuran file terlalu besar (>3.5 MB). Gunakan opsi Link PDF / Drive!', 'error');
+                        event.target.value = '';
+                        return;
+                    }
+
+                    const formattedSize = sizeKB >= 1024 
+                        ? (sizeKB / 1024).toFixed(2) + ' MB' 
+                        : Math.round(sizeKB) + ' KB';
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.formTask.pdfDataBase64 = e.target.result;
+                        this.formTask.pdfFileName = file.name;
+                        this.formTask.pdfFileSize = formattedSize;
+                        this.showToast(`File "${file.name}" siap dilampirkan.`, 'info');
+                    };
+                    reader.readAsDataURL(file);
+                },
+
+                clearUploadedPdf() {
+                    this.formTask.pdfDataBase64 = '';
+                    this.formTask.pdfFileName = '';
+                    this.formTask.pdfFileSize = '';
+                },
+
+                base64ToBlobUrl(base64Data) {
+                    try {
+                        const parts = base64Data.split(',');
+                        const byteString = atob(parts[1]);
+                        const ab = new ArrayBuffer(byteString.length);
+                        const ia = new Uint8Array(ab);
+                        for (let i = 0; i < byteString.length; i++) {
+                            ia[i] = byteString.charCodeAt(i);
+                        }
+                        const blob = new Blob([ab], { type: 'application/pdf' });
+                        return URL.createObjectURL(blob);
+                    } catch (e) {
+                        console.error('Gagal mengonversi PDF Base64 ke Blob:', e);
+                        return base64Data;
+                    }
+                },
+
+                convertDriveToPreviewUrl(url) {
+                    if (!url) return '';
+                    const cleanUrl = this.normalizeUrl(url);
+                    const driveMatch = cleanUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || cleanUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                    if (driveMatch && driveMatch[1]) {
+                        return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+                    }
+                    return cleanUrl;
+                },
+
+                openPdfPreview(task) {
+                    this.activePdfTask = task;
+                    if (this.activeBlobUrl) {
+                        URL.revokeObjectURL(this.activeBlobUrl);
+                        this.activeBlobUrl = null;
+                    }
+                    this.pdfPreviewSrc = '';
+
+                    if (task.pdfUrl && task.pdfUrl.startsWith('local_pdf_')) {
+                        const base64Data = this.localPdfStore[task.pdfUrl];
+                        if (base64Data) {
+                            this.activeBlobUrl = this.base64ToBlobUrl(base64Data);
+                            this.pdfPreviewSrc = this.activeBlobUrl;
+                        }
+                    } else if (task.pdfUrl) {
+                        this.pdfPreviewSrc = this.convertDriveToPreviewUrl(task.pdfUrl);
+                    }
+                    this.openPdfModal = true;
+                },
+
+                closePdfPreview() {
+                    this.openPdfModal = false;
+                    if (this.activeBlobUrl) {
+                        URL.revokeObjectURL(this.activeBlobUrl);
+                        this.activeBlobUrl = null;
+                    }
+                    this.pdfPreviewSrc = '';
+                    this.activePdfTask = null;
+                },
+
+                downloadOrOpenPdf(task) {
+                    if (!task || !task.pdfUrl) return;
+                    if (task.pdfUrl.startsWith('local_pdf_')) {
+                        const base64Data = this.localPdfStore[task.pdfUrl];
+                        if (!base64Data) {
+                            this.showToast('File PDF lokal hanya tersimpan di perangkat pengunggah.', 'error');
+                            return;
+                        }
+                        const link = document.createElement('a');
+                        link.href = base64Data;
+                        link.download = task.pdfName || 'Tugas_SI01.pdf';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    } else {
+                        window.open(this.normalizeUrl(task.pdfUrl), '_blank', 'noopener,noreferrer');
+                    }
                 },
 
                 fetchAllData() {
@@ -1085,82 +1396,417 @@
                         .then(res => res.json())
                         .then(data => {
                             const raw = Array.isArray(data) ? data : [];
+                            
+                            // Filter Status Kehadiran Dosen
                             this.lecturerStatusList = raw.filter(item => item.status !== 'TUGAS').reverse();
-                            this.taskList = raw.filter(item => item.status === 'TUGAS').map(item => ({
-                                id: item.id,
-                                deadlineDate: item.day,
-                                deadlineTime: item.time || '23:59',
-                                subject: item.subject,
-                                title: item.lecturer,
-                                description: item.note || '',
-                                pdfUrl: '',
-                                link: ''
-                            }));
+                            
+                            // Filter & Parse Papan Tugas
+                            this.taskList = raw.filter(item => item.status === 'TUGAS').map((item, idx) => {
+                                let desc = item.note || '';
+                                let link = '';
+                                let pdfUrl = '';
+                                let pdfName = '';
+                                let pdfSize = '';
+                                let linkLabel = '';
+
+                                if (desc.includes('|||')) {
+                                    const parts = desc.split('|||');
+                                    desc = parts[0] || '';
+                                    link = parts[1] || '';
+                                    pdfUrl = parts[2] || '';
+                                    pdfName = parts[3] || '';
+                                    pdfSize = parts[4] || '';
+                                    linkLabel = parts[5] || '';
+                                }
+
+                                const cleanDate = this.normalizeDateStr(item.day);
+                                const cleanTime = this.normalizeTimeStr(item.time);
+                                const titleStr = item.lecturer || 'Tugas Kuliah';
+                                const subjectStr = item.subject || 'Mata Kuliah';
+
+                                // UID unik untuk mencegah bug centang semua tugas
+                                const uniqueKey = item.id 
+                                    ? String(item.id) 
+                                    : `${subjectStr}_${titleStr}_${cleanDate}_${idx}`;
+
+                                return {
+                                    id: item.id,
+                                    uid: uniqueKey,
+                                    deadlineDate: cleanDate,
+                                    deadlineTime: cleanTime,
+                                    subject: subjectStr,
+                                    title: titleStr,
+                                    description: desc,
+                                    link: link,
+                                    pdfUrl: pdfUrl,
+                                    pdfName: pdfName,
+                                    pdfSize: pdfSize,
+                                    linkLabel: linkLabel
+                                };
+                            }).sort((a, b) => {
+                                const dateA = new Date(`${a.deadlineDate}T${a.deadlineTime}`);
+                                const dateB = new Date(`${b.deadlineDate}T${b.deadlineTime}`);
+                                return (isNaN(dateA) ? 0 : dateA) - (isNaN(dateB) ? 0 : dateB);
+                            });
+
                             this.loading = false;
                         })
-                        .catch(err => { this.loading = false; });
+                        .catch(err => {
+                            console.error("Gagal mengambil data:", err);
+                            this.loading = false;
+                            this.showToast('Gagal memuat data terbaru dari server.', 'error');
+                        });
                 },
 
                 addTaskItem() {
+                    if (this.submitting) return;
+
+                    let finalLink = '';
+                    let finalLinkLabel = '';
+                    let finalPdfRef = '';
+                    let finalPdfName = '';
+                    let finalPdfSize = '';
+
+                    const mode = this.formTask.attachmentMode;
+
+                    if (mode === 'link' || mode === 'both') {
+                        finalLink = this.normalizeUrl(this.formTask.link);
+                        finalLinkLabel = (this.formTask.linkLabel || '').trim();
+                        if (!finalLink) {
+                            this.showToast('Harap isi URL tautan tugas terlebih dahulu, atau pilih mode Tanpa Lampiran!', 'error');
+                            return;
+                        }
+                    }
+
+                    if (mode === 'pdf' || mode === 'both') {
+                        if (this.formTask.pdfSourceType === 'upload') {
+                            if (!this.formTask.pdfDataBase64) {
+                                this.showToast('Harap pilih file PDF dari perangkat, atau pilih mode Tanpa Lampiran!', 'error');
+                                return;
+                            }
+                            const pdfKey = 'local_pdf_' + Date.now();
+                            this.localPdfStore[pdfKey] = this.formTask.pdfDataBase64;
+                            try {
+                                localStorage.setItem('si01_local_pdfs', JSON.stringify(this.localPdfStore));
+                            } catch (e) {
+                                console.warn('Penyimpanan lokal penuh, menyimpan PDF di sesi aktif.');
+                            }
+                            finalPdfRef = pdfKey;
+                            finalPdfName = this.formTask.pdfFileName || 'Dokumen_Tugas.pdf';
+                            finalPdfSize = this.formTask.pdfFileSize || '';
+                        } else if (this.formTask.pdfSourceType === 'url') {
+                            const cleanPdfUrl = this.normalizeUrl(this.formTask.pdfFileUrl);
+                            if (!cleanPdfUrl) {
+                                this.showToast('Harap masukkan link file PDF / Google Drive!', 'error');
+                                return;
+                            }
+                            finalPdfRef = cleanPdfUrl;
+                            finalPdfName = (this.formTask.pdfFileName || '').trim() || 'Dokumen_Tugas.pdf';
+                            finalPdfSize = 'Cloud PDF';
+                        }
+                    }
+
+                    const hasAttachment = Boolean(finalLink || finalPdfRef);
+                    const packedNote = hasAttachment
+                        ? [
+                            (this.formTask.description || '').trim(),
+                            finalLink,
+                            finalPdfRef,
+                            finalPdfName,
+                            finalPdfSize,
+                            finalLinkLabel
+                          ].join('|||')
+                        : (this.formTask.description || '').trim();
+
                     const params = new URLSearchParams({
                         action: 'update',
                         pin: this.formTask.pin,
                         day: this.formTask.deadlineDate,
                         time: this.formTask.deadlineTime,
                         subject: this.formTask.subject,
-                        lecturer: this.formTask.title,
+                        lecturer: this.formTask.title.trim(),
                         status: 'TUGAS',
-                        note: this.formTask.description
+                        note: packedNote
                     });
 
+                    this.submitting = true;
                     this.loading = true;
                     fetch(`${API_URL}?${params.toString()}`)
                         .then(res => res.json())
                         .then(res => {
+                            this.submitting = false;
                             this.loading = false;
                             if (res.status === 'success') {
-                                this.showToast('Tugas berhasil ditambahkan!', 'success');
+                                this.showToast('Tugas baru berhasil ditambahkan ke Papan Tugas!', 'success');
                                 this.openAddTaskModal = false;
                                 this.fetchAllData();
                             } else {
-                                this.showToast('Gagal: ' + res.message, 'error');
+                                this.showToast('Gagal: ' + (res.message || 'PIN salah atau terjadi kesalahan.'), 'error');
                             }
+                        })
+                        .catch(err => {
+                            this.submitting = false;
+                            this.loading = false;
+                            this.showToast('Terjadi kesalahan jaringan saat menyimpan tugas.', 'error');
                         });
                 },
 
-                isTaskDone(id) { return this.completedTaskIds.includes(String(id)); },
-                toggleTaskDone(id) {
-                    const strId = String(id);
+                isTaskDone(uid) {
+                    return this.completedTaskIds.includes(String(uid));
+                },
+
+                toggleTaskDone(uid) {
+                    const strId = String(uid);
                     if (this.completedTaskIds.includes(strId)) {
                         this.completedTaskIds = this.completedTaskIds.filter(item => item !== strId);
+                        this.showToast('Tugas ditandai belum selesai.', 'info');
                     } else {
                         this.completedTaskIds.push(strId);
+                        this.showToast('Mantap! Tugas berhasil ditandai selesai.', 'success');
                     }
                     localStorage.setItem('si01_completed_tasks', JSON.stringify(this.completedTaskIds));
                 },
 
-                getDeadlineInfo(dateStr, timeStr, taskId) {
-                    if (this.isTaskDone(taskId)) return { label: 'Selesai', badgeClass: 'bg-emerald-500/20 text-emerald-300', icon: 'fa-solid fa-check' };
-                    return { label: dateStr, badgeClass: 'bg-indigo-500/20 text-indigo-300', icon: 'fa-regular fa-clock' };
+                formatDateIndo(dateStr) {
+                    if (!dateStr) return '-';
+                    const clean = this.normalizeDateStr(dateStr);
+                    const d = new Date(clean + 'T00:00:00');
+                    if (isNaN(d.getTime())) return dateStr;
+                    return d.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
                 },
 
-                get filteredTasks() { return this.taskList; },
-                get pendingTasksCount() { return this.taskList.length; },
-                get taskProgressPercent() { return 0; },
-                getWhatsAppLink(item) { return `https://wa.me/${item.phone}?text=Assalamu'alaikum...`; },
+                getDeadlineInfo(dateStr, timeStr, taskUid) {
+                    if (this.isTaskDone(taskUid)) {
+                        return {
+                            label: 'Selesai Dikerjakan',
+                            badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+                            icon: 'fa-solid fa-check'
+                        };
+                    }
+                    const cleanDate = this.normalizeDateStr(dateStr);
+                    const cleanTime = this.normalizeTimeStr(timeStr);
+                    const target = new Date(`${cleanDate}T${cleanTime}`);
+                    if (isNaN(target.getTime())) {
+                        return { label: cleanDate || '-', badgeClass: 'bg-slate-800 text-slate-300 border-slate-700', icon: 'fa-regular fa-clock' };
+                    }
+                    const now = new Date();
+                    const diffMs = target - now;
+                    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                    const diffDays = Math.floor(diffHours / 24);
+
+                    if (diffMs < 0) {
+                        return {
+                            label: 'Deadline Terlewat',
+                            badgeClass: 'bg-rose-950/80 text-rose-400 border-rose-500/40',
+                            icon: 'fa-solid fa-circle-exclamation'
+                        };
+                    } else if (diffHours < 24) {
+                        return {
+                            label: diffHours <= 0 ? 'Kurang dari 1 Jam!' : `Mendesak • ${diffHours} Jam Lagi`,
+                            badgeClass: 'bg-rose-500/20 text-rose-300 border-rose-500/40 animate-pulse',
+                            icon: 'fa-solid fa-fire'
+                        };
+                    } else if (diffDays <= 3) {
+                        return {
+                            label: `Sisa ${diffDays} Hari ${diffHours % 24} Jam`,
+                            badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+                            icon: 'fa-solid fa-hourglass-half'
+                        };
+                    } else {
+                        return {
+                            label: `${diffDays} Hari Lagi`,
+                            badgeClass: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
+                            icon: 'fa-regular fa-clock'
+                        };
+                    }
+                },
+
+                buildTaskShareText(task) {
+                    const pdfLine = task.pdfUrl
+                        ? (task.pdfUrl.startsWith('local_pdf_')
+                            ? `\n📄 *Lampiran PDF:* ${task.pdfName || 'Dokumen Tugas.pdf'} (Tersedia di Portal Kelas)`
+                            : `\n📄 *File PDF (${task.pdfName || 'Dokumen'}):* ${this.normalizeUrl(task.pdfUrl)}`)
+                        : '';
+                    const linkLine = task.link ? `\n🔗 *${task.linkLabel || 'Link Tugas'}:* ${this.normalizeUrl(task.link)}` : '';
+
+                    return `📢 *PENGINGAT TUGAS KULIAH SI-01*
+
+📚 *Mata Kuliah:* ${task.subject}
+📝 *Judul Tugas:* ${task.title}
+⏰ *Deadline:* ${this.formatDateIndo(task.deadlineDate)} (${task.deadlineTime} WIB)${task.description ? `\n\n📌 *Instruksi:* \n${task.description}` : ''}${pdfLine}${linkLine}
+
+Jangan lupa dikerjakan tepat waktu ya teman-teman!`;
+                },
+
+                getTaskWhatsAppShare(task) {
+                    return `https://wa.me/?text=${encodeURIComponent(this.buildTaskShareText(task))}`;
+                },
+
+                copyTaskInfo(task) {
+                    const text = this.buildTaskShareText(task);
+                    navigator.clipboard.writeText(text)
+                        .then(() => this.showToast('Detail tugas berhasil disalin ke clipboard!', 'success'))
+                        .catch(() => this.showToast('Gagal menyalin teks tugas.', 'error'));
+                },
+
+                get filteredTasks() {
+                    return this.taskList.filter(t => {
+                        // Filter Status Selesai / Belum
+                        if (this.taskFilter === 'pending' && this.isTaskDone(t.uid)) return false;
+                        if (this.taskFilter === 'completed' && !this.isTaskDone(t.uid)) return false;
+
+                        // Filter Mata Kuliah
+                        if (this.taskSubjectFilter && t.subject !== this.taskSubjectFilter) return false;
+
+                        // Filter Pencarian Kata Kunci
+                        if (this.searchTask) {
+                            const q = this.searchTask.toLowerCase();
+                            const matchTitle = (t.title || '').toLowerCase().includes(q);
+                            const matchSubj = (t.subject || '').toLowerCase().includes(q);
+                            const matchDesc = (t.description || '').toLowerCase().includes(q);
+                            if (!matchTitle && !matchSubj && !matchDesc) return false;
+                        }
+
+                        return true;
+                    });
+                },
+
+                get pendingTasksCount() {
+                    return this.taskList.filter(t => !this.isTaskDone(t.uid)).length;
+                },
+
+                get completedTasksCount() {
+                    return this.taskList.length - this.pendingTasksCount;
+                },
+
+                get taskProgressPercent() {
+                    if (this.taskList.length === 0) return 0;
+                    return Math.round((this.completedTasksCount / this.taskList.length) * 100);
+                },
+
+                getWhatsAppLink(item) {
+                    const phone = (item.phone && item.phone !== '6281234567890') ? item.phone : '';
+                    const text = `Assalamu'alaikum Wr. Wb.
+
+Yth. Bapak/Ibu ${item.lecturer},
+
+Kami dari perwakilan mahasiswa Kelas Sistem Informasi 01 Universitas Abulyatama ingin mengkonfirmasi ketersediaan perkuliahan untuk mata kuliah *${item.subject}* pada:
+
+🗓 Hari: ${item.day}
+⏰ Pukul: ${item.time} WIB
+🏫 Ruangan: ${item.room}
+
+Mohon konfirmasi ketersediaan kehadiran Bapak/Ibu. Terima kasih banyak.
+
+Hormat kami,
+Rian Sayadi
+NIM: 26146039
+Komting Sistem Informasi 01`;
+
+                    return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+                },
 
                 showToast(message, type = 'success') {
-                    const id = Date.now();
+                    const id = Date.now() + Math.random();
                     this.toasts.push({ id, message, type });
-                    setTimeout(() => { this.toasts = this.toasts.filter(t => t.id !== id); }, 4000);
+                    setTimeout(() => {
+                        this.toasts = this.toasts.filter(t => t.id !== id);
+                    }, 4000);
                 },
-                removeToast(id) { this.toasts = this.toasts.filter(t => t.id !== id); },
-                get filteredSchedule() { return this.schedule.filter(item => item.day === this.selectedDay); },
-                get todaySchedule() { return this.schedule.filter(item => item.day === this.todayName); },
+
+                removeToast(id) {
+                    this.toasts = this.toasts.filter(t => t.id !== id);
+                },
+
+                get filteredSchedule() {
+                    return this.schedule.filter(item => item.day === this.selectedDay);
+                },
+
+                get todaySchedule() {
+                    return this.schedule.filter(item => item.day === this.todayName);
+                },
+
                 get filteredMembers() {
                     if (!this.searchMember) return this.members;
                     const search = this.searchMember.toLowerCase();
                     return this.members.filter(m => m.name.toLowerCase().includes(search) || m.nim.toLowerCase().includes(search));
+                },
+
+                addLecturerStatus() {
+                    if (this.submitting) return;
+                    const params = new URLSearchParams({
+                        action: 'update',
+                        pin: this.formLecturer.pin,
+                        day: this.formLecturer.day,
+                        time: this.formLecturer.time,
+                        subject: this.formLecturer.subject,
+                        lecturer: this.formLecturer.lecturer,
+                        status: this.formLecturer.status,
+                        note: this.formLecturer.note
+                    });
+
+                    this.submitting = true;
+                    this.loading = true;
+                    fetch(`${API_URL}?${params.toString()}`)
+                        .then(res => res.json())
+                        .then(res => {
+                            this.submitting = false;
+                            this.loading = false;
+                            if (res.status === 'success') {
+                                this.showToast('Status dosen berhasil diupdate secara real-time!', 'success');
+                                this.openAddConfirmationModal = false;
+                                this.selectedCourseIndex = '';
+                                this.formLecturer = { day: 'Senin', time: '08:30 - 10:10', subject: '', lecturer: '', status: 'Masuk', note: '', pin: '' };
+                                this.fetchAllData();
+                            } else {
+                                this.showToast('Gagal: ' + res.message, 'error');
+                            }
+                        })
+                        .catch(err => {
+                            this.submitting = false;
+                            this.loading = false;
+                            this.showToast('Terjadi kesalahan jaringan.', 'error');
+                        });
+                },
+
+                deleteConfirmation(id) {
+                    if (!id) {
+                        this.showToast('ID data tidak ditemukan untuk dihapus.', 'error');
+                        return;
+                    }
+                    this.deleteTargetId = id;
+                    this.deletePinInput = '';
+                    this.openDeleteModal = true;
+                },
+
+                confirmDelete() {
+                    if (!this.deletePinInput || this.submitting) return;
+                    const params = new URLSearchParams({
+                        action: 'delete',
+                        pin: this.deletePinInput,
+                        id: this.deleteTargetId
+                    });
+
+                    this.submitting = true;
+                    this.openDeleteModal = false;
+                    this.loading = true;
+                    fetch(`${API_URL}?${params.toString()}`)
+                        .then(res => res.json())
+                        .then(res => {
+                            this.submitting = false;
+                            this.loading = false;
+                            if (res.status === 'success') {
+                                this.showToast('Data berhasil dihapus!', 'success');
+                                this.fetchAllData();
+                            } else {
+                                this.showToast('Gagal: ' + res.message, 'error');
+                            }
+                        })
+                        .catch(err => {
+                            this.submitting = false;
+                            this.loading = false;
+                            this.showToast('Terjadi kesalahan jaringan.', 'error');
+                        });
                 }
             }
         }
