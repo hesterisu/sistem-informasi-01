@@ -80,7 +80,7 @@
                  x-transition:leave-start="opacity-100 scale-100"
                  x-transition:leave-end="opacity-0 scale-95"
                  class="pointer-events-auto flex items-start gap-3 p-4 rounded-2xl shadow-2xl border backdrop-blur-xl"
-                 :class="toast.type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-100' : (toast.type === 'error' ? 'bg-rose-950/90 border-rose-500/40 text-rose-100' : 'bg-indigo-950/90 border-indigo-500/40 text-indigo-150')">
+                 :class="toast.type === 'success' ? 'bg-emerald-950/90 border-emerald-500/40 text-emerald-100' : (toast.type === 'error' ? 'bg-rose-950/90 border-rose-500/40 text-rose-100' : 'bg-indigo-950/90 border-indigo-500/40 text-indigo-100')">
                 <div class="shrink-0 pt-0.5">
                     <i :class="{
                         'fa-solid fa-circle-check text-emerald-400': toast.type === 'success',
@@ -230,193 +230,6 @@
                     </button>
                 </div>
 
-                <!-- Grid jika ada jadwal hari ini -->
-                <div x-show="todaySchedule.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <template x-for="item in todaySchedule" :key="item.subject">
-                        <div class="bg-slate-950/60 p-5 rounded-2xl border border-indigo-500/10 hover:border-indigo-500/40 transition flex flex-col justify-between">
-                            <div>
-                                <div class="flex justify-between items-start">
-                                    <span class="bg-indigo-500/20 text-indigo-300 text-xs font-semibold px-2.5 py-1 rounded-lg border border-indigo-500/30" x-text="item.time"></span>
-                                    <span class="text-slate-400 text-xs font-medium"><i class="fa-solid fa-location-dot text-rose-400 mr-1"></i> <span x-text="item.room"></span></span>
-                                </div>
-                                <h4 class="font-bold text-white mt-3 text-base" x-text="item.subject"></h4>
-                                <p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-chalkboard-user text-indigo-400"></i> <span x-text="item.lecturer"></span>
-                                </p>
-                            </div>
-                            <div class="mt-4 pt-3 border-t border-slate-800/80 flex gap-2">
-                                <button @click="openQuickUpdate(item)" class="flex-1 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
-                                    <i class="fa-solid fa-pen-to-square"></i> Status
-                                </button>
-                                <a :href="getWhatsAppLink(item)" target="_blank" class="flex-1 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition">
-                                    <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i> WA Dosen
-                                </a>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-
-                <!-- Empty State jika tidak ada jadwal hari ini -->
-                <div x-show="todaySchedule.length === 0" class="bg-slate-950/60 p-8 sm:p-10 rounded-2xl border border-indigo-500/10 text-center space-y-3">
-                    <div class="w-14 h-14 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center mx-auto text-indigo-400 text-2xl">
-                        <i class="fa-solid fa-mug-hot"></i>
-                    </div>
-                    <div class="space-y-1">
-                        indigo-400': toast.type === 'info'
-                    }" class="text-lg"></i>
-                </div>
-                <div class="flex-grow text-sm font-medium" x-text="toast.message"></div>
-                <button @click="removeToast(toast.id)" class="shrink-0 opacity-70 hover:opacity-100 transition">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-        </template>
-    </div>
-
-    <!-- Header / Navbar -->
-    <header class="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-indigo-500/20 shadow-xl shadow-indigo-950/20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row justify-between items-center gap-3">
-            <div class="flex items-center justify-between w-full md:w-auto">
-                <div class="flex items-center space-x-3.5">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-indigo-500 rounded-xl blur-md opacity-40"></div>
-                        <div class="relative bg-gradient-to-br from-indigo-600 to-violet-700 p-2.5 rounded-xl border border-indigo-400/40 shadow-inner">
-                            <i class="fa-solid fa-graduation-cap text-white text-xl sm:text-2xl"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <h1 class="text-base sm:text-lg font-extrabold tracking-tight bg-gradient-to-r from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent">SI-01 ELITE</h1>
-                            <span class="bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 text-[10px] font-semibold px-2 py-0.5 rounded-full">LIVE</span>
-                        </div>
-                        <p class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                            <span x-text="currentTime"></span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Navigation Tabs -->
-            <nav class="flex overflow-x-auto w-full md:w-auto justify-start md:justify-center gap-1.5 bg-slate-950/60 p-1.5 rounded-2xl border border-indigo-500/20 no-scrollbar">
-                <button @click="activeTab = 'home'" :class="activeTab === 'home' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-house"></i> Beranda
-                </button>
-                <button @click="activeTab = 'schedule'" :class="activeTab === 'schedule' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-calendar-days"></i> Jadwal Kuliah
-                </button>
-                <button @click="activeTab = 'tasks'" :class="activeTab === 'tasks' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-list-check"></i> Papan Tugas
-                    <span x-show="pendingTasksCount > 0" x-text="pendingTasksCount" class="bg-amber-500 text-slate-950 text-[10px] font-extrabold px-1.5 py-0.2 rounded-full"></span>
-                </button>
-                <button @click="activeTab = 'lecturer'" :class="activeTab === 'lecturer' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-user-check"></i> Status Dosen
-                </button>
-                <button @click="activeTab = 'members'" :class="activeTab === 'members' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2">
-                    <i class="fa-solid fa-users"></i> Anggota Kelas
-                </button>
-
-                <!-- TAB ADMIN: HANYA MUNCUL UNTUK KETUA KELAS / ADMIN (NIM 26146073) -->
-                <button x-show="currentUser && currentUser.nim === '26146073'" @click="activeTab = 'admin_logs'" :class="activeTab === 'admin_logs' ? 'bg-gradient-to-r from-rose-600 to-pink-600 text-white font-semibold shadow-lg shadow-rose-600/30' : 'text-rose-400 hover:text-white hover:bg-rose-950/40'" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm whitespace-nowrap transition-all duration-300 flex items-center gap-2 border border-rose-500/30">
-                    <i class="fa-solid fa-user-shield text-rose-300"></i> Log Akses & Lokasi
-                </button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full relative z-10">
-
-        <!-- TAB 1: BERANDA -->
-        <div x-show="activeTab === 'home'" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 translate-y-3"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             class="space-y-8">
-            
-            <!-- Hero Banner -->
-            <div class="relative rounded-3xl p-6 sm:p-10 overflow-hidden border border-indigo-500/30 shadow-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-violet-950">
-                <div class="absolute -right-20 -top-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="relative z-10 max-w-3xl space-y-4">
-                    <div class="flex flex-wrap items-center justify-between gap-3">
-                        <div class="inline-flex items-center gap-2 bg-indigo-500/20 border border-indigo-400/30 px-3 py-1 rounded-full text-indigo-300 text-xs font-semibold">
-                            <i class="fa-solid fa-sparkles text-amber-400"></i>
-                            <span x-text="greeting"></span>, <span x-text="currentUser?.name"></span> (<span x-text="currentUser?.nim"></span>)
-                        </div>
-                        <button @click="logout" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 px-3 py-1 rounded-full text-xs font-semibold transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-right-from-bracket"></i> Keluar
-                        </button>
-                    </div>
-                    <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                        Portal Akademik <span class="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Sistem Informasi 01</span>
-                    </h2>
-                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        Pusat koordinasi perkuliahan real-time. Pantau jadwal, cek deadline & file PDF tugas, kirim konfirmasi WhatsApp ke dosen dalam 1 klik, dan pantau status perkuliahan dengan cepat.
-                    </p>
-                    <div class="pt-2 flex flex-wrap gap-3">
-                        <button @click="activeTab = 'tasks'" class="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold px-6 py-3 rounded-2xl text-sm shadow-lg shadow-indigo-600/30 transition-all duration-300 flex items-center gap-2">
-                            <i class="fa-solid fa-list-check"></i>
-                            <span>Cek Papan Tugas</span>
-                            <span x-show="pendingTasksCount > 0" class="bg-amber-400 text-slate-950 text-xs font-extrabold px-2 py-0.5 rounded-full" x-text="pendingTasksCount"></span>
-                        </button>
-                        <button @click="activeTab = 'lecturer'" class="bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 font-semibold px-6 py-3 rounded-2xl text-sm transition-all duration-300 flex items-center gap-2">
-                            <i class="fa-solid fa-user-check text-indigo-400"></i> Status Dosen
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Stats Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-indigo-500/20 shadow-xl flex items-center space-x-5 hover:border-indigo-500/40 transition">
-                    <div class="bg-indigo-500/20 text-indigo-400 p-4 rounded-2xl text-2xl border border-indigo-500/30 shrink-0">
-                        <i class="fa-solid fa-book-open"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Mata Kuliah</p>
-                        <h3 class="text-2xl font-extrabold text-white mt-1" x-text="schedule.length + ' Matkul'"></h3>
-                    </div>
-                </div>
-                <div @click="activeTab = 'tasks'" class="cursor-pointer bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-rose-500/20 shadow-xl flex items-center space-x-5 hover:border-rose-500/40 transition">
-                    <div class="bg-rose-500/20 text-rose-400 p-4 rounded-2xl text-2xl border border-rose-500/30 shrink-0">
-                        <i class="fa-solid fa-fire-flame-curved"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Tugas Aktif</p>
-                        <h3 class="text-2xl font-extrabold text-white mt-1" x-text="pendingTasksCount + ' Belum Selesai'"></h3>
-                    </div>
-                </div>
-                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-emerald-500/20 shadow-xl flex items-center space-x-5 hover:border-emerald-500/40 transition">
-                    <div class="bg-emerald-500/20 text-emerald-400 p-4 rounded-2xl text-2xl border border-emerald-500/30 shrink-0">
-                        <i class="fa-solid fa-user-graduate"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Total Mahasiswa</p>
-                        <h3 class="text-2xl font-extrabold text-white mt-1" x-text="members.length + ' Orang'"></h3>
-                    </div>
-                </div>
-                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-amber-500/20 shadow-xl flex items-center space-x-5 hover:border-amber-500/40 transition">
-                    <div class="bg-amber-500/20 text-amber-400 p-4 rounded-2xl text-2xl border border-amber-500/30 shrink-0">
-                        <i class="fa-solid fa-file-pdf"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Lampiran Tugas</p>
-                        <h3 class="text-sm font-bold text-white mt-1">Support PDF & Link</h3>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Schedule Preview Today -->
-            <div class="bg-slate-900/60 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-indigo-500/20 shadow-xl space-y-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-bolt text-amber-400"></i> Ringkasan Jadwal (<span x-text="todayName"></span>)
-                    </h3>
-                    <button @click="selectedDay = todayName; activeTab = 'schedule'" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
-                        Lihat Semua <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                    </button>
-                </div>
-
                 <div x-show="todaySchedule.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <template x-for="item in todaySchedule" :key="item.subject">
                         <div class="bg-slate-950/60 p-5 rounded-2xl border border-indigo-500/10 hover:border-indigo-500/40 transition flex flex-col justify-between">
@@ -459,7 +272,7 @@
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
              x-transition:enter-end="opacity-100 translate-y-0"
-             class="space-y-6">
+             class="space-y-6" x-cloak>
             
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -509,6 +322,11 @@
                     </div>
                 </template>
             </div>
+
+            <div x-show="filteredSchedule.length === 0" class="bg-slate-900/60 p-10 rounded-3xl border border-indigo-500/20 text-center space-y-2">
+                <i class="fa-solid fa-calendar-xmark text-3xl text-indigo-400"></i>
+                <p class="text-sm font-bold text-white">Tidak ada jadwal kuliah pada hari <span x-text="selectedDay"></span>.</p>
+            </div>
         </div>
 
         <!-- TAB 3: PAPAN TUGAS & DEADLINE TRACKER -->
@@ -516,7 +334,7 @@
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
              x-transition:enter-end="opacity-100 translate-y-0"
-             class="space-y-6">
+             class="space-y-6" x-cloak>
             
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -565,6 +383,11 @@
             <div x-show="loading" class="text-center py-16 text-indigo-400">
                 <i class="fa-solid fa-spinner fa-spin text-3xl"></i>
                 <p class="text-xs text-slate-400 mt-3 font-medium">Memuat daftar tugas kelas...</p>
+            </div>
+
+            <div x-show="!loading && filteredTasks.length === 0" class="bg-slate-900/60 p-12 rounded-3xl border border-indigo-500/20 text-center space-y-2">
+                <i class="fa-solid fa-clipboard-check text-3xl text-emerald-400"></i>
+                <p class="text-sm font-bold text-white">Tidak ada tugas pada kategori ini.</p>
             </div>
 
             <div x-show="!loading && filteredTasks.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -649,7 +472,7 @@
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
              x-transition:enter-end="opacity-100 translate-y-0"
-             class="space-y-6">
+             class="space-y-6" x-cloak>
             
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -683,9 +506,13 @@
                                 </div>
                                 <h3 class="text-base sm:text-lg font-bold text-white" x-text="item.subject"></h3>
                                 <p class="text-xs text-slate-300">Dosen: <span class="font-semibold text-indigo-300" x-text="item.lecturer"></span></p>
+                                <p x-show="item.note" class="text-xs text-slate-400 italic mt-1" x-text="'Catatan: ' + item.note"></p>
                             </div>
                         </div>
                     </template>
+                </div>
+                <div x-show="lecturerStatusList.length === 0" class="p-12 text-center text-slate-400 text-sm">
+                    Belum ada pembaruan status dosen.
                 </div>
             </div>
         </div>
@@ -695,7 +522,7 @@
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
              x-transition:enter-end="opacity-100 translate-y-0"
-             class="space-y-6">
+             class="space-y-6" x-cloak>
             
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -722,70 +549,9 @@
             </div>
         </div>
 
-        <!-- ================= TAB KHUSUS ADMIN: LOG AKSES & LOKASI (HANYA MUNCUL DI ANDA) ================= -->
-        <div x-show="activeTab === 'admin_logs'" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 translate-y-3"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             class="space-y-6" x-cloak>
-            
-            <div class="bg-gradient-to-r from-rose-950/80 via-slate-900 to-slate-900 p-6 rounded-3xl border border-rose-500/40 shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <h2 class="text-2xl font-extrabold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-user-secret text-rose-400"></i> Panel Keamanan: Log Akses & Lokasi
-                    </h2>
-                    <p class="text-slate-300 text-xs sm:text-sm mt-1">Hanya Anda (Ketua Kelas / Admin) yang dapat melihat daftar siapa saja yang membuka website ini beserta titik lokasinya.</p>
-                </div>
-                <button @click="clearAccessLogs" class="bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 px-4 py-2.5 rounded-2xl text-xs font-semibold transition flex items-center gap-2">
-                    <i class="fa-solid fa-trash-can"></i> Bersihkan Log
-                </button>
-            </div>
-
-            <div class="bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-rose-500/20 shadow-xl overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="bg-slate-950/80 text-slate-400 uppercase border-b border-slate-800">
-                            <tr>
-                                <th class="px-5 py-3.5">Waktu Akses</th>
-                                <th class="px-5 py-3.5">NIM & Nama Pengguna</th>
-                                <th class="px-5 py-3.5">Perangkat</th>
-                                <th class="px-5 py-3.5">Lokasi GPS Saat Akses</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800/80">
-                            <template x-for="log in accessLogs" :key="log.time + log.nim">
-                                <tr class="hover:bg-slate-800/40 transition">
-                                    <td class="px-5 py-4 font-mono text-slate-400" x-text="formatLogTime(log.time)"></td>
-                                    <td class="px-5 py-4">
-                                        <p class="font-bold text-white" x-text="log.name"></p>
-                                        <p class="text-indigo-400 font-mono text-[11px]" x-text="log.nim"></p>
-                                    </td>
-                                    <td class="px-5 py-4 text-slate-400 max-w-xs truncate" x-text="log.device"></td>
-                                    <td class="px-5 py-4">
-                                        <template x-if="log.lat && log.lng">
-                                            <a :href="`https://www.google.com/maps?q=${log.lat},${log.lng}`" target="_blank" class="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-3 py-1.5 rounded-xl font-semibold hover:bg-emerald-500/30 transition">
-                                                <i class="fa-solid fa-map-location-dot text-emerald-400"></i> Buka Peta (${log.lat.toFixed(4)},${log.lng.toFixed(4)})
-                                            </a>
-                                        </template>
-                                        <template x-if="!log.lat || !log.lng">
-                                            <span class="text-amber-400/80 italic"><i class="fa-solid fa-triangle-exclamation"></i> Izin Lokasi Ditolak</span>
-                                        </template>
-                                    </td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
-                </div>
-                <div x-show="accessLogs.length === 0" class="p-16 text-center text-slate-400 text-sm">
-                    <i class="fa-solid fa-shield-halved text-4xl mb-3 text-slate-600 block"></i>
-                    Belum ada riwayat akses tercatat.
-                </div>
-            </div>
-        </div>
-
     </main>
 
-    <!-- Modal Tambah Tugas & Modal Lainnya -->
+    <!-- MODAL TAMBAH TUGAS -->
     <div x-show="openAddTaskModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 overflow-y-auto" x-cloak>
         <div @click.away="openAddTaskModal = false" class="bg-slate-900 border border-indigo-500/30 w-full max-w-xl rounded-3xl shadow-2xl p-6 sm:p-8 space-y-5 my-auto">
             <div class="flex justify-between items-center border-b border-slate-800 pb-4">
@@ -832,6 +598,47 @@
         </div>
     </div>
 
+    <!-- MODAL UPDATE STATUS DOSEN -->
+    <div x-show="openUpdateStatusModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 overflow-y-auto" x-cloak>
+        <div @click.away="openUpdateStatusModal = false" class="bg-slate-900 border border-indigo-500/30 w-full max-w-xl rounded-3xl shadow-2xl p-6 sm:p-8 space-y-5 my-auto">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fa-solid fa-user-check text-indigo-400"></i> Update Kehadiran Dosen</h3>
+                <button @click="openUpdateStatusModal = false" class="text-slate-400 hover:text-white p-1.5 rounded-xl bg-slate-800/80"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form @submit.prevent="submitLecturerStatus" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Mata Kuliah</label>
+                    <select required x-model="formStatus.subject" @change="onSelectCourseForStatus()" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white">
+                        <option value="">-- Pilih Mata Kuliah --</option>
+                        <template x-for="course in schedule" :key="course.subject">
+                            <option :value="course.subject" x-text="`${course.subject} (${course.day})`"></option>
+                        </template>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Status Kehadiran</label>
+                    <select required x-model="formStatus.status" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white">
+                        <option value="Masuk">Masuk (Tatap Muka)</option>
+                        <option value="Online / Daring">Online / Daring</option>
+                        <option value="Tidak Masuk">Tidak Masuk</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Catatan Tambahan (Opsional)</label>
+                    <textarea x-model="formStatus.note" rows="2" placeholder="Contoh: Diganti hari Sabtu / Link Zoom menyusul..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-2xl text-sm text-white"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-indigo-400 uppercase mb-1.5">PIN Admin</label>
+                    <input type="password" required x-model="formStatus.pin" placeholder="PIN rahasia..." class="w-full p-3 bg-indigo-950/40 border border-indigo-500/40 rounded-2xl text-sm text-white">
+                </div>
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                    <button type="button" @click="openUpdateStatusModal = false" class="px-5 py-2.5 bg-slate-800 text-slate-300 rounded-2xl text-sm font-semibold">Batal</button>
+                    <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white rounded-2xl text-sm font-semibold">Simpan Status</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-slate-900/80 backdrop-blur-xl border-t border-indigo-500/20 mt-auto py-6 text-center text-xs text-slate-400 px-4">
         <p>&copy; 2026 Sistem Informasi 01 • Universitas Abulyatama • Portal Elite Real-Time</p>
@@ -844,25 +651,21 @@
         function classApp() {
             return {
                 showIntro: true,
-                isLoggedIn: false,
-                authStep: 'login', // 'login' | 'change_password'
-                currentUser: null,
-                loginForm: { nim: '', password: '' },
-                changePassForm: { newPass: '', confirmPass: '' },
-                accessLogs: [],
-
                 activeTab: 'home',
                 selectedDay: 'Senin',
                 todayName: 'Senin',
                 currentTime: '',
                 greeting: 'Halo',
                 searchMember: '',
+                taskFilter: 'all',
                 openAddTaskModal: false,
+                openUpdateStatusModal: false,
                 loading: false,
                 toasts: [],
                 completedTaskIds: [],
                 
                 formTask: { subject: '', title: '', deadlineDate: '', deadlineTime: '23:59', description: '', pin: '' },
+                formStatus: { day: '', time: '', subject: '', lecturer: '', status: 'Masuk', note: '', pin: '' },
 
                 schedule: [
                     { day: 'Selasa', time: '08:30 - 10:10', subject: 'Algoritma dan Pemograman', lecturer: 'Anisah. ST., M.T', room: 'D1-306B', sks: 3, phone: '6285359398283' },
@@ -933,133 +736,15 @@
                 ],
 
                 init() {
-                    const savedUser = localStorage.getItem('si01_current_user');
-                    if (savedUser) {
-                        try {
-                            this.currentUser = JSON.parse(savedUser);
-                            this.isLoggedIn = true;
-                        } catch (e) { this.isLoggedIn = false; }
-                    }
-
-                    const savedLogs = localStorage.getItem('si01_access_logs');
-                    if (savedLogs) {
-                        try { this.accessLogs = JSON.parse(savedLogs); } catch (e) { this.accessLogs = []; }
+                    const savedCompleted = localStorage.getItem('si01_completed_tasks');
+                    if (savedCompleted) {
+                        try { this.completedTaskIds = JSON.parse(savedCompleted); } catch (e) { this.completedTaskIds = []; }
                     }
 
                     this.updateClockAndGreeting();
                     setInterval(() => this.updateClockAndGreeting(), 1000);
                     this.fetchAllData();
                     setTimeout(() => { this.showIntro = false; }, 1400);
-                },
-
-                handleLogin() {
-                    const nimInput = this.loginForm.nim.trim();
-                    const passInput = this.loginForm.password;
-
-                    const student = this.members.find(m => m.nim === nimInput);
-                    if (!student) {
-                        this.showToast('NIM tidak terdaftar dalam kelas SI-01!', 'error');
-                        return;
-                    }
-
-                    const customPass = localStorage.getItem(`si01_pass_${nimInput}`);
-                    const activePass = customPass || 'si012026';
-
-                    if (passInput !== activePass) {
-                        this.showToast('Password salah!', 'error');
-                        return;
-                    }
-
-                    this.currentUser = student;
-                    
-                    if (!customPass) {
-                        this.authStep = 'change_password';
-                        return;
-                    }
-
-                    // Wajibkan Lokasi
-                    this.requestLocationAndLogin();
-                },
-
-                handleChangePassword() {
-                    const newP = this.changePassForm.newPass;
-                    const confP = this.changePassForm.confirmPass;
-
-                    if (newP.length < 6) {
-                        this.showToast('Password baru minimal 6 karakter!', 'error');
-                        return;
-                    }
-                    if (newP !== confP) {
-                        this.showToast('Konfirmasi password tidak cocok!', 'error');
-                        return;
-                    }
-
-                    localStorage.setItem(`si01_pass_${this.currentUser.nim}`, newP);
-                    this.showToast('Password berhasil diubah!', 'success');
-                    
-                    // Wajibkan Lokasi Setelah Ganti Password
-                    this.requestLocationAndLogin();
-                },
-
-                requestLocationAndLogin() {
-                    if (!navigator.geolocation) {
-                        this.showToast('Browser Anda tidak mendukung fitur Geolocation.', 'error');
-                        return;
-                    }
-
-                    this.showToast('Meminta izin akses lokasi (Wajib aktif)...', 'info');
-
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                            const record = {
-                                nim: this.currentUser.nim,
-                                name: this.currentUser.name,
-                                time: new Date().toISOString(),
-                                device: navigator.userAgent,
-                                lat: pos.coords.latitude,
-                                lng: pos.coords.longitude
-                            };
-                            this.saveAccessLog(record);
-                            this.isLoggedIn = true;
-                            localStorage.setItem('si01_current_user', JSON.stringify(this.currentUser));
-                            this.showToast(`Selamat datang, ${this.currentUser.name}!`, 'success');
-                        },
-                        (err) => {
-                            this.showToast('Akses Ditolak! Anda wajib menyalakan & mengizinkan lokasi (GPS) untuk masuk ke website ini.', 'error');
-                            this.isLoggedIn = false;
-                        },
-                        { timeout: 15000, enableHighAccuracy: true }
-                    );
-                },
-
-                saveAccessLog(record) {
-                    let logs = [];
-                    try { logs = JSON.parse(localStorage.getItem('si01_access_logs')) || []; } catch(e) { logs = []; }
-                    logs.unshift(record);
-                    localStorage.setItem('si01_access_logs', JSON.stringify(logs));
-                    this.accessLogs = logs;
-                },
-
-                clearAccessLogs() {
-                    if (confirm('Yakin ingin membersihkan riwayat log akses?')) {
-                        this.accessLogs = [];
-                        localStorage.removeItem('si01_access_logs');
-                        this.showToast('Log akses dibersihkan.', 'info');
-                    }
-                },
-
-                logout() {
-                    localStorage.removeItem('si01_current_user');
-                    this.isLoggedIn = false;
-                    this.currentUser = null;
-                    this.authStep = 'login';
-                    this.loginForm = { nim: '', password: '' };
-                    this.showToast('Berhasil keluar.', 'info');
-                },
-
-                formatLogTime(isoStr) {
-                    const d = new Date(isoStr);
-                    return isNaN(d) ? isoStr : d.toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'medium' });
                 },
 
                 updateClockAndGreeting() {
@@ -1093,12 +778,77 @@
                                 subject: item.subject,
                                 title: item.lecturer,
                                 description: item.note || '',
-                                pdfUrl: '',
-                                link: ''
+                                pdfUrl: item.pdfUrl || '',
+                                pdfName: item.pdfName || '',
+                                link: item.link || '',
+                                linkLabel: item.linkLabel || ''
                             }));
                             this.loading = false;
                         })
                         .catch(err => { this.loading = false; });
+                },
+
+                openNewTaskModal() {
+                    this.formTask = { subject: '', title: '', deadlineDate: '', deadlineTime: '23:59', description: '', pin: '' };
+                    this.openAddTaskModal = true;
+                },
+
+                openQuickUpdate(item) {
+                    this.formStatus = {
+                        day: item.day,
+                        time: item.time,
+                        subject: item.subject,
+                        lecturer: item.lecturer,
+                        status: 'Masuk',
+                        note: '',
+                        pin: ''
+                    };
+                    this.openUpdateStatusModal = true;
+                },
+
+                openNewUpdateModal() {
+                    this.formStatus = { day: '', time: '', subject: '', lecturer: '', status: 'Masuk', note: '', pin: '' };
+                    this.openUpdateStatusModal = true;
+                },
+
+                onSelectCourseForStatus() {
+                    const found = this.schedule.find(s => s.subject === this.formStatus.subject);
+                    if (found) {
+                        this.formStatus.day = found.day;
+                        this.formStatus.time = found.time;
+                        this.formStatus.lecturer = found.lecturer;
+                    }
+                },
+
+                submitLecturerStatus() {
+                    const params = new URLSearchParams({
+                        action: 'update',
+                        pin: this.formStatus.pin,
+                        day: this.formStatus.day,
+                        time: this.formStatus.time,
+                        subject: this.formStatus.subject,
+                        lecturer: this.formStatus.lecturer,
+                        status: this.formStatus.status,
+                        note: this.formStatus.note
+                    });
+
+                    this.loading = true;
+                    fetch(`${API_URL}?${params.toString()}`)
+                        .then(res => res.json())
+                        .then(res => {
+                            this.loading = false;
+                            if (res.status === 'success') {
+                                this.showToast('Status dosen berhasil diperbarui!', 'success');
+                                this.openUpdateStatusModal = false;
+                                this.fetchAllData();
+                            } else {
+                                this.showToast('Gagal: ' + (res.message || 'PIN salah'), 'error');
+                            }
+                        })
+                        .catch(() => {
+                            this.loading = false;
+                            this.showToast('Gagal menghubungi server.', 'error');
+                        });
                 },
 
                 addTaskItem() {
@@ -1123,9 +873,47 @@
                                 this.openAddTaskModal = false;
                                 this.fetchAllData();
                             } else {
-                                this.showToast('Gagal: ' + res.message, 'error');
+                                this.showToast('Gagal: ' + (res.message || 'PIN salah'), 'error');
                             }
+                        })
+                        .catch(() => {
+                            this.loading = false;
+                            this.showToast('Gagal menghubungi server.', 'error');
                         });
+                },
+
+                deleteConfirmation(id) {
+                    const pin = prompt('Masukkan PIN Admin untuk menghapus tugas ini:');
+                    if (!pin) return;
+
+                    const params = new URLSearchParams({
+                        action: 'delete',
+                        id: id,
+                        pin: pin
+                    });
+
+                    this.loading = true;
+                    fetch(`${API_URL}?${params.toString()}`)
+                        .then(res => res.json())
+                        .then(res => {
+                            this.loading = false;
+                            if (res.status === 'success') {
+                                this.showToast('Tugas berhasil dihapus!', 'success');
+                                this.fetchAllData();
+                            } else {
+                                this.showToast('Gagal menghapus: ' + (res.message || 'PIN salah'), 'error');
+                            }
+                        })
+                        .catch(() => {
+                            this.loading = false;
+                            this.showToast('Gagal menghubungi server.', 'error');
+                        });
+                },
+
+                openPdfPreview(task) {
+                    if (task.pdfUrl) {
+                        window.open(task.pdfUrl, '_blank');
+                    }
                 },
 
                 isTaskDone(id) { return this.completedTaskIds.includes(String(id)); },
@@ -1140,14 +928,33 @@
                 },
 
                 getDeadlineInfo(dateStr, timeStr, taskId) {
-                    if (this.isTaskDone(taskId)) return { label: 'Selesai', badgeClass: 'bg-emerald-500/20 text-emerald-300', icon: 'fa-solid fa-check' };
-                    return { label: dateStr, badgeClass: 'bg-indigo-500/20 text-indigo-300', icon: 'fa-regular fa-clock' };
+                    if (this.isTaskDone(taskId)) {
+                        return { label: 'Selesai', badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40', icon: 'fa-solid fa-check' };
+                    }
+                    return { label: `${dateStr} • ${timeStr || '23:59'}`, badgeClass: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40', icon: 'fa-regular fa-clock' };
                 },
 
-                get filteredTasks() { return this.taskList; },
-                get pendingTasksCount() { return this.taskList.length; },
-                get taskProgressPercent() { return 0; },
-                getWhatsAppLink(item) { return `https://wa.me/${item.phone}?text=Assalamu'alaikum...`; },
+                get filteredTasks() {
+                    if (this.taskFilter === 'pending') {
+                        return this.taskList.filter(t => !this.isTaskDone(t.id));
+                    }
+                    if (this.taskFilter === 'completed') {
+                        return this.taskList.filter(t => this.isTaskDone(t.id));
+                    }
+                    return this.taskList;
+                },
+                get pendingTasksCount() {
+                    return this.taskList.filter(t => !this.isTaskDone(t.id)).length;
+                },
+                get taskProgressPercent() {
+                    if (this.taskList.length === 0) return 0;
+                    const done = this.taskList.length - this.pendingTasksCount;
+                    return Math.round((done / this.taskList.length) * 100);
+                },
+                getWhatsAppLink(item) {
+                    const text = encodeURIComponent(`Assalamu'alaikum Warahmatullahi Wabarakatuh, mohon maaf mengganggu waktunya Bapak/Ibu ${item.lecturer}. Kami dari mahasiswa kelas Sistem Informasi 01 ingin mengonfirmasi perkuliahan ${item.subject} pada hari ${item.day} pukul ${item.time} di ruang ${item.room}. Terima kasih.`);
+                    return `https://wa.me/${item.phone}?text=${text}`;
+                },
 
                 showToast(message, type = 'success') {
                     const id = Date.now();
