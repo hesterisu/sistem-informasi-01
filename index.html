@@ -1149,7 +1149,7 @@
                 getMemberWhatsAppLink(student) {
                     const cleanPhone = this.formatWhatsAppNumber(student.phone);
                     if (!cleanPhone) return '#';
-                    const text = encodeURIComponent(`Assalamu'alaikum / Halo ${student.name}, `);
+                    const text = encodeURIComponent(`Halo ${student.name}, `);
                     return `https://wa.me/${cleanPhone}?text=${text}`;
                 },
                 get filteredMembers() {
