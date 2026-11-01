@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id" class="dark">
 <head>
+    <base target="_top">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Informasi 01 - Portal Kelas Elite</title>
@@ -42,6 +43,11 @@
             50% { transform: translateY(-15px) scale(1.03); }
         }
         .animate-float { animation: floatSlow 8s ease-in-out infinite; }
+
+        /* Style Notifikasi Pengumpulan Tugas (tugas_mtk) */
+        .notice { display: none; padding: 14px; border-radius: 14px; margin-top: 16px; overflow-wrap: anywhere; font-size: 13px; font-weight: 600; }
+        .notice.ok { display: block; background: rgba(6, 78, 59, 0.7); color: #a7f3d0; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .notice.err { display: block; background: rgba(136, 19, 55, 0.7); color: #fecdd3; border: 1px solid rgba(244, 63, 94, 0.4); }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white relative overflow-x-hidden" x-data="classApp()">
@@ -165,12 +171,12 @@
                         Portal Akademik <span class="bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">Sistem Informasi 01</span>
                     </h2>
                     <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        Pusat koordinasi perkuliahan real-time. Pantau jadwal, cek deadline & file PDF tugas, kirim konfirmasi WhatsApp ke dosen dalam 1 klik, dan pantau status perkuliahan dengan cepat.
+                        Pusat koordinasi perkuliahan real-time. Pantau jadwal, cek deadline & kumpulkan file tugas MTK, kirim konfirmasi WhatsApp ke dosen dalam 1 klik, dan pantau status perkuliahan dengan cepat.
                     </p>
                     <div class="pt-2 flex flex-wrap gap-3">
                         <button @click="activeTab = 'tasks'" class="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold px-6 py-3 rounded-2xl text-sm shadow-lg shadow-indigo-600/30 transition-all duration-300 flex items-center gap-2">
                             <i class="fa-solid fa-list-check"></i>
-                            <span>Cek Papan Tugas</span>
+                            <span>Cek Papan & Kumpul Tugas MTK</span>
                             <span x-show="pendingTasksCount > 0" class="bg-amber-400 text-slate-950 text-xs font-extrabold px-2 py-0.5 rounded-full" x-text="pendingTasksCount"></span>
                         </button>
                         <button @click="activeTab = 'lecturer'" class="bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 font-semibold px-6 py-3 rounded-2xl text-sm transition-all duration-300 flex items-center gap-2">
@@ -209,13 +215,13 @@
                         <h3 class="text-2xl font-extrabold text-white mt-1" x-text="members.length + ' Orang'"></h3>
                     </div>
                 </div>
-                <div class="bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-amber-500/20 shadow-xl flex items-center space-x-5 hover:border-amber-500/40 transition">
+                <div @click="activeTab = 'tasks'; scrollToSubmissionForm()" class="cursor-pointer bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl border border-amber-500/20 shadow-xl flex items-center space-x-5 hover:border-amber-500/40 transition">
                     <div class="bg-amber-500/20 text-amber-400 p-4 rounded-2xl text-2xl border border-amber-500/30 shrink-0">
-                        <i class="fa-solid fa-file-pdf"></i>
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
                     </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Lampiran Tugas</p>
-                        <h3 class="text-sm font-bold text-white mt-1">Support PDF & Link</h3>
+                    <div class="min-w-0">
+                        <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Kumpul Tugas MTK</p>
+                        <h3 class="text-xs font-bold text-white mt-1 truncate">sisteminformasi01ganjil@gmail.com</h3>
                     </div>
                 </div>
             </div>
@@ -330,21 +336,24 @@
             </div>
         </div>
 
-        <!-- TAB 3: PAPAN TUGAS & DEADLINE TRACKER -->
+        <!-- TAB 3: PAPAN TUGAS & PENGUMPULAN TUGAS MTK -->
         <div x-show="activeTab === 'tasks'" 
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-3"
              x-transition:enter-end="opacity-100 translate-y-0"
-             class="space-y-6" x-cloak>
+             class="space-y-8" x-cloak>
             
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-2xl font-extrabold text-white flex items-center gap-2.5">
-                        <span>Papan Tugas & Deadline Tracker</span>
+                        <span>Papan Tugas & Pengumpulan Tugas MTK</span>
                     </h2>
-                    <p class="text-slate-400 text-xs sm:text-sm">Pantau tenggat waktu tugas, unduh lampiran PDF soal, atau akses link pengumpulan.</p>
+                    <p class="text-slate-400 text-xs sm:text-sm">Pantau tenggat waktu tugas kelas dan kumpulkan file Tugas Matematika langsung ke email kelas.</p>
                 </div>
-                <div class="flex gap-3 w-full sm:w-auto">
+                <div class="flex flex-wrap gap-2.5 w-full sm:w-auto">
+                    <button @click="scrollToSubmissionForm()" class="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2.5 rounded-2xl text-xs sm:text-sm shadow-lg shadow-emerald-600/20 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Form Tugas MTK
+                    </button>
                     <button @click="fetchAllData()" class="flex-1 sm:flex-none bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold px-4 py-2.5 rounded-2xl text-xs sm:text-sm border border-indigo-500/20 transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-rotate" :class="loading ? 'animate-spin text-indigo-400' : ''"></i> Refresh
                     </button>
@@ -354,7 +363,88 @@
                 </div>
             </div>
 
-            <!-- Bar Progres & Filter -->
+            <!-- BAGIAN 1: FORM PENGUMPULAN TUGAS MTK (TERHUBUNG KE APPS SCRIPT & sisteminformasi01ganjil@gmail.com) -->
+            <div id="submissionSection" class="bg-slate-900/70 backdrop-blur-xl rounded-3xl border border-indigo-500/30 shadow-2xl overflow-hidden">
+                <!-- Hero Header Pengumpulan Tugas -->
+                <div class="bg-gradient-to-r from-indigo-900 via-blue-800 to-violet-900 p-6 sm:p-8 border-b border-indigo-500/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="space-y-1.5">
+                        <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1 rounded-full text-indigo-200 text-xs font-semibold">
+                            <i class="fa-solid fa-square-root-variable text-amber-300"></i> Pengumpulan Tugas Matematika 1
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-extrabold text-white">Pengumpulan Tugas</h3>
+                        <p class="text-xs sm:text-sm text-indigo-200">Kelas 01 · Satu link untuk semua tugas</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row md:flex-col items-start sm:items-center md:items-end gap-2">
+                        <div class="bg-slate-950/50 border border-emerald-400/30 rounded-2xl px-4 py-2 text-xs text-emerald-200 flex items-center gap-2">
+                            <i class="fa-solid fa-envelope-circle-check text-emerald-400 text-sm"></i>
+                            <span>Terkirim ke: <strong class="text-white">sisteminformasi01ganjil@gmail.com</strong></span>
+                        </div>
+                        <div class="bg-slate-950/40 border border-indigo-400/30 rounded-xl px-3 py-1.5 text-[11px] text-indigo-200 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved text-amber-400"></i>
+                            <span>Maksimal ukuran file: <strong>10 MB</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body Form Pengumpulan Tugas -->
+                <div class="p-6 sm:p-8 space-y-5">
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        Isi identitas dengan benar, pilih tugas, lalu unggah file. Pastikan file yang dikirim sudah benar.
+                    </p>
+
+                    <form id="form" class="space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label for="student" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                                    <i class="fa-solid fa-id-card text-indigo-400 mr-1"></i> Nama / NIPM
+                                </label>
+                                <select id="student" required class="w-full p-3.5 bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-2xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition">
+                                    <option value="">Memuat daftar mahasiswa...</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="task" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                                    <i class="fa-solid fa-book-bookmark text-indigo-400 mr-1"></i> Minggu / Nama Tugas
+                                </label>
+                                <input id="task" type="text" placeholder="Contoh: Minggu 2 - Tugas Rumah" required maxlength="100" class="w-full p-3.5 bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-2xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="note" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                                <i class="fa-solid fa-comment-dots text-indigo-400 mr-1"></i> Catatan (opsional)
+                            </label>
+                            <textarea id="note" rows="3" placeholder="Keterangan tambahan jika ada" class="w-full p-3.5 bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-2xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition resize-y"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="file" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                                <i class="fa-solid fa-paperclip text-indigo-400 mr-1"></i> Upload file tugas
+                            </label>
+                            <input id="file" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png" required class="w-full p-3 bg-slate-950 border border-dashed border-indigo-500/40 hover:border-indigo-400 rounded-2xl text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer transition">
+                            <div class="text-xs text-slate-400 mt-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-info text-indigo-400"></i>
+                                <span>Format: PDF, Word, PowerPoint, Excel, JPG, PNG. Maksimal 10 MB.</span>
+                            </div>
+                        </div>
+
+                        <button id="send" type="submit" class="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 disabled:opacity-60 disabled:cursor-wait text-white font-bold py-3.5 px-6 rounded-2xl text-sm sm:text-base shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Kirim Tugas</span>
+                        </button>
+                    </form>
+
+                    <!-- Area Notifikasi Pengumpulan -->
+                    <div id="notice" class="notice"></div>
+
+                    <div class="text-center text-slate-500 text-xs pt-2 border-t border-slate-800/80">
+                        Sistem Pengumpulan Tugas Kelas 01 • Otomatis dikirim ke sisteminformasi01ganjil@gmail.com
+                    </div>
+                </div>
+            </div>
+
+            <!-- BAGIAN 2: BAR PROGRES & DAFTAR DEADLINE TUGAS -->
             <div class="bg-slate-900/60 backdrop-blur-xl p-5 rounded-3xl border border-indigo-500/20 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="w-full md:w-1/2 space-y-2">
                     <div class="flex justify-between text-xs font-semibold">
@@ -452,12 +542,19 @@
                         </div>
 
                         <div class="mt-5 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
-                            <button @click="toggleTaskDone(task.id)" 
-                                    :class="isTaskDone(task.id) ? 'bg-emerald-600 text-white' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'"
-                                    class="px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-2">
-                                <i class="fa-solid" :class="isTaskDone(task.id) ? 'fa-circle-check' : 'fa-regular fa-circle'"></i>
-                                <span x-text="isTaskDone(task.id) ? 'Sudah Selesai' : 'Tandai Selesai'"></span>
-                            </button>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button @click="toggleTaskDone(task.id)" 
+                                        :class="isTaskDone(task.id) ? 'bg-emerald-600 text-white' : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'"
+                                        class="px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-2">
+                                    <i class="fa-solid" :class="isTaskDone(task.id) ? 'fa-circle-check' : 'fa-regular fa-circle'"></i>
+                                    <span x-text="isTaskDone(task.id) ? 'Sudah Selesai' : 'Tandai Selesai'"></span>
+                                </button>
+
+                                <button @click="prefillTaskSubmission(task)" class="bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-300 border border-indigo-500/30 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-upload"></i>
+                                    <span>Kumpul Tugas Ini</span>
+                                </button>
+                            </div>
 
                             <button @click="deleteConfirmation(task.id)" class="bg-slate-800/80 hover:bg-rose-950/60 text-slate-400 hover:text-rose-400 border border-slate-700 p-2 rounded-xl text-xs transition" title="Hapus Tugas">
                                 <i class="fa-solid fa-trash"></i>
@@ -774,9 +871,65 @@
         <p>&copy; 2026 Sistem Informasi 01 • Universitas Abulyatama • Portal Elite Real-Time</p>
     </footer>
 
-    <!-- Script Utama -->
+    <!-- Script Utama Portal + Integrasi Pengumpulan Tugas MTK -->
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbw4W9xXs89-H8ljfkZT94Tvrtuq00L0r_BgrHHleTCzy5j2Ev3A6JpbWIupIH90jtSQZw/exec";
+        const TARGET_EMAIL_MTK = "sisteminformasi01ganjil@gmail.com";
+
+        const DEFAULT_MEMBERS = [
+            { nim: '26146039', name: 'Rian Sayadi', role: 'Ketua Kelas', phone: '85380275728' },
+            { nim: '26146073', name: 'Hanif Haikal', role: 'Wakil Ketua', phone: '62895403010139' },
+            { nim: '26146079', name: 'Muhibbud Thibri', role: 'Asisten Matematika', phone: '6282136953447' },
+            { nim: '26146001', name: 'Nurma Yunita', role: 'Mahasiswa', phone: '62895629096160' },
+            { nim: '26146003', name: 'Muhammad furqan salahuddin S.', role: 'Mahasiswa', phone: '6283873386110' },                  
+            { nim: '26146005', name: 'Nurhatifah', role: 'Mahasiswa', phone: '628388318794' },
+            { nim: '26146007', name: 'M. Raffa Azarta', role: 'Mahasiswa', phone: '62895325716717' },
+            { nim: '26146009', name: 'Shabila anjani', role: 'Mahasiswa', phone: '6287862087277' },
+            { nim: '26146013', name: 'Maulidi', role: 'Mahasiswa', phone: '6282281054543' },
+            { nim: '26146015', name: 'Khairatun Nafais', role: 'Mahasiswa', phone: '62895351424776' },                  
+            { nim: '26146017', name: 'Sauma Al Khalis', role: 'Mahasiswa', phone: '6285962459552' },
+            { nim: '26146019', name: 'Ahya Agus Sidqi', role: 'Mahasiswa', phone: '6283866873015' },
+            { nim: '26146021', name: 'Arif', role: 'Mahasiswa', phone: '62895712448333' },
+            { nim: '26146023', name: 'Maulidia', role: 'Mahasiswa', phone: '6285282951072' },
+            { nim: '26146025', name: 'Anna Taqia Putri', role: 'Mahasiswa', phone: '6283862631865' },
+            { nim: '26146027', name: 'Rahma Akmalia', role: 'Mahasiswa', phone: '62895339042926' },
+            { nim: '26146029', name: 'M. Syibral Aula', role: 'Mahasiswa', phone: '6283866825722' },
+            { nim: '26146031', name: 'Naziratul Hasanah', role: 'Mahasiswa', phone: '6281251449140' },
+            { nim: '26146033', name: 'Aldi Sri Dandi', role: 'Mahasiswa', phone: '6285319155214' },
+            { nim: '26146035', name: 'Fariel Hidayah', role: 'Mahasiswa', phone: '6281269119612' },
+            { nim: '26146037', name: 'Rahman Sale', role: 'Mahasiswa', phone: '6285133951001' },
+            { nim: '26146041', name: 'Hajra Wandi', role: 'Mahasiswa', phone: '6281269774985' },
+            { nim: '26146043', name: 'Rifno Mirilwan', role: 'Mahasiswa', phone: '6282252630712' },
+            { nim: '26146045', name: 'Afdal Kan', role: 'Mahasiswa', phone: '6285658053275' },
+            { nim: '26146047', name: 'Tasya Mutmainah', role: 'Mahasiswa', phone: '6281396864966' },
+            { nim: '26146049', name: 'Adek Haliaton', role: 'Mahasiswa', phone: '6283866811209' },
+            { nim: '26146051', name: 'Irwan Wahyudi', role: 'Mahasiswa', phone: '6289654986700' },
+            { nim: '26146053', name: 'Ayu Windira', role: 'Mahasiswa', phone: '628217656621' },
+            { nim: '26146055', name: 'Zulkarnen', role: 'Mahasiswa', phone: '6283875921119' },
+            { nim: '26146057', name: 'M. Vicky Julianda', role: 'Mahasiswa', phone: '895327896195' },
+            { nim: '26146059', name: 'Susi', role: 'Mahasiswa', phone: '6285371718098' },
+            { nim: '26146061', name: 'M. Fahreza', role: 'Mahasiswa', phone: '6282164651590' },
+            { nim: '26146063', name: 'Wulan Maulanda', role: 'Mahasiswa', phone: '6283151578034' },
+            { nim: '26146065', name: 'Abdul Khalid', role: 'Mahasiswa', phone: '6283195472213' },
+            { nim: '26146067', name: 'M.Hafidz Saragih', role: 'Mahasiswa', phone: '6289601043641' },
+            { nim: '26146069', name: 'Safrullah Kamil', role: 'Mahasiswa', phone: '6283195858665' },
+            { nim: '26146071', name: 'Alif Ilsha Putra', role: 'Mahasiswa', phone: '628216509648' },
+            { nim: '26146075', name: 'Qori Arvita Manda', role: 'Mahasiswa', phone: '6285789151121' },
+            { nim: '26146077', name: 'Azzami Syauqi', role: 'Mahasiswa', phone: '6285381745744' },
+            { nim: '26146083', name: 'Muzammil', role: 'Mahasiswa', phone: '6281374792398' },
+            { nim: '26146085', name: 'Husairi Akbar', role: 'Mahasiswa', phone: '6282372908248' },
+            { nim: '26146087', name: 'Fuad Akram', role: 'Mahasiswa', phone: '6285129579781' },
+            { nim: '26146089', name: 'Muhammand Naufal', role: 'Mahasiswa', phone: '6285147888735' },
+            { nim: '26146091', name: 'T.M Hidayat Alde', role: 'Mahasiswa', phone: '6285805425579' },
+            { nim: '26146093', name: 'Muharis', role: 'Mahasiswa', phone: '6283114558692' },
+            { nim: '26146095', name: 'Dhiyaa Fawwaz', role: 'Mahasiswa', phone: '6285374424334' },
+            { nim: '26146097', name: 'Ahmad Rizqan Kausar', role: 'Mahasiswa', phone: '6281268973567' },
+            { nim: '26146099', name: 'Willi Vanonta', role: 'Mahasiswa', phone: '6285177260995' },
+            { nim: '26146101', name: 'Rajul Aulia', role: 'Mahasiswa', phone: '6285371190948' },
+            { nim: '26146103', name: 'Miranda Sari', role: 'Mahasiswa', phone: '6282177392112' },
+            { nim: '26146105', name: 'Moulida', role: 'Mahasiswa', phone: '6285194607806' },
+            { nim: '26146107', name: 'Nizar Fazari', role: 'Mahasiswa', phone: '6285360996043' }
+        ];
 
         function classApp() {
             return {
@@ -812,61 +965,7 @@
 
                 lecturerStatusList: [],
                 taskList: [],
-
-                members: [
-                    { nim: '26146039', name: 'Rian Sayadi', role: 'Ketua Kelas', phone: '85380275728' },
-                    { nim: '26146073', name: 'Hanif Haikal', role: 'Wakil Ketua', phone: '62895403010139' },
-                    { nim: '26146079', name: 'Muhibbud Thibri', role: 'Asisten Matematika', phone: '6282136953447' },
-                    { nim: '26146001', name: 'Nurma Yunita', role: 'Mahasiswa', phone: '62895629096160' },
-                    { nim: '26146003', name: 'Muhammad furqan salahuddin S.', role: 'Mahasiswa', phone: '6283873386110' },                  
-                    { nim: '26146005', name: 'Nurhatifah', role: 'Mahasiswa', phone: '628388318794' },
-                    { nim: '26146007', name: 'M. Raffa Azarta', role: 'Mahasiswa', phone: '62895325716717' },
-                    { nim: '26146009', name: 'Shabila anjani', role: 'Mahasiswa', phone: '6287862087277' },
-                    { nim: '26146013', name: 'Maulidi', role: 'Mahasiswa', phone: '6282281054543' },
-                    { nim: '26146015', name: 'Khairatun Nafais', role: 'Mahasiswa', phone: '62895351424776' },                  
-                    { nim: '26146017', name: 'Sauma Al Khalis', role: 'Mahasiswa', phone: '6285962459552' },
-                    { nim: '26146019', name: 'Ahya Agus Sidqi', role: 'Mahasiswa', phone: '6283866873015' },
-                    { nim: '26146021', name: 'Arif', role: 'Mahasiswa', phone: '62895712448333' },
-                    { nim: '26146023', name: 'Maulidia', role: 'Mahasiswa', phone: '6285282951072' },
-                    { nim: '26146025', name: 'Anna Taqia Putri', role: 'Mahasiswa', phone: '6283862631865' },
-                    { nim: '26146027', name: 'Rahma Akmalia', role: 'Mahasiswa', phone: '62895339042926' },
-                    { nim: '26146029', name: 'M. Syibral Aula', role: 'Mahasiswa', phone: '6283866825722' },
-                    { nim: '26146031', name: 'Naziratul Hasanah', role: 'Mahasiswa', phone: '6281251449140' },
-                    { nim: '26146033', name: 'Aldi Sri Dandi', role: 'Mahasiswa', phone: '6285319155214' },
-                    { nim: '26146035', name: 'Fariel Hidayah', role: 'Mahasiswa', phone: '6281269119612' },
-                    { nim: '26146037', name: 'Rahman Sale', role: 'Mahasiswa', phone: '6285133951001' },
-                    { nim: '26146041', name: 'Hajra Wandi', role: 'Mahasiswa', phone: '6281269774985' },
-                    { nim: '26146043', name: 'Rifno Mirilwan', role: 'Mahasiswa', phone: '6282252630712' },
-                    { nim: '26146045', name: 'Afdal Kan', role: 'Mahasiswa', phone: '6285658053275' },
-                    { nim: '26146047', name: 'Tasya Mutmainah', role: 'Mahasiswa', phone: '6281396864966' },
-                    { nim: '26146049', name: 'Adek Haliaton', role: 'Mahasiswa', phone: '6283866811209' },
-                    { nim: '26146051', name: 'Irwan Wahyudi', role: 'Mahasiswa', phone: '6289654986700' },
-                    { nim: '26146053', name: 'Ayu Windira', role: 'Mahasiswa', phone: '628217656621' },
-                    { nim: '26146055', name: 'Zulkarnen', role: 'Mahasiswa', phone: '6283875921119' },
-                    { nim: '26146057', name: 'M. Vicky Julianda', role: 'Mahasiswa', phone: '895327896195' },
-                    { nim: '26146059', name: 'Susi', role: 'Mahasiswa', phone: '6285371718098' },
-                    { nim: '26146061', name: 'M. Fahreza', role: 'Mahasiswa', phone: '6282164651590' },
-                    { nim: '26146063', name: 'Wulan Maulanda', role: 'Mahasiswa', phone: '6283151578034' },
-                    { nim: '26146065', name: 'Abdul Khalid', role: 'Mahasiswa', phone: '6283195472213' },
-                    { nim: '26146067', name: 'M.Hafidz Saragih', role: 'Mahasiswa', phone: '6289601043641' },
-                    { nim: '26146069', name: 'Safrullah Kamil', role: 'Mahasiswa', phone: '6283195858665' },
-                    { nim: '26146071', name: 'Alif Ilsha Putra', role: 'Mahasiswa', phone: '628216509648' },
-                    { nim: '26146075', name: 'Qori Arvita Manda', role: 'Mahasiswa', phone: '6285789151121' },
-                    { nim: '26146077', name: 'Azzami Syauqi', role: 'Mahasiswa', phone: '6285381745744' },
-                    { nim: '26146083', name: 'Muzammil', role: 'Mahasiswa', phone: '6281374792398' },
-                    { nim: '26146085', name: 'Husairi Akbar', role: 'Mahasiswa', phone: '6282372908248' },
-                    { nim: '26146087', name: 'Fuad Akram', role: 'Mahasiswa', phone: '6285129579781' },
-                    { nim: '26146089', name: 'Muhammand Naufal', role: 'Mahasiswa', phone: '6285147888735' },
-                    { nim: '26146091', name: 'T.M Hidayat Alde', role: 'Mahasiswa', phone: '6285805425579' },
-                    { nim: '26146093', name: 'Muharis', role: 'Mahasiswa', phone: '6283114558692' },
-                    { nim: '26146095', name: 'Dhiyaa Fawwaz', role: 'Mahasiswa', phone: '6285374424334' },
-                    { nim: '26146097', name: 'Ahmad Rizqan Kausar', role: 'Mahasiswa', phone: '6281268973567' },
-                    { nim: '26146099', name: 'Willi Vanonta', role: 'Mahasiswa', phone: '6285177260995' },
-                    { nim: '26146101', name: 'Rajul Aulia', role: 'Mahasiswa', phone: '6285371190948' },
-                    { nim: '26146103', name: 'Miranda Sari', role: 'Mahasiswa', phone: '6282177392112' },
-                    { nim: '26146105', name: 'Moulida', role: 'Mahasiswa', phone: '6285194607806' },
-                    { nim: '26146107', name: 'Nizar Fazari', role: 'Mahasiswa', phone: '6285360996043' }
-                ],
+                members: DEFAULT_MEMBERS,
 
                 init() {
                     const savedCompleted = localStorage.getItem('si01_completed_tasks');
@@ -878,6 +977,22 @@
                     setInterval(() => this.updateClockAndGreeting(), 1000);
                     this.fetchAllData();
                     setTimeout(() => { this.showIntro = false; }, 1400);
+                },
+
+                scrollToSubmissionForm() {
+                    setTimeout(() => {
+                        const el = document.getElementById('submissionSection');
+                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                },
+
+                prefillTaskSubmission(task) {
+                    const taskInput = document.getElementById('task');
+                    if (taskInput) {
+                        taskInput.value = `${task.subject} - ${task.title}`;
+                        this.scrollToSubmissionForm();
+                        taskInput.focus();
+                    }
                 },
 
                 updateClockAndGreeting() {
@@ -1149,7 +1264,7 @@
                 getMemberWhatsAppLink(student) {
                     const cleanPhone = this.formatWhatsAppNumber(student.phone);
                     if (!cleanPhone) return '#';
-                    const text = encodeURIComponent(`Halo ${student.name}, `);
+                    const text = encodeURIComponent(`Assalamu'alaikum / Halo ${student.name}, `);
                     return `https://wa.me/${cleanPhone}?text=${text}`;
                 },
                 get filteredMembers() {
@@ -1163,6 +1278,131 @@
                 }
             }
         }
+
+        // Script Pengumpulan Tugas MTK -> terhubung ke doPost(e) & submitAssignment di Apps Script
+        document.addEventListener('DOMContentLoaded', () => {
+            const select = document.getElementById('student');
+            const form = document.getElementById('form');
+            const send = document.getElementById('send');
+            const notice = document.getElementById('notice');
+            const defaultBtnHTML = '<i class="fa-solid fa-paper-plane"></i><span>Kirim Tugas</span>';
+
+            function populateFromFallback() {
+                select.innerHTML = '<option value="">-- Pilih nama dan NIPM --</option>';
+                DEFAULT_MEMBERS.forEach(s => {
+                    const o = document.createElement('option');
+                    o.value = s.nim;
+                    o.textContent = s.name + ' — ' + s.nim;
+                    select.appendChild(o);
+                });
+            }
+
+            function show(msg, ok) {
+                notice.className = 'notice ' + (ok ? 'ok' : 'err');
+                notice.textContent = msg;
+            }
+
+            // Memuat daftar mahasiswa
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
+                google.script.run
+                    .withSuccessHandler(list => {
+                        select.innerHTML = '<option value="">-- Pilih nama dan NIPM --</option>';
+                        if (Array.isArray(list) && list.length) {
+                            list.forEach(s => {
+                                const o = document.createElement('option');
+                                o.value = s.nipm;
+                                o.textContent = s.nama + ' — ' + s.nipm;
+                                select.appendChild(o);
+                            });
+                        } else {
+                            populateFromFallback();
+                        }
+                    })
+                    .withFailureHandler(() => {
+                        populateFromFallback();
+                    })
+                    .getRoster();
+            } else {
+                populateFromFallback();
+            }
+
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                const f = document.getElementById('file').files[0];
+                if (!f) return;
+                if (f.size > 10 * 1024 * 1024) {
+                    show('Ukuran file melebihi 10 MB.', false);
+                    return;
+                }
+
+                const selectedOptionText = select.options[select.selectedIndex] ? select.options[select.selectedIndex].textContent : select.value;
+                const taskValue = document.getElementById('task').value;
+                const noteValue = document.getElementById('note').value;
+
+                send.disabled = true;
+                send.textContent = 'Mengirim...';
+                notice.className = 'notice';
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = reader.result.split(',')[1];
+                    const payload = {
+                        nipm: select.value,
+                        namaMahasiswa: selectedOptionText,
+                        tugas: taskValue,
+                        catatan: noteValue,
+                        file: {
+                            name: f.name,
+                            mimeType: f.type || 'application/octet-stream',
+                            data: base64
+                        }
+                    };
+
+                    // Jika dibuka di dalam Google Apps Script HtmlService
+                    if (typeof google !== 'undefined' && google.script && google.script.run) {
+                        google.script.run
+                            .withSuccessHandler(r => {
+                                show('BERHASIL! ' + r.nama + ' (' + r.nipm + ') telah mengumpulkan tugas. Status: ' + r.fileUrl, true);
+                                form.reset();
+                                send.disabled = false;
+                                send.innerHTML = defaultBtnHTML;
+                            })
+                            .withFailureHandler(err => {
+                                show(err.message || 'Gagal mengirim tugas.', false);
+                                send.disabled = false;
+                                send.innerHTML = defaultBtnHTML;
+                            })
+                            .submitAssignment(payload);
+                    } else {
+                        // Kirim ke fungsi doPost(e) di Google Apps Script melalui API_URL
+                        fetch(API_URL, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'text/plain;charset=utf-8'
+                            },
+                            body: JSON.stringify(payload)
+                        })
+                        .then(res => res.json())
+                        .then(res => {
+                            if (res.status === 'success') {
+                                show('BERHASIL! ' + res.nama + ' (' + res.nipm + ') telah mengumpulkan tugas ke ' + TARGET_EMAIL_MTK + '.', true);
+                                form.reset();
+                            } else {
+                                show(res.message || 'Gagal mengirim tugas.', false);
+                            }
+                            send.disabled = false;
+                            send.innerHTML = defaultBtnHTML;
+                        })
+                        .catch(() => {
+                            show('Gagal menghubungi server Apps Script. Pastikan Anda sudah melakukan New Deployment pada Apps Script.', false);
+                            send.disabled = false;
+                            send.innerHTML = defaultBtnHTML;
+                        });
+                    }
+                };
+                reader.readAsDataURL(f);
+            });
+        });
     </script>
 </body>
 </html>
