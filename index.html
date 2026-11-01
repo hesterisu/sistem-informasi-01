@@ -593,22 +593,45 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-2xl font-extrabold text-white">Direktori Anggota Kelas SI-01</h2>
-                    <p class="text-slate-400 text-xs sm:text-sm">Daftar mahasiswa lengkap kelas.</p>
+                    <p class="text-slate-400 text-xs sm:text-sm">Daftar mahasiswa lengkap beserta kontak WhatsApp.</p>
                 </div>
                 <div class="w-full sm:w-80 relative">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-search"></i></span>
-                    <input type="text" x-model="searchMember" placeholder="Cari nama atau NIM..." class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-indigo-500/20 rounded-2xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+                    <input type="text" x-model="searchMember" placeholder="Cari nama, NIM, atau No. WA..." class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-indigo-500/20 rounded-2xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <template x-for="student in filteredMembers" :key="student.nim">
-                    <div class="bg-slate-900/60 backdrop-blur-xl p-5 rounded-3xl border border-indigo-500/20 shadow-xl flex items-center space-x-4 hover:border-indigo-500/40 transition group">
-                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 text-white flex items-center justify-center font-bold text-lg border border-indigo-400/40 shrink-0" x-text="student.name.charAt(0)"></div>
-                        <div class="min-w-0 flex-grow">
-                            <h4 class="text-sm font-bold text-white truncate" x-text="student.name"></h4>
-                            <p class="text-xs text-slate-400 font-mono mt-0.5" x-text="student.nim"></p>
-                            <span class="inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full mt-2 border bg-slate-800 text-slate-400 border-slate-700" x-text="student.role"></span>
+                    <div class="bg-slate-900/60 backdrop-blur-xl p-5 rounded-3xl border border-indigo-500/20 shadow-xl flex flex-col justify-between hover:border-indigo-500/40 transition group">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 text-white flex items-center justify-center font-bold text-lg border border-indigo-400/40 shrink-0" x-text="student.name.charAt(0)"></div>
+                            <div class="min-w-0 flex-grow">
+                                <h4 class="text-sm font-bold text-white truncate" x-text="student.name"></h4>
+                                <p class="text-xs text-slate-400 font-mono mt-0.5" x-text="'NIM: ' + student.nim"></p>
+                                <div class="flex flex-wrap items-center gap-1.5 mt-2">
+                                    <span class="inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full border"
+                                          :class="student.role !== 'Mahasiswa' ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40' : 'bg-slate-800 text-slate-400 border-slate-700'"
+                                          x-text="student.role"></span>
+                                    <span x-show="student.phone" class="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-300 bg-emerald-950/50 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                                        <i class="fa-brands fa-whatsapp text-emerald-400"></i>
+                                        <span x-text="student.phone"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <a x-show="student.phone" :href="getMemberWhatsAppLink(student)" target="_blank" rel="noopener noreferrer"
+                               class="w-full bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition shadow-sm">
+                                <i class="fa-brands fa-whatsapp text-sm"></i>
+                                <span>Hubungi WA</span>
+                            </a>
+                            <div x-show="!student.phone"
+                                 class="w-full bg-slate-800/50 text-slate-500 border border-slate-800 py-2 px-3 rounded-xl text-xs font-medium flex items-center justify-center gap-2 cursor-not-allowed">
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <span>No. WA Belum Tersedia</span>
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -791,57 +814,58 @@
                 taskList: [],
 
                 members: [
-                    { nim: '26146039', name: 'Rian Sayadi', role: 'Ketua Kelas' },
-                    { nim: '26146073', name: 'Hanif Haikal', role: 'Wakil Ketua' },
-                    { nim: '26146087', name: 'Fuad Akram', role: 'Ketua Angkatan 26' },
-                    { nim: '26146001', name: 'Nurma Yunita', role: 'Mahasiswa' },
-                    { nim: '26146003', name: 'Muhammad furqan salahuddin S.', role: 'Mahasiswa' },                  
-                    { nim: '26146005', name: 'Nurhatifah', role: 'Mahasiswa' },
-                    { nim: '26146007', name: 'M. Raffa Azarta', role: 'Mahasiswa' },
-                    { nim: '26146009', name: 'Shabila anjani', role: 'Mahasiswa' },
-                    { nim: '26146013', name: 'Maulidi', role: 'Mahasiswa' },
-                    { nim: '26146015', name: 'Khairatun Nafais', role: 'Mahasiswa' },                  
-                    { nim: '26146017', name: 'Sauma Al Khalis', role: 'Mahasiswa' },
-                    { nim: '26146019', name: 'Ahya Agus Sidqi', role: 'Mahasiswa' },
-                    { nim: '26146021', name: 'Arif', role: 'Mahasiswa' },
-                    { nim: '26146023', name: 'Maulidia', role: 'Mahasiswa' },
-                    { nim: '26146025', name: 'Anna Taqia Putri', role: 'Mahasiswa' },
-                    { nim: '26146027', name: 'Rahma Akmalia', role: 'Mahasiswa' },
-                    { nim: '26146029', name: 'M. Syibral Aula', role: 'Mahasiswa' },
-                    { nim: '26146031', name: 'Naziratul Hasanah', role: 'Mahasiswa' },
-                    { nim: '26146035', name: 'Fariel Hidayah', role: 'Mahasiswa' },
-                    { nim: '26146037', name: 'Rahman Sale', role: 'Mahasiswa' },
-                    { nim: '26146041', name: 'Hajra Wandi', role: 'Mahasiswa' },
-                    { nim: '26146043', name: 'Rifno Mirilwan', role: 'Mahasiswa' },
-                    { nim: '26146045', name: 'Afdal Kan', role: 'Mahasiswa' },
-                    { nim: '26146047', name: 'Tasya Mutmainah', role: 'Mahasiswa' },
-                    { nim: '26146049', name: 'Adek Haliaton', role: 'Mahasiswa' },
-                    { nim: '26146051', name: 'Irwan Wahyudi', role: 'Mahasiswa' },
-                    { nim: '26146053', name: 'Ayu Windira', role: 'Mahasiswa' },
-                    { nim: '26146055', name: 'Zulkarnen', role: 'Mahasiswa' },
-                    { nim: '26146057', name: 'M. Vicky Julianda', role: 'Mahasiswa' },
-                    { nim: '26146059', name: 'Susi Aurelliya', role: 'Mahasiswa' },
-                    { nim: '26146061', name: 'M. Fahreza', role: 'Mahasiswa' },
-                    { nim: '26146063', name: 'Wulan Maulanda', role: 'Mahasiswa' },
-                    { nim: '26146065', name: 'Abdul Khalid', role: 'Mahasiswa' },
-                    { nim: '26146067', name: 'M.Hafidz Saragih', role: 'Mahasiswa' },
-                    { nim: '26146069', name: 'Safrullah Kamil', role: 'Mahasiswa' },
-                    { nim: '26146071', name: 'Alif Ilsha Putra', role: 'Mahasiswa' },
-                    { nim: '26146075', name: 'Qori Arvita Manda', role: 'Mahasiswa' },
-                    { nim: '26146077', name: 'Azzami Syauqi', role: 'Mahasiswa' },
-                    { nim: '26146079', name: 'Muhibbud Thibri', role: 'Mahasiswa' },
-                    { nim: '26146083', name: 'Muzammil', role: 'Mahasiswa' },
-                    { nim: '26146085', name: 'Husairi Akbar', role: 'Mahasiswa' },
-                    { nim: '26146089', name: 'Muhammand Naufal', role: 'Mahasiswa' },
-                    { nim: '26146091', name: 'T.M Hidayat Alde', role: 'Mahasiswa' },
-                    { nim: '26146093', name: 'Muharis', role: 'Mahasiswa' },
-                    { nim: '26146095', name: 'Dhiyaa Fawwaz', role: 'Mahasiswa' },
-                    { nim: '26146097', name: 'Ahmad Rizqan Kausar', role: 'Mahasiswa' },
-                    { nim: '26146099', name: 'Willi Vanonta', role: 'Mahasiswa' },
-                    { nim: '26146101', name: 'Rajul Aulia', role: 'Mahasiswa' },
-                    { nim: '26146103', name: 'Miranda Sari', role: 'Mahasiswa' },
-                    { nim: '26146105', name: 'Moulida', role: 'Mahasiswa' },
-                    { nim: '26146107', name: 'Nizar Fazari', role: 'Mahasiswa' }
+                    { nim: '26146039', name: 'Rian Sayadi', role: 'Ketua Kelas', phone: '85380275728' },
+                    { nim: '26146073', name: 'Hanif Haikal', role: 'Wakil Ketua', phone: '62895403010139' },
+                    { nim: '26146079', name: 'Muhibbud Thibri', role: 'Asisten Matematika', phone: '6282136953447' },
+                    { nim: '26146001', name: 'Nurma Yunita', role: 'Mahasiswa', phone: '62895629096160' },
+                    { nim: '26146003', name: 'Muhammad furqan salahuddin S.', role: 'Mahasiswa', phone: '6283873386110' },                  
+                    { nim: '26146005', name: 'Nurhatifah', role: 'Mahasiswa', phone: '628388318794' },
+                    { nim: '26146007', name: 'M. Raffa Azarta', role: 'Mahasiswa', phone: '62895325716717' },
+                    { nim: '26146009', name: 'Shabila anjani', role: 'Mahasiswa', phone: '6287862087277' },
+                    { nim: '26146013', name: 'Maulidi', role: 'Mahasiswa', phone: '6282281054543' },
+                    { nim: '26146015', name: 'Khairatun Nafais', role: 'Mahasiswa', phone: '62895351424776' },                  
+                    { nim: '26146017', name: 'Sauma Al Khalis', role: 'Mahasiswa', phone: '6285962459552' },
+                    { nim: '26146019', name: 'Ahya Agus Sidqi', role: 'Mahasiswa', phone: '6283866873015' },
+                    { nim: '26146021', name: 'Arif', role: 'Mahasiswa', phone: '62895712448333' },
+                    { nim: '26146023', name: 'Maulidia', role: 'Mahasiswa', phone: '6285282951072' },
+                    { nim: '26146025', name: 'Anna Taqia Putri', role: 'Mahasiswa', phone: '6283862631865' },
+                    { nim: '26146027', name: 'Rahma Akmalia', role: 'Mahasiswa', phone: '62895339042926' },
+                    { nim: '26146029', name: 'M. Syibral Aula', role: 'Mahasiswa', phone: '6283866825722' },
+                    { nim: '26146031', name: 'Naziratul Hasanah', role: 'Mahasiswa', phone: '6281251449140' },
+                    { nim: '26146033', name: 'Aldi Sri Dandi', role: 'Mahasiswa', phone: '6285319155214' },
+                    { nim: '26146035', name: 'Fariel Hidayah', role: 'Mahasiswa', phone: '6281269119612' },
+                    { nim: '26146037', name: 'Rahman Sale', role: 'Mahasiswa', phone: '6285133951001' },
+                    { nim: '26146041', name: 'Hajra Wandi', role: 'Mahasiswa', phone: '6281269774985' },
+                    { nim: '26146043', name: 'Rifno Mirilwan', role: 'Mahasiswa', phone: '6282252630712' },
+                    { nim: '26146045', name: 'Afdal Kan', role: 'Mahasiswa', phone: '6285658053275' },
+                    { nim: '26146047', name: 'Tasya Mutmainah', role: 'Mahasiswa', phone: '6281396864966' },
+                    { nim: '26146049', name: 'Adek Haliaton', role: 'Mahasiswa', phone: '6283866811209' },
+                    { nim: '26146051', name: 'Irwan Wahyudi', role: 'Mahasiswa', phone: '6289654986700' },
+                    { nim: '26146053', name: 'Ayu Windira', role: 'Mahasiswa', phone: '628217656621' },
+                    { nim: '26146055', name: 'Zulkarnen', role: 'Mahasiswa', phone: '6283875921119' },
+                    { nim: '26146057', name: 'M. Vicky Julianda', role: 'Mahasiswa', phone: '895327896195' },
+                    { nim: '26146059', name: 'Susi', role: 'Mahasiswa', phone: '6285371718098' },
+                    { nim: '26146061', name: 'M. Fahreza', role: 'Mahasiswa', phone: '6282164651590' },
+                    { nim: '26146063', name: 'Wulan Maulanda', role: 'Mahasiswa', phone: '6283151578034' },
+                    { nim: '26146065', name: 'Abdul Khalid', role: 'Mahasiswa', phone: '6283195472213' },
+                    { nim: '26146067', name: 'M.Hafidz Saragih', role: 'Mahasiswa', phone: '6289601043641' },
+                    { nim: '26146069', name: 'Safrullah Kamil', role: 'Mahasiswa', phone: '6283195858665' },
+                    { nim: '26146071', name: 'Alif Ilsha Putra', role: 'Mahasiswa', phone: '628216509648' },
+                    { nim: '26146075', name: 'Qori Arvita Manda', role: 'Mahasiswa', phone: '6285789151121' },
+                    { nim: '26146077', name: 'Azzami Syauqi', role: 'Mahasiswa', phone: '6285381745744' },
+                    { nim: '26146083', name: 'Muzammil', role: 'Mahasiswa', phone: '6281374792398' },
+                    { nim: '26146085', name: 'Husairi Akbar', role: 'Mahasiswa', phone: '6282372908248' },
+                    { nim: '26146087', name: 'Fuad Akram', role: 'Mahasiswa', phone: '6285129579781' },
+                    { nim: '26146089', name: 'Muhammand Naufal', role: 'Mahasiswa', phone: '6285147888735' },
+                    { nim: '26146091', name: 'T.M Hidayat Alde', role: 'Mahasiswa', phone: '6285805425579' },
+                    { nim: '26146093', name: 'Muharis', role: 'Mahasiswa', phone: '6283114558692' },
+                    { nim: '26146095', name: 'Dhiyaa Fawwaz', role: 'Mahasiswa', phone: '6285374424334' },
+                    { nim: '26146097', name: 'Ahmad Rizqan Kausar', role: 'Mahasiswa', phone: '6281268973567' },
+                    { nim: '26146099', name: 'Willi Vanonta', role: 'Mahasiswa', phone: '6285177260995' },
+                    { nim: '26146101', name: 'Rajul Aulia', role: 'Mahasiswa', phone: '6285371190948' },
+                    { nim: '26146103', name: 'Miranda Sari', role: 'Mahasiswa', phone: '6282177392112' },
+                    { nim: '26146105', name: 'Moulida', role: 'Mahasiswa', phone: '6285194607806' },
+                    { nim: '26146107', name: 'Nizar Fazari', role: 'Mahasiswa', phone: '6285360996043' }
                 ],
 
                 init() {
@@ -1114,10 +1138,28 @@
                 removeToast(id) { this.toasts = this.toasts.filter(t => t.id !== id); },
                 get filteredSchedule() { return this.schedule.filter(item => item.day === this.selectedDay); },
                 get todaySchedule() { return this.schedule.filter(item => item.day === this.todayName); },
+                formatWhatsAppNumber(phone) {
+                    if (!phone) return '';
+                    let cleaned = String(phone).replace(/[^0-9]/g, '');
+                    if (cleaned.startsWith('0')) {
+                        cleaned = '62' + cleaned.slice(1);
+                    }
+                    return cleaned;
+                },
+                getMemberWhatsAppLink(student) {
+                    const cleanPhone = this.formatWhatsAppNumber(student.phone);
+                    if (!cleanPhone) return '#';
+                    const text = encodeURIComponent(`Assalamu'alaikum / Halo ${student.name}, `);
+                    return `https://wa.me/${cleanPhone}?text=${text}`;
+                },
                 get filteredMembers() {
                     if (!this.searchMember) return this.members;
                     const search = this.searchMember.toLowerCase();
-                    return this.members.filter(m => m.name.toLowerCase().includes(search) || m.nim.toLowerCase().includes(search));
+                    return this.members.filter(m => 
+                        m.name.toLowerCase().includes(search) || 
+                        m.nim.toLowerCase().includes(search) ||
+                        (m.phone && m.phone.toLowerCase().includes(search))
+                    );
                 }
             }
         }
